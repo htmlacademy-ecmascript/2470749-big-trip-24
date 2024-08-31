@@ -1,10 +1,7 @@
 import { createElement } from "../render";
+import { getUpperCaseString } from "../util";
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
-const getUpperCaseString = (string) => {
-return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 const createEventTypeItem = (eventType) => {
   return `
@@ -178,7 +175,6 @@ function createNewCreatePointTemplate() {
   </form>
 </li>`
 }
-
 export default class NewCreatePoint {
   getTemplate() {
     return createNewCreatePointTemplate();

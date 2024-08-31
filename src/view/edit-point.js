@@ -1,7 +1,44 @@
 import { createElement } from "../render";
 import { getUpperCaseString } from "../util";
 
-const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const EVENT_TYPES = [
+  {
+    name: 'taxi',
+    state: ''
+  },
+  {
+    name: 'bus',
+    state: ''
+  },
+  {
+    name: 'train',
+    state: ''
+  },
+  {
+    name: 'ship',
+    state: ''
+  },
+  {
+    name: 'drive',
+    state: ''
+  },
+  {
+    name: 'flight',
+    state: 'checked'
+  },
+  {
+    name: 'check-in',
+    state: ''
+  },
+  {
+    name: 'sightseeing',
+    state: ''
+  },
+  {
+    name: 'restaurant',
+    state: ''
+  }
+];
 const EVENT_OFFERS = [
   {
     class: 'luggage',
@@ -37,10 +74,10 @@ const EVENT_OFFERS = [
 
 const createEventTypeItem = (eventType) => {
   return `
-<div class="event__type-item">
-<input id="event-type-${eventType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType}">
-<label class="event__type-label  event__type-label--${eventType}" for="event-type-${eventType}-1">${getUpperCaseString(eventType)}</label>
-</div>`
+  <div class="event__type-item">
+  <input id="event-type-${eventType.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType.name}" ${eventType.state}>
+  <label class="event__type-label  event__type-label--${eventType.name}" for="event-type-${eventType.name}-1">${getUpperCaseString(eventType.name)}</label>
+  </div>`
 }
 
 const getEventOfferItem = (eventOffer) => {
@@ -51,7 +88,7 @@ const getEventOfferItem = (eventOffer) => {
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${eventOffer.price}</span>
   </label>
-</div>`
+  </div>`
 }
 
 function createNewEditPointTemplate() {
