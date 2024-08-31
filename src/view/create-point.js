@@ -14,8 +14,6 @@ const createEventTypeItem = (eventType) => {
 </div>`
 }
 
-console.log(createEventTypeItem('taxi'));
-
 function createNewCreatePointTemplate() {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">

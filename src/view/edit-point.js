@@ -1,4 +1,5 @@
 import { createElement } from "../render";
+import { getUpperCaseString } from "../util";
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const EVENT_OFFERS = [
@@ -33,10 +34,6 @@ const EVENT_OFFERS = [
     checked: ''
   },
 ];
-
-const getUpperCaseString = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 const createEventTypeItem = (eventType) => {
   return `
