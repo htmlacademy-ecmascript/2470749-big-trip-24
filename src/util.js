@@ -1,5 +1,3 @@
-const getUpperCaseString = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const getUpperCaseString = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-export { getUpperCaseString }
+export { getUpperCaseString };

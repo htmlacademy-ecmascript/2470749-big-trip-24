@@ -1,9 +1,9 @@
-import NewEventsList from "../view/events-list";
-import NewEditPoint from "../view/edit-point";
-import NewCreatePoint from "../view/create-point";
-import NewEventsItem from "../view/events-item";
-import NewSorting from "../view/sorting";
-import { render } from "../render";
+import NewEventsList from '../view/events-list';
+import NewEditPoint from '../view/edit-point';
+import NewCreatePoint from '../view/create-point';
+import NewEventsItem from '../view/events-item';
+import NewSorting from '../view/sorting';
+import { render } from '../render';
 
 const tripEvents = document.querySelector('.trip-events');
 

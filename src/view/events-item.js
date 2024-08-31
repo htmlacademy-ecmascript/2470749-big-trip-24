@@ -1,4 +1,4 @@
-import { createElement } from "../render";
+import { createElement } from '../render';
 
 function createNewEventsItemTemplate() {
   return `<li class="trip-events__item">
@@ -37,7 +37,7 @@ function createNewEventsItemTemplate() {
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-</li>`
+</li>`;
 }
 
 export default class NewEventsItem {

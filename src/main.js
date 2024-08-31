@@ -1,7 +1,7 @@
-import NewFilters from "./view/filters";
-import NewTripInfo from "./view/trip-info";
-import { RenderPosition, render } from "./render";
-import MainPresenter from "./presenter/main-presenter";
+import NewFilters from './view/filters';
+import NewTripInfo from './view/trip-info';
+import { RenderPosition, render } from './render';
+import MainPresenter from './presenter/main-presenter';
 
 const tripMain = document.querySelector('.trip-main');
 const tripFilters = document.querySelector('.trip-controls__filters');

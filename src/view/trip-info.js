@@ -1,4 +1,4 @@
-import { createElement } from "../render";
+import { createElement } from '../render';
 
 function createNewTripInfoTemplate() {
   return `<section class="trip-main__trip-info  trip-info">
@@ -11,7 +11,7 @@ function createNewTripInfoTemplate() {
   <p class="trip-info__cost">
     Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
   </p>
-</section>`
+</section>`;
 }
 
 export default class NewTripInfo {

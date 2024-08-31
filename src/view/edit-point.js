@@ -1,5 +1,5 @@
-import { createElement } from "../render";
-import { getUpperCaseString } from "../util";
+import { createElement } from '../render';
+import { getUpperCaseString } from '../util';
 
 const EVENT_TYPES = [
   {
@@ -72,24 +72,20 @@ const EVENT_OFFERS = [
   },
 ];
 
-const createEventTypeItem = (eventType) => {
-  return `
+const createEventTypeItem = (eventType) => `
   <div class="event__type-item">
   <input id="event-type-${eventType.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType.name}" ${eventType.state}>
   <label class="event__type-label  event__type-label--${eventType.name}" for="event-type-${eventType.name}-1">${getUpperCaseString(eventType.name)}</label>
-  </div>`
-}
+  </div>`;
 
-const getEventOfferItem = (eventOffer) => {
-  return `<div class="event__offer-${eventOffer.class}">
+const getEventOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer.class}">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventOffer.class}-1" type="checkbox" name="event-offer-${eventOffer.class}" ${eventOffer.state}>
   <label class="event__offer-label" for="event-offer-${eventOffer.class}-1">
     <span class="event__offer-title">${eventOffer.title}</span>
     &plus;&euro;&nbsp;
     <span class="event__offer-price">${eventOffer.price}</span>
   </label>
-  </div>`
-}
+  </div>`;
 
 function createNewEditPointTemplate() {
   return `<li class="trip-events__item">
@@ -159,7 +155,7 @@ function createNewEditPointTemplate() {
       </section>
     </section>
   </form>
-</li>`
+</li>`;
 }
 
 export default class NewEditPoint {

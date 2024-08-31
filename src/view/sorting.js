@@ -1,5 +1,5 @@
-import { createElement } from "../render";
-import { getUpperCaseString } from "../util";
+import { createElement } from '../render';
+import { getUpperCaseString } from '../util';
 
 const SORTINGS = [
   {
@@ -24,17 +24,15 @@ const SORTINGS = [
   }
 ];
 
-const getSortingItems = (sorting) => {
-return ` <div class="trip-sort__item  trip-sort__item--${sorting.name}">
+const getSortingItems = (sorting) => ` <div class="trip-sort__item  trip-sort__item--${sorting.name}">
 <input id="sort-${sorting.name}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sorting.name}" ${sorting.state}>
 <label class="trip-sort__btn" for="sort-${sorting.name}">${getUpperCaseString(sorting.name)}</label>
-</div>`
-}
+</div>`;
 
 function createNewSortingTemplate() {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${SORTINGS.map((sorting) => getSortingItems(sorting)).join('')}
-  </form>`
+  </form>`;
 }
 
 export default class NewSorting {
