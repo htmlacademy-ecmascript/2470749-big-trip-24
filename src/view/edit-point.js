@@ -7,31 +7,31 @@ const EVENT_OFFERS = [
     class: 'luggage',
     title: 'Add luggage',
     price: '50',
-    checked: 'checked'
+    state: 'checked'
   },
   {
     class: 'comfort',
     title: 'Switch to comfort',
     price: '80',
-    checked: 'checked'
+    state: 'checked'
   },
   {
     class: 'meal',
     title: 'Add meal',
     price: '15',
-    checked: ''
+    state: ''
   },
   {
     class: 'seats',
     title: 'Choose seats',
     price: '5',
-    checked: ''
+    state: ''
   },
   {
     class: 'train',
     title: 'Travel by train',
     price: '40',
-    checked: ''
+    state: ''
   },
 ];
 
@@ -45,7 +45,7 @@ const createEventTypeItem = (eventType) => {
 
 const getEventOfferItem = (eventOffer) => {
   return `<div class="event__offer-${eventOffer.class}">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventOffer.class}-1" type="checkbox" name="event-offer-${eventOffer.class}" ${eventOffer.checked}>
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventOffer.class}-1" type="checkbox" name="event-offer-${eventOffer.class}" ${eventOffer.state}>
   <label class="event__offer-label" for="event-offer-${eventOffer.class}-1">
     <span class="event__offer-title">${eventOffer.title}</span>
     &plus;&euro;&nbsp;

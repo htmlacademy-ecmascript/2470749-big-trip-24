@@ -4,25 +4,25 @@ import { getUpperCaseString } from "../util";
 const FILTERS = [
   {
     name: 'everything',
-    checked: ''
+    state: ''
   },
   {
     name: 'future',
-    checked: ''
+    state: ''
   },
   {
     name: 'present',
-    checked: ''
+    state: ''
   },
   {
     name: 'past',
-    checked: 'checked'
+    state: 'checked'
   }
 ];
 
 const getFiltersItem = (filter) => {
   return `<div class="trip-filters__filter">
-<input id="filter-${filter.name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name}" ${filter.checked}>
+<input id="filter-${filter.name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name}" ${filter.state}>
 <label class="trip-filters__filter-label" for="filter-${filter.name}">${getUpperCaseString(filter.name)}</label>
 </div>`
 }
