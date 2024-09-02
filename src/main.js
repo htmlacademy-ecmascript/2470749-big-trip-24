@@ -1,14 +1,14 @@
-import NewFilters from './view/filters';
-import NewTripInfo from './view/trip-info';
+import NewFilters from './view/filters-view';
+import NewTripInfo from './view/trip-info-view';
 import { RenderPosition, render } from './render';
 import MainPresenter from './presenter/main-presenter';
 
-const tripMain = document.querySelector('.trip-main');
-const tripFilters = document.querySelector('.trip-controls__filters');
-const tripEvents = document.querySelector('.trip-events');
-const mainPresenter = new MainPresenter({eventsContainer: tripEvents});
+const mainContainer = document.querySelector('.trip-main');
+const filtersContainer = document.querySelector('.trip-controls__filters');
+const pointsContainer = document.querySelector('.trip-events');
+const mainPresenter = new MainPresenter({pointsContainer: pointsContainer});
 
-render(new NewTripInfo(), tripMain, RenderPosition.AFTERBEGIN);
-render(new NewFilters(), tripFilters);
+render(new NewTripInfo(), mainContainer, RenderPosition.AFTERBEGIN);
+render(new NewFilters(), filtersContainer);
 
 mainPresenter.init();

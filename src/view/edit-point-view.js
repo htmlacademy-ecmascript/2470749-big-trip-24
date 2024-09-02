@@ -72,13 +72,13 @@ const EVENT_OFFERS = [
   },
 ];
 
-const createEventTypeItem = (eventType) => `
+const createPointTypeItem = (eventType) => `
   <div class="event__type-item">
   <input id="event-type-${eventType.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType.name}" ${eventType.state}>
   <label class="event__type-label  event__type-label--${eventType.name}" for="event-type-${eventType.name}-1">${capitalize(eventType.name)}</label>
   </div>`;
 
-const getEventOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer.class}">
+const getPointOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer.class}">
   <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventOffer.class}-1" type="checkbox" name="event-offer-${eventOffer.class}" ${eventOffer.state}>
   <label class="event__offer-label" for="event-offer-${eventOffer.class}-1">
     <span class="event__offer-title">${eventOffer.title}</span>
@@ -87,7 +87,7 @@ const getEventOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer
   </label>
   </div>`;
 
-function createNewEditPointTemplate() {
+function createEditPointViewTemplate() {
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -101,7 +101,7 @@ function createNewEditPointTemplate() {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${EVENT_TYPES.map((eventType) => createEventTypeItem(eventType)).join('')}
+            ${EVENT_TYPES.map((eventType) => createPointTypeItem(eventType)).join('')}
           </fieldset>
         </div>
       </div>
@@ -145,7 +145,7 @@ function createNewEditPointTemplate() {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${EVENT_OFFERS.map((eventOffer) => getEventOfferItem(eventOffer)).join('')}
+        ${EVENT_OFFERS.map((eventOffer) => getPointOfferItem(eventOffer)).join('')}
         </div>
       </section>
 
@@ -158,9 +158,9 @@ function createNewEditPointTemplate() {
 </li>`;
 }
 
-export default class NewEditPoint {
+export default class EditPointView {
   getTemplate() {
-    return createNewEditPointTemplate();
+    return createEditPointViewTemplate();
   }
 
   getElement() {

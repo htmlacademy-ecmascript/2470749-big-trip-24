@@ -1,24 +1,25 @@
-import NewEventsList from '../view/events-list';
-import NewEditPoint from '../view/edit-point';
-import NewCreatePoint from '../view/create-point';
-import NewEventsItem from '../view/events-item';
-import NewSorting from '../view/sorting';
+import PointListView from '../view/point-list-view';
+import EditPoint from '../view/edit-point-view';
+import CreatePoint from '../view/create-point-view';
+import PointItemView from '../view/point-item-view';
+import SortingView from '../view/sorting-view';
 import { render } from '../render';
-export default class MainPresenter {
-  eventsListComponent = new NewEventsList();
 
-  constructor({eventsContainer}) {
-    this.eventsContainer = eventsContainer;
+export default class MainPresenter {
+  pointsListComponent = new PointListView();
+
+  constructor({pointsContainer}) {
+    this.pointsContainer = pointsContainer;
   }
 
   init() {
-    render(new NewSorting(), this.eventsContainer);
-    render(this.eventsListComponent, this.eventsContainer);
-    render(new NewEditPoint(), this.eventsListComponent.getElement());
-    render(new NewCreatePoint(), this.eventsListComponent.getElement());
+    render(new SortingView(), this.pointsContainer);
+    render(this.pointsListComponent, this.pointsContainer);
+    render(new EditPoint(), this.pointsListComponent.getElement());
+    render(new CreatePoint(), this.pointsListComponent.getElement());
 
     for (let i = 0; i < 3; i++) {
-      render(new NewEventsItem(), this.eventsListComponent.getElement());
+      render(new PointItemView(), this.pointsListComponent.getElement());
     }
   }
 }
