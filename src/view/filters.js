@@ -1,5 +1,5 @@
 import { createElement } from '../render';
-import { getUpperCaseString } from '../util';
+import { capitalize } from '../util';
 
 const FILTERS = [
   {
@@ -22,7 +22,7 @@ const FILTERS = [
 
 const getFiltersItem = (filter) => `<div class="trip-filters__filter">
 <input id="filter-${filter.name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name}" ${filter.state}>
-<label class="trip-filters__filter-label" for="filter-${filter.name}">${getUpperCaseString(filter.name)}</label>
+<label class="trip-filters__filter-label" for="filter-${filter.name}">${capitalize(filter.name)}</label>
 </div>`;
 
 function createNewFiltersTemplate() {

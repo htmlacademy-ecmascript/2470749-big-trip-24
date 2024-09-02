@@ -1,5 +1,5 @@
 import { createElement } from '../render';
-import { getUpperCaseString } from '../util';
+import { capitalize } from '../util';
 
 const EVENT_TYPES = [
   {
@@ -75,7 +75,7 @@ const EVENT_OFFERS = [
 const createEventTypeItem = (eventType) => `
   <div class="event__type-item">
   <input id="event-type-${eventType.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventType.name}" ${eventType.state}>
-  <label class="event__type-label  event__type-label--${eventType.name}" for="event-type-${eventType.name}-1">${getUpperCaseString(eventType.name)}</label>
+  <label class="event__type-label  event__type-label--${eventType.name}" for="event-type-${eventType.name}-1">${capitalize(eventType.name)}</label>
   </div>`;
 
 const getEventOfferItem = (eventOffer) => `<div class="event__offer-${eventOffer.class}">

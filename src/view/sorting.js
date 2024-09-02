@@ -1,5 +1,5 @@
 import { createElement } from '../render';
-import { getUpperCaseString } from '../util';
+import { capitalize } from '../util';
 
 const SORTINGS = [
   {
@@ -26,7 +26,7 @@ const SORTINGS = [
 
 const getSortingItems = (sorting) => ` <div class="trip-sort__item  trip-sort__item--${sorting.name}">
 <input id="sort-${sorting.name}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sorting.name}" ${sorting.state}>
-<label class="trip-sort__btn" for="sort-${sorting.name}">${getUpperCaseString(sorting.name)}</label>
+<label class="trip-sort__btn" for="sort-${sorting.name}">${capitalize(sorting.name)}</label>
 </div>`;
 
 function createNewSortingTemplate() {
