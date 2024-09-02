@@ -4,9 +4,6 @@ import NewCreatePoint from '../view/create-point';
 import NewEventsItem from '../view/events-item';
 import NewSorting from '../view/sorting';
 import { render } from '../render';
-
-const tripEvents = document.querySelector('.trip-events');
-
 export default class MainPresenter {
   eventsListComponent = new NewEventsList();
 
@@ -15,7 +12,7 @@ export default class MainPresenter {
   }
 
   init() {
-    render(new NewSorting(), tripEvents);
+    render(new NewSorting(), this.eventsContainer);
     render(this.eventsListComponent, this.eventsContainer);
     render(new NewEditPoint(), this.eventsListComponent.getElement());
     render(new NewCreatePoint(), this.eventsListComponent.getElement());
