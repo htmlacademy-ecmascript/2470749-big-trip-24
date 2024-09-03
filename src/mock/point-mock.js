@@ -1,6 +1,8 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from "../util"
 import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from "../const";
 
+const POINTS_COUNT = 10;
+
 const getRandomDescriptionPoint = (text) => {
   const descriptionsArray = DESCRIPTION_TEXT.split('.');
   const randomDescriptionText = Array.from({ length: 5 }, () => getRandomArrayElement(descriptionsArray).trim()).join('.');
@@ -28,7 +30,7 @@ const getPointMockElement = () => {
 }
 
 const getPointMockArray = () => {
-  return Array.from({ length: 10 }, () => getPointMockElement())
+  return Array.from({ length: POINTS_COUNT }, () => getPointMockElement())
 }
 
 const pointMockArray = getPointMockArray();
