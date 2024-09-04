@@ -1,4 +1,4 @@
-import { pointMockArray } from "./point-mock"
+import { getCopyOfPointMockArray } from "./point-mock"
 import { OFFERS } from "../const";
 
 const getOffersArray = (offersIdArray) => {
@@ -23,6 +23,7 @@ const getFullOfferMockElement = (type, offersIdArray) => {
 
 const getOfferMockArray = () => {
   const offerMockArray = [];
+  const pointMockArray = getCopyOfPointMockArray();
 
   pointMockArray.forEach((point) => {
     const pointType = point.type;

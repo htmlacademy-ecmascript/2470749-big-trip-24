@@ -1,7 +1,7 @@
-import { pointMockArray } from "../mock/point-mock";
+import { getCopyOfPointMockArray } from "../mock/point-mock";
 
 export default class PointModel {
-  points = pointMockArray;
+  points = getCopyOfPointMockArray();
 
   getPoints() {
     return this.points;
