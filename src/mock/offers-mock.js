@@ -1,7 +1,7 @@
-import { getCopyOfPointMockArray } from "./point-mock"
+import { getPointsData } from "./point-mock"
 import { OFFERS } from "../const";
 
-const getOffersArray = (offersIdArray) => {
+const getOffersArrayFromPoints = (offersIdArray) => {
   const offersArray = [];
 
   offersIdArray.forEach((offerId) => {
@@ -12,36 +12,35 @@ const getOffersArray = (offersIdArray) => {
   return offersArray;
 }
 
-const getFullOfferMockElement = (type, offersIdArray) => {
+const getOfferMockElement = (type, offersIdArray) => {
   const offerMockElement = {
     type: type,
-    offers: getOffersArray(offersIdArray)
+    offers: getOffersArrayFromPoints(offersIdArray)
   }
 
   return offerMockElement;
 }
 
-const getOfferMockArray = () => {
-  const offerMockArray = [];
-  const pointMockArray = getCopyOfPointMockArray();
+const getOffersMockArray = () => {
+  const offersMockArray = [];
+  const pointMockArray = getPointsData();
 
   pointMockArray.forEach((point) => {
     const pointType = point.type;
     const offersIdArray = point.offers;
-    const offerMockElement = getFullOfferMockElement(pointType, offersIdArray);
+    const offerMockElement = getOfferMockElement(pointType, offersIdArray);
 
-    offerMockArray.push(offerMockElement);
+    offersMockArray.push(offerMockElement);
   })
 
+  return offersMockArray;
+}
+
+const offerMockArray = getOffersMockArray();
+
+const getOffersData = () => {
   return offerMockArray;
 }
 
-const offerMockArray = getOfferMockArray();
-console.log(offerMockArray)
-
-const getCopyOfOfferMockArray = () => {
-  return offerMockArray;
-}
-
-export { getCopyOfOfferMockArray };
+export { getOffersData };
 

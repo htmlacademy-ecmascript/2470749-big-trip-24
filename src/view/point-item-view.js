@@ -1,38 +1,26 @@
 import { createElement } from '../render';
-import { getDestinationsMockArray } from '../mock/destination-mock';
 import { humanizePointDate, humanizePointTime, getPointDuration } from '../util';
-// import { getCopyOfOfferMockArray } from '../mock/offers-mock';
 
-const destinationsMockArray = getDestinationsMockArray();
-// const offerMockArray = getCopyOfOfferMockArray();
-
-// const getOffersFromArray = (offersArray) => {
-//   let result = [];
-
-//   offersArray.forEach((offer) => {
-//     const offersList = offer.offers;
-//     result.push(Object.values(offersList));
-//   });
-
-//   return result;
-// }
-
-// console.log(getOffersFromArray(offerMockArray));
-
-// const getSelectedOffersList = (offers) => {
-
-// return `<li class="event__offer">
-//   <span class="event__offer-title">Order Uber</span>
-//   &plus;&euro;&nbsp;
-//   <span class="event__offer-price">20</span>
-//   </li>`
-// }
-
-function createPointItemViewTemplate(point) {
-  const { type, destination, dateFrom, dateTo, basePrice, offers } = point;
+function createPointItemViewTemplate(point, offers, destinations) {
+  const { type, destination, dateFrom, dateTo, basePrice } = point;
 
   const pointDestination = destination;
-  const modifiedDestination = destinationsMockArray.find((destination) => destination.id === pointDestination).name;
+  const modifiedDestination = destinations.find((destination) => destination.id === pointDestination).name;
+
+  const getOffersData = (type, offers) => {
+    const offerData = offers.find((offer) => offer.type === type).offers;
+
+    const renderOffers = (title, price) => {
+      return `<li class="event__offer">
+        <span class="event__offer-title">${title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+        </li>`
+    }
+
+    const offersList = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
+    return offersList;
+  }
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -54,7 +42,7 @@ function createPointItemViewTemplate(point) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-
+      ${getOffersData(type, offers)}
     </ul>
     <button class="event__favorite-btn event__favorite-btn--active" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -70,12 +58,14 @@ function createPointItemViewTemplate(point) {
 }
 
 export default class PointItemView {
-  constructor({ point }) {
+  constructor({ point, offers, destinations }) {
     this.point = point;
+    this.offers = offers;
+    this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointItemViewTemplate(this.point);
+    return createPointItemViewTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {

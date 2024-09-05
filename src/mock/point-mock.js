@@ -34,11 +34,10 @@ const getPointMockArray = () => {
 }
 
 const pointMockArray = getPointMockArray();
-console.log(pointMockArray);
 
-const getCopyOfPointMockArray = () => {
+const getPointsData = () => {
   return pointMockArray;
 }
 
-export { getCopyOfPointMockArray };
+export { getPointsData };
 

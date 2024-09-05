@@ -2,8 +2,8 @@ import { CITIES, PICTURES } from "../const";
 
 let destinationId = 0;
 
-const getDestinationMock = (city) => {
-  const destinationMock = {
+const getDestinationsMock = (city) => {
+  const destinationsMock = {
     id: destinationId,
     name: city,
     description: `${city}, is a beautiful city, a true asian pearl, with crowded streets.`,
@@ -30,7 +30,7 @@ const getDestinationMock = (city) => {
       }
     ],
   }
-  return destinationMock;
+  return destinationsMock;
 }
 
 const getDestinationsMockArray = () => {
@@ -38,10 +38,16 @@ const getDestinationsMockArray = () => {
 
   CITIES.forEach((city) => {
     destinationId++;
-    destinationsMockArray.push(getDestinationMock(city));
+    destinationsMockArray.push(getDestinationsMock(city));
   });
 
   return destinationsMockArray;
 }
 
-export { getDestinationsMockArray }
+const destinationsData = getDestinationsMockArray();
+
+const getDestinationsData = () => {
+  return destinationsData
+}
+
+export { getDestinationsData }
