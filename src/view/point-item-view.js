@@ -5,22 +5,20 @@ function createPointItemViewTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
 
   const pointDestination = destination;
-  const modifiedDestination = destinations.find((destination) => destination.id === pointDestination).name;
+  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === pointDestination).name;
 
-  const getOffersData = (type, offers) => {
-    const offerData = offers.find((offer) => offer.type === type).offers;
+  const getOffersData = (offerType, offersList) => {
+    const offerData = offersList.find((offer) => offer.type === offerType).offers;
 
-    const renderOffers = (title, price) => {
-      return `<li class="event__offer">
+    const renderOffers = (title, price) => `<li class="event__offer">
         <span class="event__offer-title">${title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
-        </li>`
-    }
+        </li>`;
 
-    const offersList = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
-    return offersList;
-  }
+    const result = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
+    return result;
+  };
 
   return `<li class="trip-events__item">
   <div class="event">

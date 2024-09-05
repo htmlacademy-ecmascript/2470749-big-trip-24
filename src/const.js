@@ -1,4 +1,4 @@
-import { getRandomInteger } from "./util";
+import { getRandomInteger } from './util';
 
 const CITIES = ['Amsterdam', 'Geneva', 'Chamonix', 'Basel', 'Düsseldorf', 'Strasbourg'];
 const TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
@@ -10,34 +10,34 @@ const PICTURES = [
   `https://loremflickr.com/248/152?random=${getRandomInteger(1, 5)}`,
   `https://loremflickr.com/248/152?random=${getRandomInteger(1, 5)}`,
   `https://loremflickr.com/248/152?random=${getRandomInteger(1, 5)}`
-]
+];
 
 const DATES = [
   {
-    dateFrom: "2024-07-10T10:00:00",
-    dateTo: "2024-07-11T11:00:00",
+    dateFrom: '2024-07-10T10:00:00',
+    dateTo: '2024-07-11T11:00:00',
   },
   {
-    dateFrom: "2024-07-15T18:00:00",
-    dateTo: "2024-07-16T20:30:00",
+    dateFrom: '2024-07-15T18:00:00',
+    dateTo: '2024-07-16T20:30:00',
   },
   {
-    dateFrom: "2024-07-16T21:00:00",
-    dateTo: "2024-07-16T23:45:00",
+    dateFrom: '2024-07-16T21:00:00',
+    dateTo: '2024-07-16T23:45:00',
   },
   {
-    dateFrom: "2024-08-01T09:55:00",
-    dateTo: "2024-08-02T11:22:00",
+    dateFrom: '2024-08-01T09:55:00',
+    dateTo: '2024-08-02T11:22:00',
   },
   {
-    dateFrom: "2024-08-10T14:00:00",
-    dateTo: "2024-08-10T17:00:00",
+    dateFrom: '2024-08-10T14:00:00',
+    dateTo: '2024-08-10T17:00:00',
   },
   {
-    dateFrom: "2024-08-12T13:56:00",
-    dateTo: "2024-08-12T14:06:00",
+    dateFrom: '2024-08-12T13:56:00',
+    dateTo: '2024-08-12T14:06:00',
   },
-]
+];
 
 const OFFERS = [
   {

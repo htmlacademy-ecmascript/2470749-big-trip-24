@@ -1,4 +1,4 @@
-import { CITIES, PICTURES } from "../const";
+import { CITIES, PICTURES } from '../const';
 
 let destinationId = 0;
 
@@ -29,9 +29,9 @@ const getDestinationsMock = (city) => {
         description: `${city} church`
       }
     ],
-  }
+  };
   return destinationsMock;
-}
+};
 
 const getDestinationsMockArray = () => {
   const destinationsMockArray = [];
@@ -42,12 +42,10 @@ const getDestinationsMockArray = () => {
   });
 
   return destinationsMockArray;
-}
+};
 
 const destinationsData = getDestinationsMockArray();
 
-const getDestinationsData = () => {
-  return destinationsData
-}
+const getDestinationsData = () => destinationsData;
 
-export { getDestinationsData }
+export { getDestinationsData };

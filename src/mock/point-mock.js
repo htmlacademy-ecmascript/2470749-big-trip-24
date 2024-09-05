@@ -1,20 +1,20 @@
-import { getRandomArrayElement, getRandomInteger, createIdGenerator } from "../util"
-import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from "../const";
+import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
+import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from '../const';
 
 const POINTS_COUNT = 10;
 
 const getRandomDescriptionPoint = (text) => {
-  const descriptionsArray = DESCRIPTION_TEXT.split('.');
+  const descriptionsArray = text.split('.');
   const randomDescriptionText = Array.from({ length: 5 }, () => getRandomArrayElement(descriptionsArray).trim()).join('.');
   return randomDescriptionText;
-}
+};
 
 const generateRandomPointId = createIdGenerator();
 
 const getPointMockElement = () => {
-  let pointDate = getRandomArrayElement(DATES);
+  const pointDate = getRandomArrayElement(DATES);
 
-  const getPointMockElement = {
+  const pointMockElement = {
     id: generateRandomPointId(),
     type: getRandomArrayElement(TYPES),
     destination: getRandomInteger(1, CITIES.length),
@@ -22,22 +22,18 @@ const getPointMockElement = () => {
     dateFrom: pointDate.dateFrom,
     dateTo: pointDate.dateTo,
     basePrice: getRandomInteger(20, 5000),
-    offers: Array.from({ length: getRandomInteger(1, 3) }, (_, i) => getRandomInteger(1, OFFERS.length)),
+    offers: Array.from({ length: getRandomInteger(1, 3) }, () => getRandomInteger(1, OFFERS.length)),
     isFavorite: true
-  }
+  };
 
-  return getPointMockElement;
-}
+  return pointMockElement;
+};
 
-const getPointMockArray = () => {
-  return Array.from({ length: POINTS_COUNT }, () => getPointMockElement())
-}
+const getPointMockArray = () => Array.from({ length: POINTS_COUNT }, () => getPointMockElement());
 
 const pointMockArray = getPointMockArray();
 
-const getPointsData = () => {
-  return pointMockArray;
-}
+const getPointsData = () => pointMockArray;
 
 export { getPointsData };
 

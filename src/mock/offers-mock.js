@@ -1,25 +1,25 @@
-import { getPointsData } from "./point-mock"
-import { OFFERS } from "../const";
+import { getPointsData } from './point-mock';
+import { OFFERS } from '../const';
 
 const getOffersArrayFromPoints = (offersIdArray) => {
   const offersArray = [];
 
   offersIdArray.forEach((offerId) => {
-    const offer = OFFERS.find(offer => offer.id === offerId);
-    offersArray.push(offer);
-  })
+    const offerElement = OFFERS.find((offer) => offer.id === offerId);
+    offersArray.push(offerElement);
+  });
 
   return offersArray;
-}
+};
 
 const getOfferMockElement = (type, offersIdArray) => {
   const offerMockElement = {
     type: type,
     offers: getOffersArrayFromPoints(offersIdArray)
-  }
+  };
 
   return offerMockElement;
-}
+};
 
 const getOffersMockArray = () => {
   const offersMockArray = [];
@@ -31,16 +31,14 @@ const getOffersMockArray = () => {
     const offerMockElement = getOfferMockElement(pointType, offersIdArray);
 
     offersMockArray.push(offerMockElement);
-  })
+  });
 
   return offersMockArray;
-}
+};
 
 const offerMockArray = getOffersMockArray();
 
-const getOffersData = () => {
-  return offerMockArray;
-}
+const getOffersData = () => offerMockArray;
 
 export { getOffersData };
 

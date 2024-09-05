@@ -1,11 +1,10 @@
-import dayjs from "dayjs";
-var duration = require("dayjs/plugin/duration");
-// import duration from 'dayjs/plugin/duration' // ES 2015
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(duration);
 
-const DATE_FORMAT = 'D MMM'
-const TIME_FORMAT = 'HH:mm'
+const DATE_FORMAT = 'D MMM';
+const TIME_FORMAT = 'HH:mm';
 
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -29,29 +28,27 @@ const createIdGenerator = () => {
   };
 };
 
-const humanizePointDate = (pointDate) => {
-  return pointDate ? dayjs(pointDate).format(DATE_FORMAT) : '';
-}
+const humanizePointDate = (pointDate) => pointDate ? dayjs(pointDate).format(DATE_FORMAT) : '';
 
-const humanizePointTime = (pointDate) => {
-  return pointDate ? dayjs(pointDate).format(TIME_FORMAT) : '';
-}
+const humanizePointTime = (pointDate) => pointDate ? dayjs(pointDate).format(TIME_FORMAT) : '';
 
 const getPointDuration = (pointDateFrom, pointDateTo) => {
   const humatizedDateFrom = dayjs(pointDateFrom);
   const humatizedDateTo = dayjs(pointDateTo);
 
-  const duration = dayjs.duration(humatizedDateTo.diff(humatizedDateFrom));
+  const pointDuration = dayjs.duration(humatizedDateTo.diff(humatizedDateFrom));
 
-  let result = ``;
+  let result = '';
 
-  if (duration.days() > 0) {
-    return result = duration.format('DD[D] HH[H] mm[M]');
-  } else if (duration.hours() > 0) {
-    return result = duration.format('HH[H] mm[M]');
+  if (pointDuration.days() > 0) {
+    result = pointDuration.format('DD[D] HH[H] mm[M]');
+  } else if (pointDuration.hours() > 0) {
+    result = pointDuration.format('HH[H] mm[M]');
   } else {
-    return result = duration.format('mm[M]');
+    result = pointDuration.format('mm[M]');
   }
-}
+
+  return result;
+};
 
 export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, humanizePointTime, getPointDuration };

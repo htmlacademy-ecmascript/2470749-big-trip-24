@@ -1,4 +1,4 @@
-import { getPointsData } from "../mock/point-mock";
+import { getPointsData } from '../mock/point-mock';
 
 export default class PointModel {
   points = getPointsData();
