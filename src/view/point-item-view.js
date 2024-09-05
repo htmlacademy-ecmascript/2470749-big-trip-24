@@ -1,31 +1,60 @@
 import { createElement } from '../render';
+import { getDestinationsMockArray } from '../mock/destination-mock';
+import { humanizePointDate, humanizePointTime, getPointDuration } from '../util';
+// import { getCopyOfOfferMockArray } from '../mock/offers-mock';
 
-function createPointItemViewTemplate() {
+const destinationsMockArray = getDestinationsMockArray();
+// const offerMockArray = getCopyOfOfferMockArray();
+
+// const getOffersFromArray = (offersArray) => {
+//   let result = [];
+
+//   offersArray.forEach((offer) => {
+//     const offersList = offer.offers;
+//     result.push(Object.values(offersList));
+//   });
+
+//   return result;
+// }
+
+// console.log(getOffersFromArray(offerMockArray));
+
+// const getSelectedOffersList = (offers) => {
+
+// return `<li class="event__offer">
+//   <span class="event__offer-title">Order Uber</span>
+//   &plus;&euro;&nbsp;
+//   <span class="event__offer-price">20</span>
+//   </li>`
+// }
+
+function createPointItemViewTemplate(point) {
+  const { type, destination, dateFrom, dateTo, basePrice, offers } = point;
+
+  const pointDestination = destination;
+  const modifiedDestination = destinationsMockArray.find((destination) => destination.id === pointDestination).name;
+
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">MAR 18</time>
+    <time class="event__date" datetime="2019-03-18">${humanizePointDate(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Taxi Amsterdam</h3>
+    <h3 class="event__title">${type} ${modifiedDestination}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+        <time class="event__start-time" datetime="2019-03-18T10:30">${humanizePointTime(dateFrom)}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <time class="event__end-time" datetime="2019-03-18T11:00">${humanizePointTime(dateTo)}</time>
       </p>
-      <p class="event__duration">30M</p>
+      <p class="event__duration">${getPointDuration(dateFrom, dateTo)}</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">20</span>
+      &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
+
     </ul>
     <button class="event__favorite-btn event__favorite-btn--active" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -41,8 +70,12 @@ function createPointItemViewTemplate() {
 }
 
 export default class PointItemView {
+  constructor({ point }) {
+    this.point = point;
+  }
+
   getTemplate() {
-    return createPointItemViewTemplate();
+    return createPointItemViewTemplate(this.point);
   }
 
   getElement() {

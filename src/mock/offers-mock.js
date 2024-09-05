@@ -37,6 +37,11 @@ const getOfferMockArray = () => {
 }
 
 const offerMockArray = getOfferMockArray();
+console.log(offerMockArray)
 
-export { offerMockArray };
+const getCopyOfOfferMockArray = () => {
+  return offerMockArray;
+}
+
+export { getCopyOfOfferMockArray };
 

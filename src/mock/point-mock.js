@@ -34,6 +34,7 @@ const getPointMockArray = () => {
 }
 
 const pointMockArray = getPointMockArray();
+console.log(pointMockArray);
 
 const getCopyOfPointMockArray = () => {
   return pointMockArray;
