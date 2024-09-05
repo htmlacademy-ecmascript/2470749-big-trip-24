@@ -3,9 +3,6 @@ import duration from 'dayjs/plugin/duration';
 
 dayjs.extend(duration);
 
-const DATE_FORMAT = 'D MMM';
-const TIME_FORMAT = 'HH:mm';
-
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 function getRandomArrayElement(items) {
@@ -28,9 +25,7 @@ const createIdGenerator = () => {
   };
 };
 
-const humanizePointDate = (pointDate) => pointDate ? dayjs(pointDate).format(DATE_FORMAT) : '';
-
-const humanizePointTime = (pointDate) => pointDate ? dayjs(pointDate).format(TIME_FORMAT) : '';
+const humanizePointDate = (pointDate, dateFormat) => pointDate ? dayjs(pointDate).format(dateFormat) : '';
 
 const getPointDuration = (pointDateFrom, pointDateTo) => {
   const humatizedDateFrom = dayjs(pointDateFrom);
@@ -51,4 +46,4 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
   return result;
 };
 
-export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, humanizePointTime, getPointDuration };
+export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, getPointDuration };

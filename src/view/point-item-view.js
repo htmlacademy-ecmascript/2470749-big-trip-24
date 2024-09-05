@@ -1,5 +1,6 @@
 import { createElement } from '../render';
-import { humanizePointDate, humanizePointTime, getPointDuration } from '../util';
+import { humanizePointDate, getPointDuration } from '../util';
+import { DATE_FORMAT, TIME_FORMAT } from '../const';
 
 function createPointItemViewTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
@@ -22,16 +23,16 @@ function createPointItemViewTemplate(point, offers, destinations) {
 
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${humanizePointDate(dateFrom)}</time>
+    <time class="event__date" datetime="2019-03-18">${humanizePointDate(dateFrom, DATE_FORMAT)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${type} ${modifiedDestination}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">${humanizePointTime(dateFrom)}</time>
+        <time class="event__start-time" datetime="2019-03-18T10:30">${humanizePointDate(dateFrom, TIME_FORMAT)}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">${humanizePointTime(dateTo)}</time>
+        <time class="event__end-time" datetime="2019-03-18T11:00">${humanizePointDate(dateTo, TIME_FORMAT)}</time>
       </p>
       <p class="event__duration">${getPointDuration(dateFrom, dateTo)}</p>
     </div>

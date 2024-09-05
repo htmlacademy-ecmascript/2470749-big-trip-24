@@ -77,7 +77,7 @@ const OFFERS = [
   },
 ];
 
-const EVENT_TYPES = [
+const POINT_TYPES = [
   {
     name: 'taxi',
     state: ''
@@ -116,7 +116,7 @@ const EVENT_TYPES = [
   }
 ];
 
-const EVENT_OFFERS = [
+const POINT_OFFERS = [
   {
     class: 'luggage',
     title: 'Add luggage',
@@ -149,4 +149,8 @@ const EVENT_OFFERS = [
   },
 ];
 
-export { CITIES, TYPES, DESCRIPTION_TEXT, OFFERS, PICTURES, DATES, EVENT_OFFERS, EVENT_TYPES };
+const DATE_FORMAT = 'D MMM';
+const TIME_FORMAT = 'HH:mm';
+const DATE_WITH_TIME_FORMAT = 'DD/MM/YY HH:MM';
+
+export { CITIES, TYPES, DESCRIPTION_TEXT, OFFERS, PICTURES, DATES, POINT_OFFERS, POINT_TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT };
