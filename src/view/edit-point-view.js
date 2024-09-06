@@ -18,10 +18,11 @@ const getPointOfferItem = (pointOffer) => `<div class="event__offer-${pointOffer
   </div>`;
 
 function createEditPointViewTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice, description } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, description, offers: pointOffers } = point;
 
-  const pointDestination = destination;
-  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === pointDestination).name;
+
+
+  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">

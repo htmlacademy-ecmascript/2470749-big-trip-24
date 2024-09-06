@@ -33,9 +33,9 @@ const getOfferMocks = () => {
   return offers;
 }
 
-const offerMockArray = getOfferMocks();
+const offerMocks = getOfferMocks();
 
-const getOffersData = () => offerMockArray;
+const getOffers = () => offerMocks;
 
-export { getOffersData };
+export { getOffers };
 

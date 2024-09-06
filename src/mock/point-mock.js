@@ -1,9 +1,9 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
 import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from '../const';
-import { getOffersData } from './offers-mock';
+import { getOffers } from './offers-mock';
 
 const POINTS_COUNT = 10;
-const offersData = getOffersData();
+const offersData = getOffers();
 
 const getRandomDescriptionPoint = (text) => {
   const descriptionsArray = text.split('.');

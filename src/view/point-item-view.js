@@ -5,8 +5,7 @@ import { DATE_FORMAT, TIME_FORMAT } from '../const';
 function createPointItemViewTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
 
-  const pointDestination = destination;
-  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === pointDestination).name;
+  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
 
   const getOffersData = (offerType, offersList) => {
     const offerData = offersList.find((offer) => offer.type === offerType).offers;
