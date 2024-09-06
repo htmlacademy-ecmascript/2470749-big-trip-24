@@ -2,23 +2,23 @@ import { createElement } from '../render';
 import { humanizePointDate, getPointDuration } from '../util';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 
+const getOffersData = (offerType, offersList) => {
+  const offerData = offersList.find((offer) => offer.type === offerType).offers;
+
+  const renderOffers = (title, price) => `<li class="event__offer">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+      </li>`;
+
+  const result = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
+  return result;
+};
+
 function createPointItemViewTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
 
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
-
-  const getOffersData = (offerType, offersList) => {
-    const offerData = offersList.find((offer) => offer.type === offerType).offers;
-
-    const renderOffers = (title, price) => `<li class="event__offer">
-        <span class="event__offer-title">${title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
-        </li>`;
-
-    const result = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
-    return result;
-  };
 
   return `<li class="trip-events__item">
   <div class="event">
