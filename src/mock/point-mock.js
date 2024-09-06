@@ -1,7 +1,9 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
 import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from '../const';
+import { getOffersData } from './offers-mock';
 
 const POINTS_COUNT = 10;
+const offersData = getOffersData();
 
 const getRandomDescriptionPoint = (text) => {
   const descriptionsArray = text.split('.');
@@ -11,29 +13,44 @@ const getRandomDescriptionPoint = (text) => {
 
 const generateRandomPointId = createIdGenerator();
 
-const getPointMockElement = () => {
+const createPointMock = () => {
   const pointDate = getRandomArrayElement(DATES);
+  const pointType = getRandomArrayElement(TYPES);
 
-  const pointMockElement = {
+  const getRandomOffers = () => {
+    const typeOffers = offersData.find((offer) => offer.type === pointType).offers;
+
+    let typeOffersKeys = [];
+
+    typeOffers.forEach((offer) => {
+      typeOffersKeys.push(offer.id);
+    })
+
+    const pointOffers = typeOffersKeys.slice(0, getRandomInteger(1, typeOffersKeys.length));
+
+    return pointOffers;
+  }
+
+  const pointMock = {
     id: generateRandomPointId(),
-    type: getRandomArrayElement(TYPES),
+    type: pointType,
     destination: getRandomInteger(1, CITIES.length),
     description: getRandomDescriptionPoint(DESCRIPTION_TEXT),
     dateFrom: pointDate.dateFrom,
     dateTo: pointDate.dateTo,
     basePrice: getRandomInteger(20, 5000),
-    offers: Array.from({ length: getRandomInteger(1, 3) }, () => getRandomInteger(1, OFFERS.length)),
+    offers: getRandomOffers(),
     isFavorite: true
   };
 
-  return pointMockElement;
+  return pointMock;
 };
 
-const getPointMockArray = () => Array.from({ length: POINTS_COUNT }, () => getPointMockElement());
+const getPointMocks = () => Array.from({ length: POINTS_COUNT }, () => createPointMock());
 
-const pointMockArray = getPointMockArray();
+const points = getPointMocks();
 
-const getPointsData = () => pointMockArray;
+const getPoints = () => points;
 
-export { getPointsData };
+export { getPoints };
 

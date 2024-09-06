@@ -1,5 +1,5 @@
-import { getPointsData } from './point-mock';
-import { OFFERS } from '../const';
+import { OFFERS, TYPES } from '../const';
+import { getRandomInteger, getRandomIntegerArray } from '../util';
 
 const getOffersArrayFromPoints = (offersIdArray) => {
   const offersArray = [];
@@ -12,31 +12,28 @@ const getOffersArrayFromPoints = (offersIdArray) => {
   return offersArray;
 };
 
-const getOfferMockElement = (type, offersIdArray) => {
-  const offerMockElement = {
+const getOfferMock = (type, offersIdArray) => {
+  const offerMock = {
     type: type,
     offers: getOffersArrayFromPoints(offersIdArray)
   };
 
-  return offerMockElement;
+  return offerMock;
 };
 
-const getOffersMockArray = () => {
-  const offersMockArray = [];
-  const pointMockArray = getPointsData();
+const getOfferMocks = () => {
+  const offers = [];
 
-  pointMockArray.forEach((point) => {
-    const pointType = point.type;
-    const offersIdArray = point.offers;
-    const offerMockElement = getOfferMockElement(pointType, offersIdArray);
+  TYPES.forEach((type) => {
+    const randomIntegerArray = getRandomIntegerArray(1, getRandomInteger(1, OFFERS.length));
+    const offer = getOfferMock(type, randomIntegerArray);
+    offers.push(offer);
+  })
 
-    offersMockArray.push(offerMockElement);
-  });
+  return offers;
+}
 
-  return offersMockArray;
-};
-
-const offerMockArray = getOffersMockArray();
+const offerMockArray = getOfferMocks();
 
 const getOffersData = () => offerMockArray;
 

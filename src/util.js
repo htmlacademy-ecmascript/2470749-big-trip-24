@@ -16,6 +16,22 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
+const getRandomIntegerArray = (min, max) => {
+  const randomIntegerArray = [];
+
+  while (randomIntegerArray.length !== max) {
+    let newElement = getRandomInteger(min, max);
+    const result = randomIntegerArray.every((element) => element !== newElement);
+
+    if (result) {
+      randomIntegerArray.push(newElement);
+    } else {
+      newElement = getRandomInteger(min, max);
+    }
+  }
+  return randomIntegerArray;
+};
+
 const createIdGenerator = () => {
   let numberId = 0;
 
@@ -46,4 +62,4 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
   return result;
 };
 
-export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, getPointDuration };
+export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, getPointDuration, getRandomIntegerArray };

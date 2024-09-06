@@ -4,10 +4,10 @@ import CreatePoint from '../view/create-point-view';
 import PointItemView from '../view/point-item-view';
 import SortingView from '../view/sorting-view';
 import { render } from '../render';
-import { getDestinationsData } from '../mock/destinations-mock';
+import { getDestinations } from '../mock/destinations-mock';
 import { getOffersData } from '../mock/offers-mock';
 
-const destinations = getDestinationsData();
+const destinations = getDestinations();
 const offers = getOffersData();
 
 export default class MainPresenter {

@@ -44,8 +44,8 @@ const getDestinationsMockArray = () => {
   return destinationsMockArray;
 };
 
-const destinationsData = getDestinationsMockArray();
+const destinations = getDestinationsMockArray();
 
-const getDestinationsData = () => destinationsData;
+const getDestinations = () => destinations;
 
-export { getDestinationsData };
+export { getDestinations };
