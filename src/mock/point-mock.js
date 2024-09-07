@@ -1,5 +1,5 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
-import { TYPES, CITIES, DESCRIPTION_TEXT, DATES, OFFERS } from '../const';
+import { TYPES, CITIES, DESCRIPTION_TEXT, DATES } from '../const';
 import { getOffers } from './offers-mock';
 
 const POINTS_COUNT = 10;
@@ -20,16 +20,16 @@ const createPointMock = () => {
   const getRandomOffers = () => {
     const typeOffers = offersData.find((offer) => offer.type === pointType).offers;
 
-    let typeOffersKeys = [];
+    const typeOffersKeys = [];
 
     typeOffers.forEach((offer) => {
       typeOffersKeys.push(offer.id);
-    })
+    });
 
     const pointOffers = typeOffersKeys.slice(0, getRandomInteger(1, typeOffersKeys.length));
 
     return pointOffers;
-  }
+  };
 
   const pointMock = {
     id: generateRandomPointId(),

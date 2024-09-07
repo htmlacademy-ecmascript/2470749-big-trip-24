@@ -3,7 +3,7 @@ import { capitalize } from '../util';
 import { TYPES, CITIES } from '../const';
 
 const DEFAULT_TYPE = 'Flight';
-const DEFAULT_DESTINATION = 'Geneva'
+const DEFAULT_DESTINATION = 'Geneva';
 const DEFAULT_START_TIME = '19/03/19 00:00';
 const DEFAULT_END_TIME = '19/03/19 00:00';
 
@@ -16,15 +16,15 @@ const createPointTypeItem = (pointType, pointTypeChecked) => `
 const createDestinationsList = (destination) =>
   `<option value="${destination}"></option>`;
 
-function createCreatePointViewTemplate(offers, destinations) {
-  console.log(destinations);
+function createCreatePointViewTemplate() {
+
   const isTypeChecked = (pointType) => {
     if (pointType === 'flight') {
-      return 'checked'
+      return 'checked';
     } else {
-      return ''
+      return '';
     }
-  }
+  };
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -144,13 +144,8 @@ function createCreatePointViewTemplate(offers, destinations) {
 </li>`;
 }
 export default class CreatePointView {
-  constructor({ offers, destinations }) {
-    this.offers = offers;
-    this.destinations = destinations;
-  }
-
   getTemplate() {
-    return createCreatePointViewTemplate(this.offers, this.destinations);
+    return createCreatePointViewTemplate();
   }
 
   getElement() {

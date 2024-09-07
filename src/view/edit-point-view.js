@@ -5,10 +5,10 @@ import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 const createOfferClass = (offerTitle) => {
   const offerTitleSplitArray = offerTitle.split(' ');
   return offerTitleSplitArray[offerTitleSplitArray.length - 1];
-}
+};
 
 const createDestinationsList = (destination) =>
-`<option value="${destination}"></option>`;
+  `<option value="${destination}"></option>`;
 
 const createPointTypeItem = (pointType, pointTypeChecked) => `
   <div class="event__type-item">
@@ -32,19 +32,19 @@ function createEditPointViewTemplate(point, offers, destinations) {
 
   const isOfferChecked = (offerId) => {
     if (pointOffers.includes(offerId)) {
-      return 'checked'
+      return 'checked';
     } else {
-      return ''
+      return '';
     }
-  }
+  };
 
   const isTypeChecked = (pointType) => {
     if (pointType === type) {
-      return 'checked'
+      return 'checked';
     } else {
-      return ''
+      return '';
     }
-  }
+  };
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">

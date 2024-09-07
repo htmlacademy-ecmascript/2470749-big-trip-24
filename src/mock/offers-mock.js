@@ -28,10 +28,10 @@ const getOfferMocks = () => {
     const randomIntegerArray = getRandomIntegerArray(1, getRandomInteger(1, OFFERS.length));
     const offer = getOfferMock(type, randomIntegerArray);
     offers.push(offer);
-  })
+  });
 
   return offers;
-}
+};
 
 const offerMocks = getOfferMocks();
 
