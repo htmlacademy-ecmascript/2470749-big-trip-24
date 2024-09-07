@@ -1,11 +1,14 @@
 import { createElement } from '../render';
 import { capitalize, humanizePointDate } from '../util';
-import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 
 const createOfferClass = (offerTitle) => {
   const offerTitleSplitArray = offerTitle.split(' ');
   return offerTitleSplitArray[offerTitleSplitArray.length - 1];
 }
+
+const createDestinationsList = (destination) =>
+`<option value="${destination}"></option>`;
 
 const createPointTypeItem = (pointType, pointTypeChecked) => `
   <div class="event__type-item">
@@ -67,9 +70,7 @@ function createEditPointViewTemplate(point, offers, destinations) {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${modifiedDestination}" list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+          ${CITIES.map((city) => createDestinationsList(city)).join('')}
         </datalist>
       </div>
 

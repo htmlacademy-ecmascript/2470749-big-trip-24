@@ -21,7 +21,7 @@ export default class MainPresenter {
     render(new SortingView(), this.pointsContainer);
     render(this.pointsListComponent, this.pointsContainer);
     render(new EditPoint({point: this.points[0], offers: this.offers, destinations: this.destinations}), this.pointsListComponent.getElement());
-    render(new CreatePoint(), this.pointsListComponent.getElement());
+    render(new CreatePoint({offers: this.offers, destinations: this.destinations}), this.pointsListComponent.getElement());
 
     for (let i = 0; i < this.points.length; i++) {
       render(new PointItemView({point: this.points[i], offers: this.offers, destinations: this.destinations}), this.pointsListComponent.getElement());

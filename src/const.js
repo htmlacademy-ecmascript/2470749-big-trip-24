@@ -77,80 +77,8 @@ const OFFERS = [
   },
 ];
 
-const POINT_TYPES = [
-  {
-    name: 'taxi',
-    state: ''
-  },
-  {
-    name: 'bus',
-    state: ''
-  },
-  {
-    name: 'train',
-    state: ''
-  },
-  {
-    name: 'ship',
-    state: ''
-  },
-  {
-    name: 'drive',
-    state: ''
-  },
-  {
-    name: 'flight',
-    state: 'checked'
-  },
-  {
-    name: 'check-in',
-    state: ''
-  },
-  {
-    name: 'sightseeing',
-    state: ''
-  },
-  {
-    name: 'restaurant',
-    state: ''
-  }
-];
-
-const POINT_OFFERS = [
-  {
-    class: 'luggage',
-    title: 'Add luggage',
-    price: '50',
-    state: 'checked'
-  },
-  {
-    class: 'comfort',
-    title: 'Switch to comfort',
-    price: '80',
-    state: 'checked'
-  },
-  {
-    class: 'meal',
-    title: 'Add meal',
-    price: '15',
-    state: ''
-  },
-  {
-    class: 'seats',
-    title: 'Choose seats',
-    price: '5',
-    state: ''
-  },
-  {
-    class: 'train',
-    title: 'Travel by train',
-    price: '40',
-    state: ''
-  },
-];
-
 const DATE_FORMAT = 'D MMM';
 const TIME_FORMAT = 'HH:mm';
 const DATE_WITH_TIME_FORMAT = 'DD/MM/YY HH:MM';
 
-export { CITIES, TYPES, DESCRIPTION_TEXT, OFFERS, PICTURES, DATES, POINT_OFFERS, POINT_TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT };
+export { CITIES, TYPES, DESCRIPTION_TEXT, OFFERS, PICTURES, DATES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT };
