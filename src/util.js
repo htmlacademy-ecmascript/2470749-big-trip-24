@@ -49,17 +49,13 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
 
   const pointDuration = dayjs.duration(humatizedDateTo.diff(humatizedDateFrom));
 
-  let result = '';
-
   if (pointDuration.days() > 0) {
-    result = pointDuration.format('DD[D] HH[H] mm[M]');
+    return pointDuration.format('DD[D] HH[H] mm[M]');
   } else if (pointDuration.hours() > 0) {
-    result = pointDuration.format('HH[H] mm[M]');
+    return pointDuration.format('HH[H] mm[M]');
   } else {
-    result = pointDuration.format('mm[M]');
+    return pointDuration.format('mm[M]');
   }
-
-  return result;
 };
 
 export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, humanizePointDate, getPointDuration, getRandomIntegerArray };

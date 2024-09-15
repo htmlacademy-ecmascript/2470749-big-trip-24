@@ -3,8 +3,8 @@ import { capitalize, humanizePointDate } from '../util';
 import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 
 const createOfferClass = (offerTitle) => {
-  const offerTitleSplitArray = offerTitle.split(' ');
-  return offerTitleSplitArray[offerTitleSplitArray.length - 1];
+  const splittedOfferTitles = offerTitle.split(' ');
+  return splittedOfferTitles[splittedOfferTitles.length - 1];
 };
 
 const createDestinationsList = (destination) =>
@@ -30,7 +30,7 @@ function createEditPointViewTemplate(point, offers, destinations) {
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   const offersArray = offers.find((offer) => offer.type === type).offers;
 
-  const isOfferChecked = (offerId) => {
+  const getOfferCheckedAttribute = (offerId) => {
     if (pointOffers.includes(offerId)) {
       return 'checked';
     } else {
@@ -38,7 +38,7 @@ function createEditPointViewTemplate(point, offers, destinations) {
     }
   };
 
-  const isTypeChecked = (pointType) => {
+  const getTypeCheckedAttribute = (pointType) => {
     if (pointType === type) {
       return 'checked';
     } else {
@@ -59,7 +59,7 @@ function createEditPointViewTemplate(point, offers, destinations) {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${TYPES.map((pointType) => createPointTypeItem(pointType, isTypeChecked(pointType))).join('')}
+            ${TYPES.map((pointType) => createPointTypeItem(pointType, getTypeCheckedAttribute(pointType))).join('')}
           </fieldset>
         </div>
       </div>
@@ -101,7 +101,7 @@ function createEditPointViewTemplate(point, offers, destinations) {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, isOfferChecked(pointOffer.id))).join('')}
+        ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id))).join('')}
         </div>
       </section>
 

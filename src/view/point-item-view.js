@@ -2,8 +2,8 @@ import { createElement } from '../render';
 import { humanizePointDate, getPointDuration } from '../util';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 
-const getOffersData = (offerType, offersList) => {
-  const offerData = offersList.find((offer) => offer.type === offerType).offers;
+const getOffers = (offerType, offersList) => {
+  const offers = offersList.find((offer) => offer.type === offerType).offers;
 
   const renderOffers = (title, price) => `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
@@ -11,8 +11,7 @@ const getOffersData = (offerType, offersList) => {
       <span class="event__offer-price">${price}</span>
       </li>`;
 
-  const result = offerData.map((offer) => renderOffers(offer.title, offer.price)).join('');
-  return result;
+  return offers.map((offer) => renderOffers(offer.title, offer.price)).join('');
 };
 
 function createPointItemViewTemplate(point, offers, destinations) {
@@ -40,7 +39,7 @@ function createPointItemViewTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${getOffersData(type, offers)}
+      ${getOffers(type, offers)}
     </ul>
     <button class="event__favorite-btn event__favorite-btn--active" type="button">
       <span class="visually-hidden">Add to favorite</span>

@@ -18,7 +18,7 @@ const createDestinationsList = (destination) =>
 
 function createCreatePointViewTemplate() {
 
-  const isTypeChecked = (pointType) => {
+  const getTypeCheckedAttribute = (pointType) => {
     if (pointType === 'flight') {
       return 'checked';
     } else {
@@ -39,7 +39,7 @@ function createCreatePointViewTemplate() {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${TYPES.map((pointType) => createPointTypeItem(pointType, isTypeChecked(pointType))).join('')}
+            ${TYPES.map((pointType) => createPointTypeItem(pointType, getTypeCheckedAttribute(pointType))).join('')}
           </fieldset>
         </div>
       </div>
