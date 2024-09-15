@@ -1,6 +1,6 @@
-import { createElement } from '../render';
 import { capitalize } from '../util';
 import { TYPES, CITIES } from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const DEFAULT_TYPE = 'Flight';
 const DEFAULT_DESTINATION = 'Geneva';
@@ -143,20 +143,8 @@ function createCreatePointViewTemplate() {
   </form>
 </li>`;
 }
-export default class CreatePointView {
-  getTemplate() {
+export default class CreatePointView extends AbstractView {
+  get template() {
     return createCreatePointViewTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

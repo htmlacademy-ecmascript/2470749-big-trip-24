@@ -1,6 +1,6 @@
-import { createElement } from '../render';
 import { capitalize, humanizePointDate } from '../util';
 import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const createOfferClass = (offerTitle) => {
   const splittedOfferTitles = offerTitle.split(' ');
@@ -114,26 +114,19 @@ function createEditPointViewTemplate(point, offers, destinations) {
 </li>`;
 }
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destinations = null;
+
   constructor({ point, offers, destinations }) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
   }
 
-  getTemplate() {
-    return createEditPointViewTemplate(this.point, this.offers, this.destinations);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEditPointViewTemplate(this.#point, this.#offers, this.#destinations);
   }
 }

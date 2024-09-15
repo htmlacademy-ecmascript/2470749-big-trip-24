@@ -1,5 +1,5 @@
-import { createElement } from '../render';
 import { capitalize } from '../util';
+import AbstractView from '../framework/view/abstract-view';
 
 const FILTERS = [
   {
@@ -32,20 +32,8 @@ function createFiltersViewTemplate() {
 </form>`;
 }
 
-export default class FiltersView {
-  getTemplate() {
+export default class FiltersView extends AbstractView {
+  get template() {
     return createFiltersViewTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

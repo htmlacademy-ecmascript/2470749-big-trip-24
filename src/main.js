@@ -1,6 +1,6 @@
 import NewFilters from './view/filters-view';
 import NewTripInfo from './view/trip-info-view';
-import { RenderPosition, render } from './render';
+import { RenderPosition, render } from './framework/render';
 import MainPresenter from './presenter/main-presenter';
 import PointModel from './model/point-model';
 
