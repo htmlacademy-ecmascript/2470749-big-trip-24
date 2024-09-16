@@ -1,7 +1,6 @@
 import { humanizePointDate, getPointDuration } from '../util';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
-import { render } from '../framework/render';
 
 const getOffers = (offerType, offersList) => {
   const offers = offersList.find((offer) => offer.type === offerType).offers;

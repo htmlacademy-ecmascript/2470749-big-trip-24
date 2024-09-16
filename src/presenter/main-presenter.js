@@ -24,9 +24,13 @@ export default class MainPresenter {
     this.#destinations = [...this.#pointModel.destinations];
     this.#offers = [...this.#pointModel.offers];
 
+    this.#renderMain();
+  }
+
+  #renderMain() {
     render(new SortingView(), this.#pointsContainer);
     render(this.#pointsListComponent, this.#pointsContainer);
-    // render(new CreatePoint(), this.#pointsListComponent.element);
+    render(new CreatePoint(), this.#pointsListComponent.element);
 
     for (const point of this.#points) {
       this.#renderPointItem(point, this.#offers, this.#destinations);
