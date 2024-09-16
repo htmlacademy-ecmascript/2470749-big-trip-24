@@ -39,7 +39,7 @@ export default class MainPresenter {
 
     if (this.#points.length === 0) {
       render(new NoPointsView(), this.#pointsListComponent.element);
-      return;
+
     }
   }
 
