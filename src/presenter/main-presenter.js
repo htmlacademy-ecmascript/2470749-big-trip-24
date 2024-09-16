@@ -39,7 +39,7 @@ export default class MainPresenter {
 
     if (this.#points.length === 0) {
       render(new NoPointsView(), this.#pointsListComponent.element);
-
+      return;
     }
   }
 
@@ -70,7 +70,7 @@ export default class MainPresenter {
         replaceFormToPoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       },
-      onFormSave: () => {
+      onFormSaveClick: () => {
         replaceFormToPoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       }
