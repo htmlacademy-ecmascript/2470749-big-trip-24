@@ -1,5 +1,6 @@
 import { capitalize, humanizePointDate } from '../util';
-import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { CITIES } from '../mock/const-mock';
 import AbstractView from '../framework/view/abstract-view';
 
 const createOfferClass = (offerTitle) => {
@@ -25,7 +26,7 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
   </label>
   </div>`;
 
-function createEditPointViewTemplate(point, offers, destinations) {
+function createEditPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, description, offers: pointOffers } = point;
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   const offersArray = offers.find((offer) => offer.type === type).offers;
@@ -134,7 +135,7 @@ export default class EditPointView extends AbstractView {
   }
 
   get template() {
-    return createEditPointViewTemplate(this.#point, this.#offers, this.#destinations);
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
   #editClickHandler = (evt) => {

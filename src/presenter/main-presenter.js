@@ -1,6 +1,5 @@
 import PointListView from '../view/point-list-view';
-import EditPoint from '../view/edit-point-view';
-import CreatePoint from '../view/create-point-view';
+import EditPointView from '../view/edit-point-view';
 import PointItemView from '../view/point-item-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
@@ -31,7 +30,6 @@ export default class MainPresenter {
   #renderMain() {
     render(new SortingView(), this.#pointsContainer);
     render(this.#pointsListComponent, this.#pointsContainer);
-    render(new CreatePoint(), this.#pointsListComponent.element);
 
     for (const point of this.#points) {
       this.#renderPointItem(point, this.#offers, this.#destinations);
@@ -62,7 +60,7 @@ export default class MainPresenter {
       }
     });
 
-    const editPointComponent = new EditPoint({
+    const editPointComponent = new EditPointView({
       point,
       offers,
       destinations,

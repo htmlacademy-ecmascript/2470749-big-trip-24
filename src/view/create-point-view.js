@@ -16,7 +16,7 @@ const createPointTypeItem = (pointType, pointTypeChecked) => `
 const createDestinationsList = (destination) =>
   `<option value="${destination}"></option>`;
 
-function createCreatePointViewTemplate() {
+function createCreatePointTemplate() {
 
   const getTypeCheckedAttribute = (pointType) => {
     if (pointType === 'flight') {
@@ -145,6 +145,6 @@ function createCreatePointViewTemplate() {
 }
 export default class CreatePointView extends AbstractView {
   get template() {
-    return createCreatePointViewTemplate();
+    return createCreatePointTemplate();
   }
 }

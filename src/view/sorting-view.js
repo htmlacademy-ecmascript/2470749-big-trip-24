@@ -29,7 +29,7 @@ const getSortingItems = (sorting) => ` <div class="trip-sort__item  trip-sort__i
 <label class="trip-sort__btn" for="sort-${sorting.name}">${capitalize(sorting.name)}</label>
 </div>`;
 
-function createSortingViewTemplate() {
+function createSortingTemplate() {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${SORTINGS.map((sorting) => getSortingItems(sorting)).join('')}
   </form>`;
@@ -37,6 +37,6 @@ function createSortingViewTemplate() {
 
 export default class SortingView extends AbstractView {
   get template() {
-    return createSortingViewTemplate();
+    return createSortingTemplate();
   }
 }

@@ -14,7 +14,7 @@ const getOffers = (offerType, offersList) => {
   return offers.map((offer) => renderOffers(offer.title, offer.price)).join('');
 };
 
-function createPointItemViewTemplate(point, offers, destinations) {
+function createPointItemTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
 
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
@@ -71,7 +71,7 @@ export default class PointItemView extends AbstractView {
   }
 
   get template() {
-    return createPointItemViewTemplate(this.#point, this.#offers, this.#destinations);
+    return createPointItemTemplate(this.#point, this.#offers, this.#destinations);
   }
 
   #editClickHandler = (evt) => {

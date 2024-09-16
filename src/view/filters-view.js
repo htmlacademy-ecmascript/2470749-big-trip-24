@@ -25,7 +25,7 @@ const getFiltersItem = (filter) => `<div class="trip-filters__filter">
 <label class="trip-filters__filter-label" for="filter-${filter.name}">${capitalize(filter.name)}</label>
 </div>`;
 
-function createFiltersViewTemplate() {
+function createFiltersTemplate() {
   return `<form class="trip-filters" action="#" method="get">
   ${FILTERS.map((filter) => getFiltersItem(filter)).join('')}
   <button class="visually-hidden" type="submit">Accept filter</button>
@@ -34,6 +34,6 @@ function createFiltersViewTemplate() {
 
 export default class FiltersView extends AbstractView {
   get template() {
-    return createFiltersViewTemplate();
+    return createFiltersTemplate();
   }
 }
