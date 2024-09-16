@@ -3,6 +3,7 @@ import EditPoint from '../view/edit-point-view';
 import CreatePoint from '../view/create-point-view';
 import PointItemView from '../view/point-item-view';
 import SortingView from '../view/sorting-view';
+import NoPointsView from '../view/no-points-view';
 import { render, replace } from '../framework/render';
 
 
@@ -34,6 +35,11 @@ export default class MainPresenter {
 
     for (const point of this.#points) {
       this.#renderPointItem(point, this.#offers, this.#destinations);
+    }
+
+    if (this.#points.length === 0) {
+      render(new NoPointsView(), this.#pointsListComponent.element);
+      return;
     }
   }
 
