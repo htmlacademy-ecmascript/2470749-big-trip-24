@@ -1,5 +1,5 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
-import { CITIES, DESCRIPTION_TEXT, DATES } from "./const-mock";
+import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
 import { TYPES } from '../const';
 import { getOffers } from './offers-mock';
 
