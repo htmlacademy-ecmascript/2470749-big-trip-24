@@ -14,7 +14,6 @@ const mainPresenter = new MainPresenter({
   pointModel,
 });
 const filters = generateFilter(pointModel.points);
-console.log(filters);
 
 render(new NewTripInfo(), mainContainer, RenderPosition.AFTERBEGIN);
 render(new NewFilters({filters}), filtersContainer);

@@ -12,8 +12,8 @@ function getFiltersItem(type, count) {
     ${type === 'everything' ? 'checked' : ''}
     ${count === 0 ? 'disabled' : ''} >
     <label class="trip-filters__filter-label" for="filter-${type}">${capitalize(type)}</label>
-    </div>`
-};
+    </div>`;
+}
 
 function createFiltersTemplate(filters) {
   return `<form class="trip-filters" action="#" method="get">
