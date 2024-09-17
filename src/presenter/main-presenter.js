@@ -31,13 +31,12 @@ export default class MainPresenter {
     render(new SortingView(), this.#pointsContainer);
     render(this.#pointsListComponent, this.#pointsContainer);
 
-    for (const point of this.#points) {
-      this.#renderPointItem(point, this.#offers, this.#destinations);
-    }
-
     if (this.#points.length === 0) {
       render(new NoPointsView(), this.#pointsListComponent.element);
+    }
 
+    for (const point of this.#points) {
+      this.#renderPointItem(point, this.#offers, this.#destinations);
     }
   }
 
