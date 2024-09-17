@@ -1,6 +1,6 @@
-import { createElement } from '../render';
 import { humanizePointDate, getPointDuration } from '../util';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const getOffers = (offerType, offersList) => {
   const offers = offersList.find((offer) => offer.type === offerType).offers;
@@ -14,7 +14,7 @@ const getOffers = (offerType, offersList) => {
   return offers.map((offer) => renderOffers(offer.title, offer.price)).join('');
 };
 
-function createPointItemViewTemplate(point, offers, destinations) {
+function createPointItemTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice } = point;
 
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
@@ -54,26 +54,28 @@ function createPointItemViewTemplate(point, offers, destinations) {
 </li>`;
 }
 
-export default class PointItemView {
-  constructor({ point, offers, destinations }) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class PointItemView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destinations = null;
+  #handleEditClick = null;
+
+  constructor({ point, offers, destinations, onEditClick }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate() {
-    return createPointItemViewTemplate(this.point, this.offers, this.destinations);
+  get template() {
+    return createPointItemTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 }

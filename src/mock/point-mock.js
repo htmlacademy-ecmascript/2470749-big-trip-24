@@ -1,5 +1,6 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../util';
-import { TYPES, CITIES, DESCRIPTION_TEXT, DATES } from '../const';
+import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
+import { TYPES } from '../const';
 import { getOffers } from './offers-mock';
 
 const POINTS_COUNT = 10;

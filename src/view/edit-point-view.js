@@ -1,6 +1,7 @@
-import { createElement } from '../render';
 import { capitalize, humanizePointDate } from '../util';
-import { CITIES, DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { CITIES } from '../mock/const-mock';
+import AbstractView from '../framework/view/abstract-view';
 
 const createOfferClass = (offerTitle) => {
   const splittedOfferTitles = offerTitle.split(' ');
@@ -25,7 +26,7 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
   </label>
   </div>`;
 
-function createEditPointViewTemplate(point, offers, destinations) {
+function createEditPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, description, offers: pointOffers } = point;
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   const offersArray = offers.find((offer) => offer.type === type).offers;
@@ -114,26 +115,36 @@ function createEditPointViewTemplate(point, offers, destinations) {
 </li>`;
 }
 
-export default class EditPointView {
-  constructor({ point, offers, destinations }) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = null;
+  #destinations = null;
+  #handleEditClick = null;
+  #handleFormSave = null;
+
+  constructor({ point, offers, destinations, onEditClick, onFormSaveClick }) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#handleEditClick = onEditClick;
+    this.#handleFormSave = onFormSaveClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
   }
 
-  getTemplate() {
-    return createEditPointViewTemplate(this.point, this.offers, this.destinations);
+  get template() {
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #formSaveHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSave();
+  };
 }

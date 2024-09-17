@@ -1,6 +1,6 @@
-import { createElement } from '../render';
+import AbstractView from '../framework/view/abstract-view';
 
-function createTripInfoViewTemplate() {
+function createTripInfoTemplate() {
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
@@ -14,20 +14,8 @@ function createTripInfoViewTemplate() {
 </section>`;
 }
 
-export default class TripInfoView {
-  getTemplate() {
-    return createTripInfoViewTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+export default class TripInfoView extends AbstractView {
+  get template() {
+    return createTripInfoTemplate();
   }
 }

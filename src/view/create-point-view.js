@@ -1,6 +1,6 @@
-import { createElement } from '../render';
 import { capitalize } from '../util';
 import { TYPES, CITIES } from '../const';
+import AbstractView from '../framework/view/abstract-view';
 
 const DEFAULT_TYPE = 'Flight';
 const DEFAULT_DESTINATION = 'Geneva';
@@ -16,7 +16,7 @@ const createPointTypeItem = (pointType, pointTypeChecked) => `
 const createDestinationsList = (destination) =>
   `<option value="${destination}"></option>`;
 
-function createCreatePointViewTemplate() {
+function createCreatePointTemplate() {
 
   const getTypeCheckedAttribute = (pointType) => {
     if (pointType === 'flight') {
@@ -143,20 +143,8 @@ function createCreatePointViewTemplate() {
   </form>
 </li>`;
 }
-export default class CreatePointView {
-  getTemplate() {
-    return createCreatePointViewTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+export default class CreatePointView extends AbstractView {
+  get template() {
+    return createCreatePointTemplate();
   }
 }
