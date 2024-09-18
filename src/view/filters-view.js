@@ -10,7 +10,7 @@ function getFiltersItem(type, count) {
     name="trip-filter"
     value="${type}"
     ${type === 'everything' ? 'checked' : ''}
-    ${count === 0 ? 'disabled' : ''} >
+    ${count === 0 ? 'disabled' : 'checked'} >
     <label class="trip-filters__filter-label" for="filter-${type}">${capitalize(type)}</label>
     </div>`;
 }
