@@ -1,9 +1,7 @@
 import PointListView from '../view/point-list-view';
-import EditPointView from '../view/edit-point-view';
-import PointItemView from '../view/point-item-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
-import { render, replace } from '../framework/render';
+import { render } from '../framework/render';
 import PointPresenter from './point-presenter';
 
 

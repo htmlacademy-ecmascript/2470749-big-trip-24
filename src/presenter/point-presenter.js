@@ -1,4 +1,4 @@
-import { render } from "../framework/render";
+import { render, replace } from "../framework/render";
 import PointItemView from "../view/point-item-view";
 import EditPointView from "../view/edit-point-view";
 
@@ -26,7 +26,7 @@ export default class PointPresenter {
       destinations: this.#destinations,
       onEditClick: () => {
         this.#replacePointToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
+        document.addEventListener('keydown', this.#escKeyDownHandler);
       }
     });
 
