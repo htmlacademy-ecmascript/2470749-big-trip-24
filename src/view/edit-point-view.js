@@ -1,4 +1,4 @@
-import { capitalize, humanizePointDate } from '../util';
+import { capitalize, humanizePointDate } from './utils/util';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractView from '../framework/view/abstract-view';
