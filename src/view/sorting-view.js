@@ -1,4 +1,4 @@
-import { capitalize } from './utils/util';
+import { capitalize } from '../utils/common-utils';
 import AbstractView from '../framework/view/abstract-view';
 
 const SORTINGS = [

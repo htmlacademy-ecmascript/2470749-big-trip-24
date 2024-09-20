@@ -1,4 +1,4 @@
-import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../view/utils/util';
+import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../utils/common-utils';
 import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
 import { TYPES } from '../const';
 import { getOffers } from './offers-mock';
@@ -32,6 +32,11 @@ const createPointMock = () => {
     return pointOffers;
   };
 
+  const getRandomFavoriteAtribute = () => {
+    const result = getRandomInteger(0, 1);
+    return result === 0;
+  };
+
   const pointMock = {
     id: generateRandomPointId(),
     type: pointType,
@@ -41,7 +46,7 @@ const createPointMock = () => {
     dateTo: pointDate.dateTo,
     basePrice: getRandomInteger(20, 5000),
     offers: getRandomOffers(),
-    isFavorite: true
+    isFavorite: getRandomFavoriteAtribute()
   };
 
   return pointMock;

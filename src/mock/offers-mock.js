@@ -1,6 +1,6 @@
 import { OFFERS } from './const-mock';
 import { TYPES } from '../const';
-import { getRandomInteger, getRandomIntegerArray } from '../view/utils/util';
+import { getRandomInteger, getRandomIntegerArray } from '../utils/common-utils';
 
 const getOffersArrayFromPoints = (offersIdArray) => {
   const offersArray = [];
