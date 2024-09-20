@@ -45,7 +45,7 @@ export default class PointPresenter {
         this.#replaceFormToPoint();
         document.removeEventListener('keydown', this.#escKeyDownHandler);
       },
-      onFormSaveClick: this.#handleFormSaveClick(point)
+      onFormSaveClick: this.#handleFormSaveClick
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {

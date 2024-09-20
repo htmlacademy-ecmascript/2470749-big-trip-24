@@ -32,6 +32,11 @@ const createPointMock = () => {
     return pointOffers;
   };
 
+  const getRandomFavoriteAtribute = () => {
+    const result = getRandomInteger(0, 1);
+    return result === 0 ? true : false;
+  }
+
   const pointMock = {
     id: generateRandomPointId(),
     type: pointType,
@@ -41,7 +46,7 @@ const createPointMock = () => {
     dateTo: pointDate.dateTo,
     basePrice: getRandomInteger(20, 5000),
     offers: getRandomOffers(),
-    isFavorite: true
+    isFavorite: getRandomFavoriteAtribute()
   };
 
   return pointMock;
