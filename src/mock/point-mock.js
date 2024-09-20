@@ -34,8 +34,8 @@ const createPointMock = () => {
 
   const getRandomFavoriteAtribute = () => {
     const result = getRandomInteger(0, 1);
-    return result === 0 ? true : false;
-  }
+    return result === 0;
+  };
 
   const pointMock = {
     id: generateRandomPointId(),

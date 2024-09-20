@@ -5,7 +5,7 @@ import EditPointView from '../view/edit-point-view';
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDIT: 'EDIT'
-}
+};
 
 export default class PointPresenter {
   #point = null;
@@ -40,7 +40,7 @@ export default class PointPresenter {
       offers: this.#offers,
       destinations: this.#destinations,
       onEditClick: () => {
-        this.#replacePointToForm()
+        this.#replacePointToForm();
       },
       onFavoriteClick: this.#handleFavoriteClick
     });
@@ -50,7 +50,7 @@ export default class PointPresenter {
       offers,
       destinations,
       onEditClick: () => {
-        this.#replaceFormToPoint()
+        this.#replaceFormToPoint();
       },
       onFormSaveClick: this.#handleFormSaveClick
     });

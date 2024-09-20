@@ -57,6 +57,6 @@ export default class MainPresenter {
   };
 
   #handleModeChange = () => {
-    this.#pointPresenters.forEach((presenter) => presenter.resetView())
-  }
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
 }
