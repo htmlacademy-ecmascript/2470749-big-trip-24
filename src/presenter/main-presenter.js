@@ -5,7 +5,6 @@ import { render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { updatePoint } from '../utils/common-utils';
 
-
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #pointsContainer = null;
@@ -44,7 +43,8 @@ export default class MainPresenter {
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
-      onPointsChange: this.#handlePointsChange
+      onPointsChange: this.#handlePointsChange,
+      onModeChange: this.#handleModeChange
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -55,4 +55,8 @@ export default class MainPresenter {
     this.#points = updatePoint(this.#points, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView())
+  }
 }

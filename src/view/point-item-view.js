@@ -23,7 +23,6 @@ function createPointItemTemplate(point, offers, destinations) {
     return isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
   }
 
-
   return `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime="2019-03-18">${humanizePointDate(dateFrom, DATE_FORMAT)}</time>
