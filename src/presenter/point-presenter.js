@@ -1,6 +1,6 @@
-import { render, replace } from "../framework/render";
-import PointItemView from "../view/point-item-view";
-import EditPointView from "../view/edit-point-view";
+import { render, replace, remove } from '../framework/render';
+import PointItemView from '../view/point-item-view';
+import EditPointView from '../view/edit-point-view';
 
 export default class PointPresenter {
   #point = null;
@@ -11,14 +11,20 @@ export default class PointPresenter {
   #pointComponent = null;
   #editPointComponent = null;
 
-  constructor({ pointsListComponent }) {
+  #handlePointsChange = null;
+
+  constructor({ pointsListComponent, onPointsChange }) {
     this.#pointsListComponent = pointsListComponent;
+    this.#handlePointsChange = onPointsChange;
   }
 
   init(point, offers, destinations) {
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
+
+    const prevPointComponent = this.#pointComponent;
+    const prevEditPointComponent = this.#editPointComponent;
 
     this.#pointComponent = new PointItemView({
       point: this.#point,
@@ -27,7 +33,8 @@ export default class PointPresenter {
       onEditClick: () => {
         this.#replacePointToForm();
         document.addEventListener('keydown', this.#escKeyDownHandler);
-      }
+      },
+      onFavoriteClick: this.#handleFavoriteClick
     });
 
     this.#editPointComponent = new EditPointView({
@@ -38,13 +45,25 @@ export default class PointPresenter {
         this.#replaceFormToPoint();
         document.removeEventListener('keydown', this.#escKeyDownHandler);
       },
-      onFormSaveClick: () => {
-        this.#replaceFormToPoint();
-        document.removeEventListener('keydown', this.#escKeyDownHandler);
-      }
+      onFormSaveClick: this.#handleFormSaveClick(point)
     });
 
-    render(this.#pointComponent, this.#pointsListComponent);
+    if (prevPointComponent === null || prevEditPointComponent === null) {
+      render(this.#pointComponent, this.#pointsListComponent);
+      return;
+    }
+
+    // проверка на наличие DOM элемента чтобы не пытаться заменить то, что не было отрисовано
+    if (this.#pointsListComponent.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#pointsListComponent.contains(prevEditPointComponent.element)) {
+      replace(this.#editPointComponent, prevEditPointComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevEditPointComponent);
   }
 
   #replacePointToForm() {
@@ -55,11 +74,21 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#editPointComponent);
   }
 
+  #handleFavoriteClick = () => {
+    this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+  };
+
+  #handleFormSaveClick = (point) => {
+    this.#handlePointsChange(point);
+    this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  };
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       this.#replaceFormToPoint();
-      document.removeEventListener('keydown', escKeyDownHandler);
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 }

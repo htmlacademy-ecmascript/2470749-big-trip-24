@@ -1,4 +1,4 @@
-import { FilterType } from '../../const';
+import { FilterType } from '../const';
 // В приложении предусмотрено несколько фильтров:
 // Everything — полный список точек маршрута;
 
