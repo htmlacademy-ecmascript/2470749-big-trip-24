@@ -20,4 +20,35 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
   }
 };
 
-export { humanizePointDate, getPointDuration };
+function getWeightForPrice(a, b) {
+  if (a.basePrice < b.basePrice) {
+    return 1;
+  }
+
+  if (a.basePrice > b.basePrice) {
+    return -1;
+  }
+
+  if (a.basePrice === b.basePrice) {
+    return 0;
+  }
+}
+
+function getWeightForTime(a, b) {
+  const pointADuration = getPointDuration(a.dateFrom, a.dateTo);
+  const pointBDuration = getPointDuration(b.dateFrom, b.dateTo);
+
+  if (pointADuration < pointBDuration) {
+    return 1;
+  }
+
+  if (pointADuration > pointBDuration) {
+    return -1;
+  }
+
+  if (pointADuration === pointBDuration) {
+    return 0;
+  }
+}
+
+export { humanizePointDate, getPointDuration, getWeightForPrice, getWeightForTime };

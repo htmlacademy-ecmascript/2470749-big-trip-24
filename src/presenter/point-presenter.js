@@ -89,6 +89,11 @@ export default class PointPresenter {
     this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#editPointComponent);
+  }
+
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToPoint();
