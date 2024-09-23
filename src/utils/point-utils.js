@@ -13,11 +13,13 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
 
   if (pointDuration.days() > 0) {
     return pointDuration.format('DD[D] HH[H] mm[M]');
-  } else if (pointDuration.hours() > 0) {
-    return pointDuration.format('HH[H] mm[M]');
-  } else {
-    return pointDuration.format('mm[M]');
   }
+
+  if (pointDuration.hours() > 0) {
+    return pointDuration.format('HH[H] mm[M]');
+  }
+
+  return pointDuration.format('mm[M]');
 };
 
 function getWeightForPrice(a, b) {

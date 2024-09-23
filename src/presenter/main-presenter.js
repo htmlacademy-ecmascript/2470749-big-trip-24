@@ -34,8 +34,6 @@ export default class MainPresenter {
 
     this.#renderSorting();
     this.#renderMain();
-
-    this.#renderPointsList();
   }
 
   #renderMain() {
@@ -44,6 +42,8 @@ export default class MainPresenter {
     if (this.#points.length === 0) {
       this.#renderNoPoints();
     }
+
+    this.#renderPointsList();
   }
 
   #renderSorting() {
