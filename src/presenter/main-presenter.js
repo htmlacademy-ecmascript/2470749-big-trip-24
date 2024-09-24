@@ -49,9 +49,9 @@ export default class MainPresenter {
   #renderSorting(sortType) {
     this.#sorting = new SortingView({
       onSortingClick: this.#handleSortingClick,
-      currentSortType: sortType
+      sortType: sortType
     });
-
+console.log(sortType)
     render(this.#sorting, this.#pointsContainer);
   }
 

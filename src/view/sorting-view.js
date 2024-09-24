@@ -25,18 +25,18 @@ function createSortingTemplate(currentSortType) {
 
 export default class SortingView extends AbstractView {
   #handleSortingClick = null;
-  #currentSortType = null;
+  #sortType = '';
 
-  constructor({ onSortingClick, currentSortType }) {
+  constructor({ onSortingClick, sortType }) {
     super();
     this.#handleSortingClick = onSortingClick;
-    this.#currentSortType = currentSortType;
+    this.#sortType = sortType;
 
     this.element.addEventListener('click', this.#sortingClickHandler);
   }
 
   get template() {
-    return createSortingTemplate(this.#currentSortType);
+    return createSortingTemplate(this.#sortType);
   }
 
   #sortingClickHandler = (evt) => {
