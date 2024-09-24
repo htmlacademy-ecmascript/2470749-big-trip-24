@@ -32,7 +32,7 @@ export default class MainPresenter {
     this.#offers = [...this.#pointModel.offers];
     this.#initialPointsLayout = [...this.#pointModel.points];
 
-    this.#renderSorting();
+    this.#renderSorting(this.#currentSortType);
     this.#renderMain();
   }
 
@@ -46,9 +46,10 @@ export default class MainPresenter {
     this.#renderPointsList();
   }
 
-  #renderSorting() {
+  #renderSorting(sortType) {
     this.#sorting = new SortingView({
       onSortingClick: this.#handleSortingClick,
+      currentSortType: sortType
     });
 
     render(this.#sorting, this.#pointsContainer);
@@ -79,6 +80,7 @@ export default class MainPresenter {
 
     this.#sortPoints(sortType);
     this.#clearPointsList();
+    this.#renderSorting(sortType);
     this.#renderPointsList();
   };
 
@@ -95,7 +97,6 @@ export default class MainPresenter {
 
   #handlePointsChange = (updatedPoint) => {
     this.#points = updatePoint(this.#points, updatedPoint);
-    this.#initialPointsLayout = updatePoint(this.#initialPointsLayout, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
   };
 
