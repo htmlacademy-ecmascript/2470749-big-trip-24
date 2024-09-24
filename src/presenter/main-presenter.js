@@ -32,11 +32,11 @@ export default class MainPresenter {
     this.#offers = [...this.#pointModel.offers];
     this.#initialPointsLayout = [...this.#pointModel.points];
 
-    this.#renderSorting(this.#currentSortType);
     this.#renderMain();
   }
 
   #renderMain() {
+    this.#renderSorting(this.#currentSortType);
     render(this.#pointsListComponent, this.#pointsContainer);
 
     if (this.#points.length === 0) {
@@ -51,7 +51,7 @@ export default class MainPresenter {
       onSortingClick: this.#handleSortingClick,
       sortType: sortType
     });
-console.log(sortType)
+
     render(this.#sorting, this.#pointsContainer);
   }
 
@@ -79,8 +79,8 @@ console.log(sortType)
     }
 
     this.#sortPoints(sortType);
-    this.#clearPointsList();
     this.#renderSorting(sortType);
+    this.#clearPointsList();
     this.#renderPointsList();
   };
 

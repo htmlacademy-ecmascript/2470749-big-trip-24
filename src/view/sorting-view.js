@@ -3,7 +3,11 @@ import AbstractView from '../framework/view/abstract-view';
 import { SortType } from '../const';
 
 
-const getSortingItems = (sorting, currentSortType) => ` <div class="trip-sort__item  trip-sort__item--${sorting}">
+const getSortingItems = (sorting, currentSortType) => {
+  // console.log(`sorting ${ sorting}`);
+  // console.log(`current ${ currentSortType}`);
+  // console.log(sorting === currentSortType ? 'checked' : '');
+  return `<div class="trip-sort__item  trip-sort__item--${sorting}">
   <input
   id="sort-${sorting}"
   class="trip-sort__input  visually-hidden"
@@ -11,10 +15,10 @@ const getSortingItems = (sorting, currentSortType) => ` <div class="trip-sort__i
   name="trip-sort"
   value="sort-${sorting}"
   ${sorting === 'offer' || sorting === 'event' ? 'disabled' : ''}
-  ${sorting === currentSortType ? 'checked' : ''}
-  >
+  ${sorting === currentSortType ? 'checked' : ''}>
 <label class="trip-sort__btn" for="sort-${sorting}" data-sort-type="${sorting}">${capitalize(sorting)}</label>
 </div>`;
+};
 
 function createSortingTemplate(currentSortType) {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
