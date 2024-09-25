@@ -2,7 +2,7 @@ import { capitalize } from '../utils/common-utils';
 import { humanizePointDate } from '../utils/point-utils';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-view';
 
 const createOfferClass = (offerTitle) => {
   const splittedOfferTitles = offerTitle.split(' ');
@@ -116,12 +116,13 @@ function createEditPointTemplate(point, offers, destinations) {
 </li>`;
 }
 
-export default class EditPointView extends AbstractView {
+export default class EditPointView extends AbstractStatefulView {
   #point = null;
   #offers = null;
   #destinations = null;
   #handleEditClick = null;
   #handleFormSave = null;
+  // _state = {};
 
   constructor({ point, offers, destinations, onEditClick, onFormSaveClick }) {
     super();
@@ -133,10 +134,25 @@ export default class EditPointView extends AbstractView {
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
+
+    this._setState(EditPointView.parsePointToState(point));
   }
 
+
   get template() {
-    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
+    console.log(this._state);
+    return createEditPointTemplate(this._state, this.#offers, this.#destinations);
+  }
+
+  _restoreHandlers() {
+  }
+
+  static parsePointToState(point) {
+    return { ...point };
+  }
+
+  static parseStateToPoint(state) {
+    return { ...state };
   }
 
   #editClickHandler = (evt) => {
@@ -146,6 +162,6 @@ export default class EditPointView extends AbstractView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSave();
+    this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
   };
 }
