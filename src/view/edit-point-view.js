@@ -29,6 +29,7 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
 
 function createEditPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
+  console.log(point);
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   const description = destinations.find((destinationElement) => destinationElement.id === destination).description;
   const offersArray = offers.find((offer) => offer.type === type).offers;
@@ -142,12 +143,18 @@ export default class EditPointView extends AbstractStatefulView {
     return createEditPointTemplate(this._state, this.#offers, this.#destinations);
   }
 
+  reset(point) {
+    this.updateElement(
+      EditPointView.parsePointToState(point)
+    );
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
-    this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceInputHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#formPriceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
   }
 
@@ -162,7 +169,7 @@ export default class EditPointView extends AbstractStatefulView {
   // обработчики событий
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleEditClick(EditPointView.parseStateToPoint(this._state));
   };
 
   #formSaveHandler = (evt) => {
@@ -177,6 +184,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formPriceInputHandler = (evt) => {
     evt.preventDefault();
+
     this.updateElement(({
       basePrice: evt.target.value,
     }));
