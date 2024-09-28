@@ -89,7 +89,8 @@ export default class MainPresenter {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
       onPointsChange: this.#handlePointsChange,
-      onModeChange: this.#handleModeChange
+      onModeChange: this.#handleModeChange,
+      onPointClear: this.#clearPoint,
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -119,4 +120,9 @@ export default class MainPresenter {
   #renderNoPoints() {
     render(this.#noPoints, this.#pointsListComponent.element);
   }
+
+  #clearPoint = (point) => {
+    const targetPresenter = this.#pointPresenters.get(point.id);
+    targetPresenter.destroy();
+  };
 }

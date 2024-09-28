@@ -2,8 +2,8 @@ import { humanizePointDate, getPointDuration } from '../utils/point-utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
-const getOffers = (offerType, offersList) => {
-  const offers = offersList.find((offer) => offer.type === offerType).offers;
+const getOffers = (type, offersList) => {
+  const offers = offersList.find((offer) => offer.type === type).offers;
 
   const renderOffers = (title, price) => `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
@@ -41,7 +41,7 @@ function createPointItemTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${getOffers(type, offers)}
+    ${getOffers(type, offers)}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>

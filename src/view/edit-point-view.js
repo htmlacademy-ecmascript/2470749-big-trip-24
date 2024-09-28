@@ -1,8 +1,8 @@
 import { capitalize } from '../utils/common-utils';
-import { humanizePointDate } from '../utils/point-utils';
+import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/point-utils';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
-import AbstractStatefulView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createOfferClass = (offerTitle) => {
   const splittedOfferTitles = offerTitle.split(' ');
@@ -28,8 +28,9 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
   </div>`;
 
 function createEditPointTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice, description, offers: pointOffers } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
+  const description = destinations.find((destinationElement) => destinationElement.id === destination).description;
   const offersArray = offers.find((offer) => offer.type === type).offers;
 
   const getOfferCheckedAttribute = (offerId) => {
@@ -117,34 +118,48 @@ function createEditPointTemplate(point, offers, destinations) {
 }
 
 export default class EditPointView extends AbstractStatefulView {
-  #point = null;
   #offers = null;
   #destinations = null;
   #handleEditClick = null;
   #handleFormSave = null;
-  // _state = {};
+  #handleFormDelete = null;
+  #handleFormPriceChange = null;
+  #handleFormTypeChange = null;
+  #handleFormDestinationChange = null;
+  // #handleFormChangeDataFrom = null;
+  // #handleFormChangeDataTo = null;
+  _state = {};
 
-  constructor({ point, offers, destinations, onEditClick, onFormSaveClick }) {
+  constructor({ point, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick, onFormPriceChange, onFormTypeChange, onFormDestinationChange }) {
     super();
-    this.#point = point;
+    this._setState(EditPointView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleEditClick = onEditClick;
     this.#handleFormSave = onFormSaveClick;
+    this.#handleFormDelete = onFormDeleteClick;
+    this.#handleFormPriceChange = onFormPriceChange;
+    this.#handleFormTypeChange = onFormTypeChange;
+    this.#handleFormDestinationChange = onFormDestinationChange;
+    // this.#handleFormChangeDataFrom = onFormDataFromClick;
+    // this.#handleFormChangeDataTo = onFormDataToClick;
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
-
-    this._setState(EditPointView.parsePointToState(point));
+    this._restoreHandlers();
   }
 
-
   get template() {
-    console.log(this._state);
     return createEditPointTemplate(this._state, this.#offers, this.#destinations);
   }
 
   _restoreHandlers() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
+    this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
+    // this.element.querySelector('#event-start-time-1').addEventListener('click', this.#formChangeDataFromHandler);
+    // this.element.querySelector('#event-end-time-1').addEventListener('click', this.#formChangeDataToHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#formPriceInputHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
   }
 
   static parsePointToState(point) {
@@ -155,6 +170,7 @@ export default class EditPointView extends AbstractStatefulView {
     return { ...state };
   }
 
+  // обработчики событий
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
@@ -164,4 +180,42 @@ export default class EditPointView extends AbstractStatefulView {
     evt.preventDefault();
     this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
   };
+
+  #formDeleteHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormDelete(EditPointView.parseStateToPoint(this._state));
+  };
+
+  #formPriceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({
+      basePrice: evt.target.value,
+    });
+  };
+
+  #formTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.element.querySelector('.event__label').textContent = evt.target.value;
+
+    this.updateElement(({
+      type: evt.target.value,
+      offers: getOffersByType(evt.target.value, this.#offers),
+    }));
+  };
+
+  #formDestinationChangeHandler = (evt) => {
+    evt.preventDefault();
+
+    this.updateElement(({
+      destination: getDestinationId(evt.target.value, this.#destinations),
+    }));
+  };
+
+  // #formChangeDataFromHandler = (evt) => {
+  //   evt.preventDefault();
+  // }
+
+  // #formChangeDataToHandler = (evt) => {
+  //   evt.preventDefault();
+  // }
 }
