@@ -1,4 +1,5 @@
-import { CITIES, PICTURES } from './const-mock';
+import { CITIES, PICTURES, DESCRIPTION_TEXT } from './const-mock';
+import { getRandomDescriptionPoint } from '../utils/common-utils';
 
 let destinationId = 0;
 
@@ -6,7 +7,7 @@ const getDestinationsMock = (city) => {
   const destinationsMock = {
     id: destinationId,
     name: city,
-    description: `${city}, is a beautiful city, a true asian pearl, with crowded streets.`,
+    description: getRandomDescriptionPoint(DESCRIPTION_TEXT),
     pictures: [
       {
         src: PICTURES[0],

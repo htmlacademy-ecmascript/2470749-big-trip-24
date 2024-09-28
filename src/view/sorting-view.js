@@ -16,8 +16,8 @@ const getSortingItems = (sorting, currentSortType) =>
   value="sort-${sorting}"
   ${sorting === 'offer' || sorting === 'event' ? 'disabled' : ''}
   ${sorting === currentSortType ? 'checked' : ''}>
-<label class="trip-sort__btn" for="sort-${sorting}" data-sort-type="${sorting}">${capitalize(sorting)}</label>
-</div>`;
+  <label class="trip-sort__btn" for="sort-${sorting}" data-sort-type="${sorting}">${capitalize(sorting)}</label>
+  </div>`;
 function createSortingTemplate(currentSortType) {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${Object.values(SortType).map((sorting) => getSortingItems(sorting, currentSortType)).join('')}

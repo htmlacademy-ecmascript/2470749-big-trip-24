@@ -1,16 +1,10 @@
 import { getRandomArrayElement, getRandomInteger, createIdGenerator } from '../utils/common-utils';
-import { CITIES, DESCRIPTION_TEXT, DATES } from './const-mock';
+import { CITIES, DATES } from './const-mock';
 import { TYPES } from '../const';
 import { getOffers } from './offers-mock';
 
 const POINTS_COUNT = 10;
 const offersData = getOffers();
-
-const getRandomDescriptionPoint = (text) => {
-  const descriptionsArray = text.split('.');
-  const randomDescriptionText = Array.from({ length: 5 }, () => getRandomArrayElement(descriptionsArray).trim()).join('.');
-  return randomDescriptionText;
-};
 
 const generateRandomPointId = createIdGenerator();
 
@@ -41,7 +35,6 @@ const createPointMock = () => {
     id: generateRandomPointId(),
     type: pointType,
     destination: getRandomInteger(1, CITIES.length),
-    description: getRandomDescriptionPoint(DESCRIPTION_TEXT),
     dateFrom: pointDate.dateFrom,
     dateTo: pointDate.dateTo,
     basePrice: getRandomInteger(20, 5000),

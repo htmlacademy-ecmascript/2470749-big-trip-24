@@ -1,7 +1,7 @@
 import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
-import { render } from '../framework/render';
+import { RenderPosition, render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { updatePoint } from '../utils/common-utils';
 import { SortType } from '../const';
@@ -32,11 +32,12 @@ export default class MainPresenter {
     this.#offers = [...this.#pointModel.offers];
     this.#initialPointsLayout = [...this.#pointModel.points];
 
+    this.#renderSorting(this.#currentSortType);
     this.#renderMain();
   }
 
   #renderMain() {
-    this.#renderSorting(this.#currentSortType);
+
     render(this.#pointsListComponent, this.#pointsContainer);
 
     if (this.#points.length === 0) {
@@ -52,7 +53,7 @@ export default class MainPresenter {
       sortType: sortType
     });
 
-    render(this.#sorting, this.#pointsContainer);
+    render(this.#sorting, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
   #sortPoints = (sortType) => {
@@ -79,16 +80,17 @@ export default class MainPresenter {
     }
 
     this.#sortPoints(sortType);
-    this.#renderSorting(sortType);
     this.#clearPointsList();
     this.#renderPointsList();
+    this.#renderSorting(sortType);
   };
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
       onPointsChange: this.#handlePointsChange,
-      onModeChange: this.#handleModeChange
+      onModeChange: this.#handleModeChange,
+      onPointClear: this.#clearPoint,
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -118,4 +120,9 @@ export default class MainPresenter {
   #renderNoPoints() {
     render(this.#noPoints, this.#pointsListComponent.element);
   }
+
+  #clearPoint = (point) => {
+    const targetPresenter = this.#pointPresenters.get(point.id);
+    targetPresenter.destroy();
+  };
 }
