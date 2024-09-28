@@ -99,6 +99,7 @@ export default class PointPresenter {
       this.#replaceFormToPoint();
     }
   }
+
   // обработчики событий
   #handleFavoriteClick = () => {
     this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
@@ -119,7 +120,7 @@ export default class PointPresenter {
   #handleFormEditClick = (point) => {
     this.#resetPointView(point);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
-  }
+  };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {

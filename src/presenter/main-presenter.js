@@ -108,7 +108,7 @@ export default class MainPresenter {
 
   #resetPointView = (point) => {
     this.#pointPresenters.get(point.id).resetView();
-  }
+  };
 
   #renderPointsList() {
     for (const point of this.#points) {

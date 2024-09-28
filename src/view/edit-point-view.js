@@ -3,6 +3,9 @@ import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/p
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createOfferClass = (offerTitle) => {
   const splittedOfferTitles = offerTitle.split(' ');
@@ -29,7 +32,6 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
 
 function createEditPointTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
-  console.log(point);
   const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
   const description = destinations.find((destinationElement) => destinationElement.id === destination).description;
   const offersArray = offers.find((offer) => offer.type === type).offers;
