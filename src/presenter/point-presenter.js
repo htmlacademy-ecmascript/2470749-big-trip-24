@@ -56,14 +56,6 @@ export default class PointPresenter {
       },
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
-      onFormPriceChange: () => {
-        this.#handlePointsChange(point);
-      },
-      onFormTypeChange: () => {
-        this.#handlePointsChange(point);
-      }
-      // onFormDataFromClick: this.#handleFormDataFromClick,
-      // onFormDataToClick: this.#handleFormDataToClick
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -123,14 +115,6 @@ export default class PointPresenter {
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
-
-  // #handleFormDataFromClick = () => {
-
-  // }
-
-  // #handleFormDataToClick = () => {
-
-  // }
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {

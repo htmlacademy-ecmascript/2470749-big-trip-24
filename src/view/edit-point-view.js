@@ -123,14 +123,10 @@ export default class EditPointView extends AbstractStatefulView {
   #handleEditClick = null;
   #handleFormSave = null;
   #handleFormDelete = null;
-  #handleFormPriceChange = null;
-  #handleFormTypeChange = null;
-  #handleFormDestinationChange = null;
-  // #handleFormChangeDataFrom = null;
-  // #handleFormChangeDataTo = null;
+
   _state = {};
 
-  constructor({ point, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick, onFormPriceChange, onFormTypeChange, onFormDestinationChange }) {
+  constructor({ point, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
     this.#offers = offers;
@@ -138,11 +134,6 @@ export default class EditPointView extends AbstractStatefulView {
     this.#handleEditClick = onEditClick;
     this.#handleFormSave = onFormSaveClick;
     this.#handleFormDelete = onFormDeleteClick;
-    this.#handleFormPriceChange = onFormPriceChange;
-    this.#handleFormTypeChange = onFormTypeChange;
-    this.#handleFormDestinationChange = onFormDestinationChange;
-    // this.#handleFormChangeDataFrom = onFormDataFromClick;
-    // this.#handleFormChangeDataTo = onFormDataToClick;
 
     this._restoreHandlers();
   }
@@ -156,9 +147,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
-    // this.element.querySelector('#event-start-time-1').addEventListener('click', this.#formChangeDataFromHandler);
-    // this.element.querySelector('#event-end-time-1').addEventListener('click', this.#formChangeDataToHandler);
-    this.element.querySelector('.event__input--price').addEventListener('input', this.#formPriceInputHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
   }
 
@@ -188,9 +177,9 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formPriceInputHandler = (evt) => {
     evt.preventDefault();
-    this._setState({
+    this.updateElement(({
       basePrice: evt.target.value,
-    });
+    }));
   };
 
   #formTypeChangeHandler = (evt) => {
@@ -210,12 +199,4 @@ export default class EditPointView extends AbstractStatefulView {
       destination: getDestinationId(evt.target.value, this.#destinations),
     }));
   };
-
-  // #formChangeDataFromHandler = (evt) => {
-  //   evt.preventDefault();
-  // }
-
-  // #formChangeDataToHandler = (evt) => {
-  //   evt.preventDefault();
-  // }
 }
