@@ -4,7 +4,6 @@ import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
-
 import 'flatpickr/dist/flatpickr.min.css';
 
 const createOfferClass = (offerTitle) => {
@@ -247,20 +246,22 @@ export default class EditPointView extends AbstractStatefulView {
       {
         enableTime: true,
         dateFormat: "d/m/y H:i",
-        defaultDate: this._state.dateFrom,
+        time_24hr: true,
+        defaultDate: humanizePointDate(this._state.dateFrom, DATE_WITH_TIME_FORMAT),
         onChange: this.#dateFromChangeHandler,
       }
     )
   }
 
   #setDateToPicker() {
-    this.#dateFromPicker = flatpickr(
+    this.#dateToPicker = flatpickr(
       this.element.querySelector('#event-end-time-1'),
       {
         enableTime: true,
         dateFormat: "d/m/y H:i",
-        minDate: this._state.dateFrom,
-        defaultDate: this._state.dateTo,
+        time_24hr: true,
+        minDate: humanizePointDate(this._state.dateFrom, DATE_WITH_TIME_FORMAT),
+        defaultDate: humanizePointDate(this._state.dateTo, DATE_WITH_TIME_FORMAT),
         onChange: this.#dateToChangeHandler,
       }
     )
