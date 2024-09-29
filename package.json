@@ -35,6 +35,7 @@
   "dependencies": {
     "@babel/core": "7.21.4",
     "dayjs": "1.11.13",
+    "flatpickr": "4.6.13",
     "webpack-dev-server": "4.13.3"
   }
 }

@@ -37,7 +37,6 @@ export default class MainPresenter {
   }
 
   #renderMain() {
-
     render(this.#pointsListComponent, this.#pointsContainer);
 
     if (this.#points.length === 0) {
@@ -91,6 +90,7 @@ export default class MainPresenter {
       onPointsChange: this.#handlePointsChange,
       onModeChange: this.#handleModeChange,
       onPointClear: this.#clearPoint,
+      onEditPointView: this.#resetPointView
     });
 
     pointPresenter.init(point, this.#offers, this.#destinations);
@@ -104,6 +104,10 @@ export default class MainPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
+
+  #resetPointView = (point) => {
+    this.#pointPresenters.get(point.id).resetView();
   };
 
   #renderPointsList() {
