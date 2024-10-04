@@ -107,7 +107,7 @@ export default class MainPresenter {
 
   #handlePointsChange = (updatedPoint) => {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.offers, this.destinations);
-  }
+  };
 
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
@@ -131,12 +131,15 @@ export default class MainPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(point.id).init(point, offers, destinations);
+        break;
       case UpdateType.MINOR:
         this.#clearPointsList();
         this.#renderPointsList();
+        break;
       case UpdateType.MAJOR:
         this.#clearPointsList(resetFilters = true, resetSorting = true);
         this.#renderPointsList();
+        break;
     }
     // В зависимости от типа изменений решаем, что делать:
     // - обновить часть списка (например, когда поменялось описание)
@@ -161,7 +164,6 @@ export default class MainPresenter {
   #clearPointsList(resetFilters = false, resetSorting = false) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
-
     // Если в момент нажатия на кнопку «New Event» был выбран фильтр или применена сортировка,
     // то они сбрасываются на состояния «Everything» и по дате соответственно.
     if (resetFilters === true) {

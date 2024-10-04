@@ -17,7 +17,7 @@ export default class PointModel extends Observable {
   }
 
   updatePoint(updatedPoint) {
-    const pointIndex = this.#points.findIndex(point => point.id === updatedPoint.id);
+    const pointIndex = this.#points.findIndex((point) => point.id === updatedPoint.id);
     this.#points = [...this.#points].splice(pointIndex, 1, updatedPoint);
   }
 
@@ -26,7 +26,7 @@ export default class PointModel extends Observable {
   }
 
   deletePoint(updatedPoint) {
-    const pointIndex = this.#points.findIndex(point => point.id === updatedPoint.id);
+    const pointIndex = this.#points.findIndex((point) => point.id === updatedPoint.id);
     this.#points = [...this.#points].splice(pointIndex, 1);
   }
 

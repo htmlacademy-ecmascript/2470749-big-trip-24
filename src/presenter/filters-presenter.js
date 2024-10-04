@@ -1,8 +1,8 @@
-import { render } from "../framework/render";
-import FiltersView from "../view/filters-view";
-import FiltersModel from "../model/filters-model";
-import { FilterType } from "../const";
-import { filter } from "../utils/filter-utils";
+import { render, replace, remove } from '../framework/render';
+import FiltersView from '../view/filters-view';
+import FiltersModel from '../model/filters-model';
+import { FilterType } from '../const';
+import { filter } from '../utils/filter-utils';
 
 export default class FiltersPresenter {
   #filtersModel = new FiltersModel();
@@ -58,6 +58,6 @@ export default class FiltersPresenter {
     // проверка работает ли сортировка списка поинтов (для себя, потом удалю)
     const points = this.#pointModel.points;
     const filteredPoints = filter[this.#currentFilter](points);
-    console.log(filteredPoints)
-  }
+    console.log(filteredPoints);
+  };
 }
