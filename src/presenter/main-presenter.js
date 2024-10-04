@@ -6,7 +6,6 @@ import PointPresenter from './point-presenter';
 import { SortType, UpdateType, UserAction } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
-import { FilterType } from '../const';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
@@ -18,7 +17,7 @@ export default class MainPresenter {
 
   #sorting = null;
   #currentSortType = SortType.DAY;
-  #currentFilterType = FilterType.EVERYTHING;
+  #currentFilterType = null;
 
   constructor({ pointsContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
@@ -133,9 +132,11 @@ export default class MainPresenter {
       case UpdateType.PATCH:
         this.#pointPresenters.get(point.id).init(point, offers, destinations);
       case UpdateType.MINOR:
-
+        this.#clearPointsList();
+        this.#renderPointsList();
       case UpdateType.MAJOR:
-        this.#renderPointsList(points);
+        this.#clearPointsList(resetFilters = true, resetSorting = true);
+        this.#renderPointsList();
     }
     // В зависимости от типа изменений решаем, что делать:
     // - обновить часть списка (например, когда поменялось описание)

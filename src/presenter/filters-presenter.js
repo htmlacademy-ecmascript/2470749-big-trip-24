@@ -20,15 +20,13 @@ export default class FiltersPresenter {
   get filters() {
     const points = this.#pointModel.points;
 
-    const r = Object.entries(filter).map(
+    return Object.entries(filter).map(
       ([filterType, filterPoints]) => ({
         type: filterType,
         count: filterPoints(points).length,
-        points: filterPoints(points)
       }),
     );
-    console.log(r);
-    return r;
+
   }
 
   init() {
@@ -57,7 +55,7 @@ export default class FiltersPresenter {
     this.#currentFilter = filterType;
     this.#filtersModel.filter = filterType;
 
-    // this.#currentFilterType = this.#filtersModel.filter;
+    // проверка работает ли сортировка списка поинтов (для себя, потом удалю)
     const points = this.#pointModel.points;
     const filteredPoints = filter[this.#currentFilter](points);
     console.log(filteredPoints)
