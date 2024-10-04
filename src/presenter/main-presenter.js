@@ -3,35 +3,62 @@ import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
 import { RenderPosition, render } from '../framework/render';
 import PointPresenter from './point-presenter';
-import { updatePoint } from '../utils/common-utils';
-import { SortType } from '../const';
+import { SortType, UpdateType, UserAction } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
+import { filter } from '../utils/filter-utils';
+import { FilterType } from '../const';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #pointsContainer = null;
   #pointModel = null;
-  #points = [];
-  #destinations = [];
-  #offers = [];
   #pointPresenters = new Map();
   #noPoints = new NoPointsView();
+  #filtersModel = null;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
-  #initialPointsLayout = [];
+  #currentFilterType = FilterType.EVERYTHING;
 
-  constructor({ pointsContainer, pointModel }) {
+  constructor({ pointsContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
     this.#pointModel = pointModel;
+    this.#filtersModel = filtersModel;
+  }
+
+  get filter() {
+    return this.#filtersModel.filter;
+  }
+
+  get points() {
+    this.#currentFilterType = this.filter;
+    const points = [...this.#pointModel.points];
+    const filteredPoints = filter[this.#currentFilterType](points);
+
+    switch (this.#currentSortType) {
+      case SortType.TIME:
+        return filteredPoints.sort(getWeightForTime);
+      case SortType.PRICE:
+        return filteredPoints.sort(getWeightForPrice);
+      case SortType.EVENT:
+        break;
+      case SortType.OFFER:
+        break;
+      case SortType.DAY:
+        return filteredPoints;
+    }
+    return filteredPoints;
+  }
+
+  get offers() {
+    return this.#pointModel.offers;
+  }
+
+  get destinations() {
+    return this.#pointModel.destinations;
   }
 
   init() {
-    this.#points = [...this.#pointModel.points];
-    this.#destinations = [...this.#pointModel.destinations];
-    this.#offers = [...this.#pointModel.offers];
-    this.#initialPointsLayout = [...this.#pointModel.points];
-
     this.#renderSorting(this.#currentSortType);
     this.#renderMain();
   }
@@ -39,11 +66,11 @@ export default class MainPresenter {
   #renderMain() {
     render(this.#pointsListComponent, this.#pointsContainer);
 
-    if (this.#points.length === 0) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
     }
 
-    this.#renderPointsList();
+    this.#renderPointsList(this.points);
   }
 
   #renderSorting(sortType) {
@@ -55,30 +82,12 @@ export default class MainPresenter {
     render(this.#sorting, this.#pointsContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #sortPoints = (sortType) => {
-    switch (sortType) {
-      case SortType.TIME:
-        this.#points.sort(getWeightForTime);
-        break;
-      case SortType.PRICE:
-        this.#points.sort(getWeightForPrice);
-        break;
-      case SortType.EVENT:
-        break;
-      case SortType.OFFER:
-        break;
-      case SortType.DAY:
-        this.#points = [...this.#initialPointsLayout];
-    }
-    this.#currentSortType = sortType;
-  };
-
   #handleSortingClick = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortPoints(sortType);
+    this.#currentSortType = sortType;
     this.#clearPointsList();
     this.#renderPointsList();
     this.#renderSorting(sortType);
@@ -93,13 +102,45 @@ export default class MainPresenter {
       onEditPointView: this.#resetPointView
     });
 
-    pointPresenter.init(point, this.#offers, this.#destinations);
+    pointPresenter.init(point, this.offers, this.destinations);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
   #handlePointsChange = (updatedPoint) => {
-    this.#points = updatePoint(this.#points, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#offers, this.#destinations);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.offers, this.destinations);
+  }
+
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_TASK:
+        this.#pointModel.updateTask(updateType, update);
+        break;
+      case UserAction.ADD_TASK:
+        this.#pointModel.addTask(updateType, update);
+        break;
+      case UserAction.DELETE_TASK:
+        this.#pointModel.deleteTask(updateType, update);
+        break;
+    }
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  };
+
+  #handleModelEvent = (updateType, point, offers, destinations) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(point.id).init(point, offers, destinations);
+      case UpdateType.MINOR:
+
+      case UpdateType.MAJOR:
+        this.#renderPointsList(points);
+    }
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   };
 
   #handleModeChange = () => {
@@ -111,14 +152,20 @@ export default class MainPresenter {
   };
 
   #renderPointsList() {
-    for (const point of this.#points) {
+    for (const point of this.points) {
       this.#renderPoint(point);
     }
   }
 
-  #clearPointsList() {
+  #clearPointsList(resetFilters = false, resetSorting = false) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+
+    // Если в момент нажатия на кнопку «New Event» был выбран фильтр или применена сортировка,
+    // то они сбрасываются на состояния «Everything» и по дате соответственно.
+    if (resetFilters === true) {
+
+    }
   }
 
   #renderNoPoints() {

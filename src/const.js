@@ -19,4 +19,16 @@ const SortType = {
   OFFER: 'offer'
 };
 
-export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType };
+const UserAction = {
+  UPDATE_TASK: 'UPDATE_POINT',
+  ADD_TASK: 'ADD_POINT',
+  DELETE_TASK: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType };

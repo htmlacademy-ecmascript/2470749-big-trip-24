@@ -1,14 +1,33 @@
 import { getPoints } from '../mock/point-mock';
 import { getDestinations } from '../mock/destinations-mock';
 import { getOffers } from '../mock/offers-mock';
+import Observable from '../framework/observable';
 
-export default class PointModel {
+export default class PointModel extends Observable {
   #points = getPoints();
   #destinations = getDestinations();
   #offers = getOffers();
 
   get points() {
     return this.#points;
+  }
+
+  set points(points) {
+    this.#points = points;
+  }
+
+  updatePoint(updatedPoint) {
+    const pointIndex = this.#points.findIndex(point => point.id === updatedPoint.id);
+    this.#points = [...this.#points].splice(pointIndex, 1, updatedPoint);
+  }
+
+  addPoint(updatedPoint) {
+    this.#points = [updatedPoint, ...this.#points];
+  }
+
+  deletePoint(updatedPoint) {
+    const pointIndex = this.#points.findIndex(point => point.id === updatedPoint.id);
+    this.#points = [...this.#points].splice(pointIndex, 1);
   }
 
   get destinations() {
