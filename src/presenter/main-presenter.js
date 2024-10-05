@@ -1,28 +1,32 @@
 import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
-import { RenderPosition, render } from '../framework/render';
+import { RenderPosition, remove, render, replace } from '../framework/render';
 import PointPresenter from './point-presenter';
-import { SortType, UpdateType, UserAction } from '../const';
+import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
+import { updatePoint } from '../utils/common-utils';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #pointsContainer = null;
   #pointModel = null;
   #pointPresenters = new Map();
-  #noPoints = new NoPointsView();
+  #noPoints = null;
   #filtersModel = null;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
-  #currentFilterType = null;
+  #currentFilterType = FilterType.EVERYTHING;
 
   constructor({ pointsContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
+
+    this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
   get filter() {
@@ -65,11 +69,7 @@ export default class MainPresenter {
   #renderMain() {
     render(this.#pointsListComponent, this.#pointsContainer);
 
-    if (this.points.length === 0) {
-      this.#renderNoPoints();
-    }
-
-    this.#renderPointsList(this.points);
+    this.#renderPointsList();
   }
 
   #renderSorting(sortType) {
@@ -89,13 +89,12 @@ export default class MainPresenter {
     this.#currentSortType = sortType;
     this.#clearPointsList();
     this.#renderPointsList();
-    this.#renderSorting(sortType);
   };
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
-      onPointsChange: this.#handlePointsChange,
+      onPointsChange: this.#handleModelEvent,
       onModeChange: this.#handleModeChange,
       onPointClear: this.#clearPoint,
       onEditPointView: this.#resetPointView
@@ -105,10 +104,10 @@ export default class MainPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #handlePointsChange = (updatedPoint) => {
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.offers, this.destinations);
-  };
-
+  // Здесь будем вызывать обновление модели.
+  // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+  // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+  // update - обновленные данные
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_TASK:
@@ -121,30 +120,26 @@ export default class MainPresenter {
         this.#pointModel.deleteTask(updateType, update);
         break;
     }
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
   };
 
-  #handleModelEvent = (updateType, point, offers, destinations) => {
+  // В зависимости от типа изменений решаем, что делать:
+  #handleModelEvent = (updateType, updatedPoint) => {
     switch (updateType) {
+      // - обновить часть списка (например, когда поменялись данные поинта при редактировании)
       case UpdateType.PATCH:
-        this.#pointPresenters.get(point.id).init(point, offers, destinations);
+        this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.offers, this.destinations);
         break;
+      // - обновить список
       case UpdateType.MINOR:
         this.#clearPointsList();
         this.#renderPointsList();
         break;
+      // - обновить всю доску (с очисткой фильтров и сортировки)
       case UpdateType.MAJOR:
-        this.#clearPointsList(resetFilters = true, resetSorting = true);
+        this.#clearPointsList({ resetFilters: true, resetSorting: true });
         this.#renderPointsList();
         break;
     }
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
   };
 
   #handleModeChange = () => {
@@ -156,22 +151,38 @@ export default class MainPresenter {
   };
 
   #renderPointsList() {
+    if (this.points.length === 0) {
+      this.#renderNoPoints();
+    } else {
+      remove(this.#noPoints);
+    }
+
     for (const point of this.points) {
       this.#renderPoint(point);
     }
   }
 
-  #clearPointsList(resetFilters = false, resetSorting = false) {
+  #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
-    // Если в момент нажатия на кнопку «New Event» был выбран фильтр или применена сортировка,
-    // то они сбрасываются на состояния «Everything» и по дате соответственно.
-    if (resetFilters === true) {
 
+    if (resetFilters) {
+      this.#currentFilterType = FilterType.EVERYTHING
     }
+
+    if (resetSorting) {
+      this.#currentSortType = SortType.DAY;
+    }
+
   }
 
   #renderNoPoints() {
+    remove(this.#noPoints);
+
+    this.#noPoints = new NoPointsView({
+      filter: this.#currentFilterType,
+    });
+
     render(this.#noPoints, this.#pointsListComponent.element);
   }
 

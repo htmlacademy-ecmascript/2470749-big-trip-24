@@ -1,20 +1,21 @@
 import { render, replace, remove } from '../framework/render';
 import FiltersView from '../view/filters-view';
-import FiltersModel from '../model/filters-model';
-import { FilterType } from '../const';
+import { UpdateType } from '../const';
 import { filter } from '../utils/filter-utils';
 
 export default class FiltersPresenter {
-  #filtersModel = new FiltersModel();
+  #filtersModel = null;
   #filtersComponent = null;
   #filtersContainer = null;
   #pointModel = null;
 
-  #currentFilter = FilterType.EVERYTHING;
-
-  constructor({ filtersContainer, pointModel }) {
+  constructor({ filtersContainer, pointModel, filtersModel }) {
     this.#filtersContainer = filtersContainer;
     this.#pointModel = pointModel;
+    this.#filtersModel = filtersModel;
+
+    this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filtersModel.addObserver(this.#handleModelEvent);
   }
 
   get filters() {
@@ -26,7 +27,6 @@ export default class FiltersPresenter {
         count: filterPoints(points).length,
       }),
     );
-
   }
 
   init() {
@@ -47,17 +47,15 @@ export default class FiltersPresenter {
     remove(prevFiltersComponent);
   }
 
+  #handleModelEvent = () => {
+    this.init();
+  };
+
   #handleFiltersChange = (filterType) => {
-    if (this.#currentFilter === filterType) {
+    if (this.#filtersModel.filter === filterType) {
       return;
     }
 
-    this.#currentFilter = filterType;
-    this.#filtersModel.filter = filterType;
-
-    // проверка работает ли сортировка списка поинтов (для себя, потом удалю)
-    const points = this.#pointModel.points;
-    const filteredPoints = filter[this.#currentFilter](points);
-    console.log(filteredPoints);
+    this.#filtersModel.setFilter(UpdateType.MAJOR, filterType);
   };
 }

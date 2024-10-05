@@ -20,6 +20,7 @@ const mainPresenter = new MainPresenter({
 const filtersPresenter = new FiltersPresenter({
   filtersContainer: filtersContainer,
   pointModel,
+  filtersModel,
 });
 
 render(new NewTripInfo(), mainContainer, RenderPosition.AFTERBEGIN);

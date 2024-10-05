@@ -1,6 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointItemView from '../view/point-item-view';
 import EditPointView from '../view/edit-point-view';
+import { UpdateType } from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -16,7 +17,7 @@ export default class PointPresenter {
   #editPointComponent = null;
 
   #pointsListComponent = null;
-  #handlePointsChange = null;
+  #handleModelEvent = null;
   #handleModeChange = null;
   #clearPoint = null;
   #resetPointView = null;
@@ -25,7 +26,7 @@ export default class PointPresenter {
 
   constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView }) {
     this.#pointsListComponent = pointsListComponent;
-    this.#handlePointsChange = onPointsChange;
+    this.#handleModelEvent = onPointsChange;
     this.#handleModeChange = onModeChange;
     this.#clearPoint = onPointClear;
     this.#resetPointView = onEditPointView;
@@ -102,11 +103,12 @@ export default class PointPresenter {
 
   // обработчики событий
   #handleFavoriteClick = () => {
-    this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite })
+    // this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleFormSaveClick = (point) => {
-    this.#handlePointsChange(point);
+    this.#handleModelEvent(UpdateType.PATCH, point);
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
