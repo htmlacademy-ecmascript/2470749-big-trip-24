@@ -1,6 +1,6 @@
 import { capitalize } from '../utils/common-utils';
 import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/point-utils';
-import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
+import { DATE_WITH_TIME_FORMAT, TYPES, BLANK_POINT } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
@@ -29,11 +29,21 @@ const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event_
   </label>
   </div>`;
 
+const getFormButtons = (isNewPoint) => {
+  if (isNewPoint) {
+    return ` <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+      <button class="event__reset-btn" type="reset">Delete</button>
+      <button class="event__rollup-btn" type="button">`
+  }
+  return ` <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+    <button class="event__reset-btn" type="reset">Cancel</button>`
+}
+
 function createEditPointTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
-  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
-  const description = destinations.find((destinationElement) => destinationElement.id === destination).description;
-  const offersArray = offers.find((offer) => offer.type === type).offers;
+  const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers, isNewPoint } = point;
+  const modifiedDestination = isNewPoint ? '' : destinations.find((destinationElement) => destinationElement.id === destination).name;
+  const description = isNewPoint ? '' : destinations.find((destinationElement) => destinationElement.id === destination).description;
+  const offersArray = isNewPoint ? '' : offers.find((offer) => offer.type === type).offers;
 
   const getOfferCheckedAttribute = (offerId) => {
     if (pointOffers.includes(offerId)) {
@@ -81,10 +91,10 @@ function createEditPointTemplate(point, offers, destinations) {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${isNewPoint ? '' : humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${isNewPoint ? '' : humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -92,12 +102,9 @@ function createEditPointTemplate(point, offers, destinations) {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${isNewPoint ? '' : basePrice}">
       </div>
-
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
+      ${getFormButtons(isNewPoint)}
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
@@ -106,7 +113,7 @@ function createEditPointTemplate(point, offers, destinations) {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id))).join('')}
+        ${isNewPoint ? '' : offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id))).join('')}
         </div>
       </section>
 
@@ -130,7 +137,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   _state = {};
 
-  constructor({ point, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick }) {
+  constructor({ point = BLANK_POINT, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
     this.#offers = offers;
@@ -167,7 +174,10 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    if (this._state.isNewPoint === false) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    }
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);

@@ -20,9 +20,9 @@ const SortType = {
 };
 
 const UserAction = {
-  UPDATE_TASK: 'UPDATE_POINT',
-  ADD_TASK: 'ADD_POINT',
-  DELETE_TASK: 'DELETE_POINT',
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
 };
 
 const UpdateType = {
@@ -38,4 +38,16 @@ const ListEmptyText = {
   [FilterType.FUTURE]: 'There are no future events now',
 };
 
-export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText };
+  const BLANK_POINT = {
+    id: '',
+    type: 'flight',
+    destination: null,
+    dateFrom: '19/03/19 00:00',
+    dateTo: '19/03/19 00:00',
+    basePrice: 0,
+    offers: [],
+    isFavorite: 0,
+    isNewPoint: true
+  };
+
+export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT };

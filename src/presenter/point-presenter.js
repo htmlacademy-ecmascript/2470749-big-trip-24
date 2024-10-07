@@ -104,7 +104,6 @@ export default class PointPresenter {
   // обработчики событий
   #handleFavoriteClick = () => {
     this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite })
-    // this.#handlePointsChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleFormSaveClick = (point) => {

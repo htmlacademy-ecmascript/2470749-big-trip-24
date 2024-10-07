@@ -1,6 +1,7 @@
-import { capitalize } from '../util';
-import { TYPES, CITIES } from '../const';
-import AbstractView from '../framework/view/abstract-view';
+import { capitalize } from '../utils/common-utils';
+import { TYPES } from '../const';
+import { CITIES } from '../mock/const-mock';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const DEFAULT_TYPE = 'Flight';
 const DEFAULT_DESTINATION = 'Geneva';
@@ -17,7 +18,6 @@ const createDestinationsList = (destination) =>
   `<option value="${destination}"></option>`;
 
 function createCreatePointTemplate() {
-
   const getTypeCheckedAttribute = (pointType) => {
     if (pointType === 'flight') {
       return 'checked';
@@ -143,8 +143,43 @@ function createCreatePointTemplate() {
   </form>
 </li>`;
 }
-export default class CreatePointView extends AbstractView {
+export default class CreatePointView extends AbstractStatefulView {
+  #handleNewPointSave = null;
+  #handleNewPointCancel = null;
+
+  constructor({ point = BLANK_POINT, onNewPointSaveClick, onNewPointCancelClick }) {
+    super();
+    // this._setState(CreatePointView.parsePointToState(point));
+    this.#handleNewPointSave = onNewPointSaveClick;
+    this.#handleNewPointCancel = onNewPointCancelClick;
+
+    this.element.querySelector('form').addEventListener('submit', this.#newPointSaveHandler);
+    this.element.querySelector('form').addEventListener('reset', this.#newPointCancelHandler);
+  }
+
   get template() {
-    return createCreatePointTemplate();
+    return createCreatePointTemplate(this._state);
+  }
+
+  static parsePointToState(point) {
+    return { ...point };
+  }
+
+  static parseStateToPoint(state) {
+    return { ...state };
+  }
+
+  #newPointSaveHandler(evt) {
+    evt.preventDefault();
+    console.log('click');
+    // console.log(this._state);
+    // console.log(point);
+    this.#handleNewPointSave();
+  }
+
+  #newPointCancelHandler(evt) {
+    evt.preventDefault();
+    console.log('click');
+    this.#handleNewPointCancel();
   }
 }

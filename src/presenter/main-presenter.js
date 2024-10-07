@@ -7,6 +7,7 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
 import { updatePoint } from '../utils/common-utils';
+import NewPointPresenter from './new-point-presenter';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
@@ -15,15 +16,22 @@ export default class MainPresenter {
   #pointPresenters = new Map();
   #noPoints = null;
   #filtersModel = null;
+  #newPointPresenter = null;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
 
-  constructor({ pointsContainer, pointModel, filtersModel }) {
+  constructor({ pointsContainer, pointModel, filtersModel}) {
     this.#pointsContainer = pointsContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointsListContainer: this.#pointsListComponent.element,
+      onPointAdd: this.#handleViewAction,
+      // onDestroy: onNewPointCancel,
+    });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filtersModel.addObserver(this.#handleModelEvent);
@@ -59,6 +67,16 @@ export default class MainPresenter {
 
   get destinations() {
     return this.#pointModel.destinations;
+  }
+
+  // onNewPointCancel() {
+  //   remove()
+  // }
+
+  createPoint() {
+    this.#currentSortType = FilterType.DAY;
+    this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#newPointPresenter.init();
   }
 
   init() {
@@ -110,14 +128,14 @@ export default class MainPresenter {
   // update - обновленные данные
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
-      case UserAction.UPDATE_TASK:
-        this.#pointModel.updateTask(updateType, update);
+      case UserAction.UPDATE_POINT:
+        this.#pointModel.updatePoint(updateType, update);
         break;
-      case UserAction.ADD_TASK:
-        this.#pointModel.addTask(updateType, update);
+      case UserAction.ADD_POINT:
+        this.#pointModel.addPoint(updateType, update);
         break;
-      case UserAction.DELETE_TASK:
-        this.#pointModel.deleteTask(updateType, update);
+      case UserAction.DELETE_POINT:
+        this.#pointModel.deletePoint(updateType, update);
         break;
     }
   };
@@ -173,7 +191,6 @@ export default class MainPresenter {
     if (resetSorting) {
       this.#currentSortType = SortType.DAY;
     }
-
   }
 
   #renderNoPoints() {
@@ -187,7 +204,6 @@ export default class MainPresenter {
   }
 
   #clearPoint = (point) => {
-    const targetPresenter = this.#pointPresenters.get(point.id);
-    targetPresenter.destroy();
+    this.#handleViewAction(UserAction.DELETE_POINT, UpdateType.MINOR, point);
   };
 }
