@@ -1,6 +1,6 @@
 import { capitalize } from '../utils/common-utils';
 import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/point-utils';
-import { DATE_WITH_TIME_FORMAT, TYPES, BLANK_POINT } from '../const';
+import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import flatpickr from 'flatpickr';
@@ -11,9 +11,7 @@ const createOfferClass = (offerTitle) => {
   return splittedOfferTitles[splittedOfferTitles.length - 1];
 };
 
-const getDestinationPicture = (picture) => {
-  return `<img class="event__photo" src=${picture.src} alt="${picture.description}">`
-}
+const getDestinationPicture = (picture) => `<img class="event__photo" src=${picture.src} alt="${picture.description}">`;
 
 const createDestinationsList = (destination) =>
   `<option value="${destination}"></option>`;
@@ -45,8 +43,8 @@ const getFormButtons = (isNewPoint) => {
 
 function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
-  var modifiedDestination = '';
-  var description = ''
+  let modifiedDestination = '';
+  let description = '';
 
   if (destination !== null) {
     modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
@@ -226,9 +224,9 @@ export default class EditPointView extends AbstractStatefulView {
   #formSaveHandler = (evt) => {
     evt.preventDefault();
     if (this.#isNewPoint) {
-console.log('save')
+      console.log('save');
     } else {
-    this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
+      this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
     }
   };
 
@@ -240,10 +238,11 @@ console.log('save')
 
   #formDeleteHandler = (evt) => {
     evt.preventDefault();
+
     if (this.#isNewPoint) {
-    this.#handleFormDelete;
+      this.#handleFormDelete;
     } else {
-    this.#handleFormDelete(EditPointView.parseStateToPoint(this._state));
+      this.#handleFormDelete(EditPointView.parseStateToPoint(this._state));
     }
   };
 

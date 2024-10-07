@@ -1,12 +1,11 @@
 import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
-import { RenderPosition, remove, render, replace } from '../framework/render';
+import { RenderPosition, remove, render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
-import { updatePoint } from '../utils/common-utils';
 import NewPointPresenter from './new-point-presenter';
 
 export default class MainPresenter {

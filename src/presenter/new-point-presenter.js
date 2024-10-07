@@ -1,5 +1,5 @@
 import { BLANK_POINT, UpdateType, UserAction } from '../const';
-import { render, replace, remove, RenderPosition } from '../framework/render';
+import { render, remove, RenderPosition } from '../framework/render';
 import EditPointView from '../view/edit-point-view';
 import { nanoid } from 'nanoid';
 
