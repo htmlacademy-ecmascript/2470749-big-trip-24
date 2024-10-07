@@ -4,7 +4,6 @@ import MainPresenter from './presenter/main-presenter';
 import PointModel from './model/point-model';
 import FiltersModel from './model/filters-model';
 import FiltersPresenter from './presenter/filters-presenter';
-import CreatePointView from './view/create-point-view';
 import AddNewPointButtonView from './view/add-new-point-button-view';
 
 const mainContainer = document.querySelector('.trip-main');
@@ -17,13 +16,13 @@ const filtersModel = new FiltersModel();
 
 const addNewPointButton = new AddNewPointButtonView({
   onClick: onNewPointButtonClick,
-})
+});
 
 const mainPresenter = new MainPresenter({
   pointsContainer: pointsContainer,
   pointModel,
   filtersModel,
-  onNewPointCancel: cancelNewPoint,
+  // onNewPointCancel: cancelNewPoint,
 });
 
 const filtersPresenter = new FiltersPresenter({
@@ -37,13 +36,11 @@ render(addNewPointButton, mainContainer);
 
 function onNewPointButtonClick() {
   mainPresenter.createPoint();
-
-  addNewPointButton.disabled = true;
 }
 
-function cancelNewPoint() {
-remove()
-}
+// function cancelNewPoint() {
+//   remove();
+// }
 
 filtersPresenter.init();
 mainPresenter.init();

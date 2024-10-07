@@ -57,6 +57,7 @@ export default class PointPresenter {
       onEditClick: this.#handleFormEditClick,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
+      isNewPoint: false
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -103,7 +104,7 @@ export default class PointPresenter {
 
   // обработчики событий
   #handleFavoriteClick = () => {
-    this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite })
+    this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleFormSaveClick = (point) => {

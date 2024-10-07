@@ -51,12 +51,6 @@ export default class MainPresenter {
         return filteredPoints.sort(getWeightForTime);
       case SortType.PRICE:
         return filteredPoints.sort(getWeightForPrice);
-      case SortType.EVENT:
-        break;
-      case SortType.OFFER:
-        break;
-      case SortType.DAY:
-        return filteredPoints;
     }
     return filteredPoints;
   }
@@ -185,7 +179,7 @@ export default class MainPresenter {
     this.#pointPresenters.clear();
 
     if (resetFilters) {
-      this.#currentFilterType = FilterType.EVERYTHING
+      this.#currentFilterType = FilterType.EVERYTHING;
     }
 
     if (resetSorting) {

@@ -38,16 +38,15 @@ const ListEmptyText = {
   [FilterType.FUTURE]: 'There are no future events now',
 };
 
-  const BLANK_POINT = {
-    id: '',
-    type: 'flight',
-    destination: null,
-    dateFrom: '19/03/19 00:00',
-    dateTo: '19/03/19 00:00',
-    basePrice: 0,
-    offers: [],
-    isFavorite: 0,
-    isNewPoint: true
-  };
+const BLANK_POINT = {
+  id: '',
+  type: 'flight',
+  destination: null,
+  dateFrom: null,
+  dateTo: null,
+  basePrice: 0,
+  offers: [],
+  isFavorite: false,
+};
 
 export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT };
