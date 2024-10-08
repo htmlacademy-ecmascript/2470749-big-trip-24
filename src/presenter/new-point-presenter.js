@@ -12,7 +12,6 @@ export default class NewPointPresenter {
   #offers = [];
   #destinations = [];
 
-
   constructor({ pointsListContainer, onPointAdd }) {
     this.#pointsListContainer = pointsListContainer;
     this.#handlePointAdd = onPointAdd;

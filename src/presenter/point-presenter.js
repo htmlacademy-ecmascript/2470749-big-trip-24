@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointItemView from '../view/point-item-view';
 import EditPointView from '../view/edit-point-view';
-import { UpdateType } from '../const';
+import { UpdateType} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -57,7 +57,7 @@ export default class PointPresenter {
       onEditClick: this.#handleFormEditClick,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
-      isNewPoint: false
+      isNewPoint: false,
     });
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -109,6 +109,7 @@ export default class PointPresenter {
 
   #handleFormSaveClick = (point) => {
     this.#handleModelEvent(UpdateType.PATCH, point);
+
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };

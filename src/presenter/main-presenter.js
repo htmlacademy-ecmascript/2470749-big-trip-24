@@ -108,7 +108,7 @@ export default class MainPresenter {
       onPointsChange: this.#handleModelEvent,
       onModeChange: this.#handleModeChange,
       onPointClear: this.#clearPoint,
-      onEditPointView: this.#resetPointView
+      onEditPointView: this.#resetPointView,
     });
 
     pointPresenter.init(point, this.offers, this.destinations);

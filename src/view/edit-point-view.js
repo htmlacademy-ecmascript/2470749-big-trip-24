@@ -223,18 +223,14 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
-    if (this.#isNewPoint) {
-      console.log('save');
-    } else {
-      this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
-    }
-  };
 
-  // #handleFormSaveClick = (point) => {
-  //   this.#handleModelEvent(UpdateType.PATCH, point);
-  //   this.#replaceFormToPoint();
-  //   document.removeEventListener('keydown', this.#escKeyDownHandler);
-  // };
+    // if (this.#isNewPoint) {
+    //   console.log('save');
+    // } else {
+    this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
+    console.log(EditPointView.parseStateToPoint(this._state));
+    // }
+  };
 
   #formDeleteHandler = (evt) => {
     evt.preventDefault();
