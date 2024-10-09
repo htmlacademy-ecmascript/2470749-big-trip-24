@@ -22,8 +22,8 @@ const createPointTypeItem = (pointType, pointTypeChecked) => `
   <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-1">${capitalize(pointType)}</label>
   </div>`;
 
-const getPointOfferItem = (pointOffer, pointOfferChecked) => `<div class="event__offer-${createOfferClass(pointOffer.title)}">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${createOfferClass(pointOffer.title)}-1" type="checkbox" name="event-offer-${createOfferClass(pointOffer.title)}" ${pointOfferChecked}>
+const getPointOfferItem = (pointOffer, pointOfferChecked, offerId) => `<div class="event__offer-item">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-${createOfferClass(pointOffer.title)}-1" type="checkbox" data-type="${offerId}" name="event-offer-${createOfferClass(pointOffer.title)}" ${pointOfferChecked}>
   <label class="event__offer-label" for="event-offer-${createOfferClass(pointOffer.title)}-1">
     <span class="event__offer-title">${pointOffer.title}</span>
     &plus;&euro;&nbsp;
@@ -123,7 +123,7 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${isNewPoint ? '' : offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id))).join('')}
+        ${isNewPoint ? '' : offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id), pointOffer.id)).join('')}
         </div>
       </section>
 
@@ -200,6 +200,7 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChooseHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
 
@@ -260,6 +261,24 @@ export default class EditPointView extends AbstractStatefulView {
     }));
   };
 
+  #offersChooseHandler = (evt) => {
+    evt.preventDefault();
+
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
+    let updatedOffers = null;
+    const newOffer = Number(Object.values(evt.target.dataset));
+
+    if (evt.target.checked) {
+      updatedOffers = this._state.offers.concat(newOffer);
+    } else {
+      updatedOffers = this._state.offers.filter((offer) => offer !== newOffer);
+    }
+    this._state.offers = updatedOffers;
+  };
+
   #formDestinationChangeHandler = (evt) => {
     evt.preventDefault();
 
@@ -287,6 +306,7 @@ export default class EditPointView extends AbstractStatefulView {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
         'time_24hr': true,
+        maxDate: humanizePointDate(this._state.dateTo, DATE_WITH_TIME_FORMAT),
         defaultDate: humanizePointDate(this._state.dateFrom, DATE_WITH_TIME_FORMAT),
         onChange: this.#dateFromChangeHandler,
       }
