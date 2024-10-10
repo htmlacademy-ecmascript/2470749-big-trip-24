@@ -302,8 +302,6 @@ export default class EditPointView extends AbstractStatefulView {
         this.updateElement(({
           destination: getDestinationId(evt.target.value, this.#destinations),
         }));
-      } else {
-        evt.target.value = '';
       }
     });
   };
