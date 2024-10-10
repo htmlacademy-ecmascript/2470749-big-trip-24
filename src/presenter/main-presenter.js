@@ -29,7 +29,7 @@ export default class MainPresenter {
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointAdd: this.#handleViewAction,
-      // onDestroy: onNewPointCancel,
+      onDestroy: this.#clearPoint,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -62,14 +62,18 @@ export default class MainPresenter {
     return this.#pointModel.destinations;
   }
 
-  // onNewPointCancel() {
-  //   remove()
+  // onNewPointCancel = (point) => {
+  //   this.#handleViewAction(
+  //     UserAction.DELETE_POINT,
+  //     UpdateType.MINOR,
+  //     point,
+  //   );
   // }
 
   createPoint() {
     this.#currentSortType = FilterType.DAY;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init();
+    this.#newPointPresenter.init(this.offers, this.destinations);
   }
 
   init() {

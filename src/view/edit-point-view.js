@@ -3,6 +3,7 @@ import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/p
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import { nanoid } from 'nanoid';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -44,16 +45,16 @@ const getFormButtons = (isNewPoint) => {
 function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
   let modifiedDestination = '';
-  let description = '';
+  let description = null;
+  let pictures = [];
 
   if (destination !== null) {
     modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
     description = destinations.find((destinationElement) => destinationElement.id === destination).description;
+    pictures = destinations.find((destinationElement) => destinationElement.id === destination).pictures;
   }
 
-  const offersArray = isNewPoint ? '' : offers.find((offer) => offer.type === type).offers;
-
-  const pictures = isNewPoint ? '' : destinations.find((destinationElement) => destinationElement.id === destination).pictures;
+  const offersArray = offers.find((offer) => offer.type === type).offers;
 
   const getOfferCheckedAttribute = (offerId) => {
     if (pointOffers.includes(offerId)) {
@@ -101,10 +102,10 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${isNewPoint ? '' : humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizePointDate(dateFrom, DATE_WITH_TIME_FORMAT)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${isNewPoint ? '' : humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizePointDate(dateTo, DATE_WITH_TIME_FORMAT)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -112,7 +113,7 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${isNewPoint ? '' : basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
       </div>
       ${getFormButtons(isNewPoint)}
         <span class="visually-hidden">Open event</span>
@@ -123,17 +124,17 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${isNewPoint ? '' : offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id), pointOffer.id)).join('')}
+        ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id), pointOffer.id)).join('')}
         </div>
       </section>
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${isNewPoint ? '' : description}</p>
+        <p class="event__destination-description">${description}</p>
 
         <div class="event__photos-container">
         <div class="event__photos-tape">
-        ${isNewPoint ? '' : pictures.map((picture) => getDestinationPicture(picture)).join('')}
+        ${pictures.map((picture) => getDestinationPicture(picture)).join('')}
         </div>
       </div>
 
@@ -224,13 +225,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
-
-    // if (this.#isNewPoint) {
-    //   console.log('save');
-    // } else {
+    if (this.#isNewPoint) {
+      this._state.id = nanoid();
+    }
     this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
-    console.log(EditPointView.parseStateToPoint(this._state));
-    // }
+
   };
 
   #formDeleteHandler = (evt) => {
