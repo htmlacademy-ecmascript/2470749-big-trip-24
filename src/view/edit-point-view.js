@@ -54,7 +54,7 @@ const getDestinationInfo = (description, pictures) => {
     </div>
     </section>`;
   }
-}
+};
 
 const getOfferCheckedAttribute = (pointOffers, offerId) => {
   if (pointOffers.includes(offerId)) {
@@ -66,14 +66,14 @@ const getOfferCheckedAttribute = (pointOffers, offerId) => {
 
 const getOffersInfo = (offersArray, pointOffers) => {
   if (offersArray.length !== 0) {
-  return `<section class="event__section  event__section--offers">
+    return `<section class="event__section  event__section--offers">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
   <div class="event__available-offers">
   ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffers, pointOffer.id), pointOffer.id)).join('')}
   </div>
   </section>`;
   }
-}
+};
 
 function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
