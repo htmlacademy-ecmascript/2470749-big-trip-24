@@ -1,10 +1,10 @@
 import { BLANK_POINT, UpdateType, UserAction } from '../const';
 import { render, remove, RenderPosition } from '../framework/render';
 import EditPointView from '../view/edit-point-view';
+import {nanoid} from 'nanoid';
 
 export default class NewPointPresenter {
   #pointsListContainer = null;
-  #handleModelEvent = null;
   #editPointComponent = null;
   #handlePointAdd = null;
   #handleDestroy = null;
@@ -47,6 +47,7 @@ export default class NewPointPresenter {
     this.#handleDestroy();
 
     remove(this.#editPointComponent);
+
     this.#editPointComponent = null;
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
@@ -56,8 +57,9 @@ export default class NewPointPresenter {
     this.#handlePointAdd(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      point,
+      {id: nanoid(), ...point} ,
     );
+    this.destroy();
   };
 
   #handleFormDeleteClick = () => {
@@ -67,7 +69,7 @@ export default class NewPointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-
+      this.destroy();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };

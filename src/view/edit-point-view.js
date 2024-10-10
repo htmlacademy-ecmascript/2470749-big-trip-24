@@ -225,18 +225,19 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
+
     if (this.#isNewPoint) {
       this._state.id = nanoid();
     }
     this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
-
   };
 
   #formDeleteHandler = (evt) => {
     evt.preventDefault();
 
     if (this.#isNewPoint) {
-      this.#handleFormDelete;
+      this._state.id = nanoid();
+      this.#handleFormDelete();
     } else {
       this.#handleFormDelete(EditPointView.parseStateToPoint(this._state));
     }

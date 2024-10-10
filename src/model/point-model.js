@@ -18,7 +18,12 @@ export default class PointModel extends Observable {
 
   updatePoint(updateType, updatedPoint) {
     const pointIndex = this.#points.findIndex((point) => point.id === updatedPoint.id);
-    this.#points = [...this.#points].splice(pointIndex, 1, updatedPoint);
+
+    this.#points = [
+      ...this.#points.slice(0, pointIndex),
+      updatedPoint,
+      ...this.#points.slice(pointIndex + 1),
+    ];
 
     this._notify(updateType, updatedPoint);
   }

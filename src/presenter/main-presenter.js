@@ -16,12 +16,13 @@ export default class MainPresenter {
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
+  #handleNewPointCancel = null;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
 
-  constructor({ pointsContainer, pointModel, filtersModel }) {
+  constructor({ pointsContainer, pointModel, filtersModel, onNewPointCancel }) {
     this.#pointsContainer = pointsContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
@@ -29,7 +30,7 @@ export default class MainPresenter {
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointAdd: this.#handleViewAction,
-      onDestroy: this.#clearPoint,
+      onDestroy: onNewPointCancel,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -115,6 +116,7 @@ export default class MainPresenter {
       onModeChange: this.#handleModeChange,
       onPointClear: this.#clearPoint,
       onEditPointView: this.#resetPointView,
+      onModelUpdate: this.#handleViewAction,
     });
 
     pointPresenter.init(point, this.offers, this.destinations);

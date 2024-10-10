@@ -21,7 +21,7 @@ const mainPresenter = new MainPresenter({
   pointsContainer: pointsContainer,
   pointModel,
   filtersModel,
-  // onNewPointCancel: cancelNewPoint,
+  onNewPointCancel: cancelNewPoint,
 });
 
 const filtersPresenter = new FiltersPresenter({
@@ -37,9 +37,9 @@ function onNewPointButtonClick() {
   mainPresenter.createPoint();
 }
 
-// function cancelNewPoint() {
-//   remove();
-// }
+function cancelNewPoint() {
+  addNewPointButton.element.disabled = false;
+}
 
 filtersPresenter.init();
 mainPresenter.init();

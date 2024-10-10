@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointItemView from '../view/point-item-view';
 import EditPointView from '../view/edit-point-view';
-import { UpdateType} from '../const';
+import { UpdateType, UserAction} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -10,8 +10,8 @@ const Mode = {
 
 export default class PointPresenter {
   #point = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -21,15 +21,17 @@ export default class PointPresenter {
   #handleModeChange = null;
   #clearPoint = null;
   #resetPointView = null;
+  #handleModelUpdate = null;
 
   #mode = Mode.DEFAULT;
 
-  constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView }) {
+  constructor({ pointsListComponent, onPointsChange, onModeChange, onPointClear, onEditPointView, onModelUpdate }) {
     this.#pointsListComponent = pointsListComponent;
     this.#handleModelEvent = onPointsChange;
     this.#handleModeChange = onModeChange;
     this.#clearPoint = onPointClear;
     this.#resetPointView = onEditPointView;
+    this.#handleModelUpdate = onModelUpdate;
   }
 
   init(point, offers, destinations) {
@@ -108,7 +110,7 @@ export default class PointPresenter {
   };
 
   #handleFormSaveClick = (point) => {
-    this.#handleModelEvent(UpdateType.PATCH, point);
+    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.PATCH, point);
 
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
