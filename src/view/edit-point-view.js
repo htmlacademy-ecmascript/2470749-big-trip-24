@@ -121,7 +121,7 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${modifiedDestination}" list="destination-list-1">
         <datalist id="destination-list-1">
-          ${destinations.map((destination) => createDestinationsList(destination.name)).join('') ?? ''}
+          ${destinations.map((destinationElement) => createDestinationsList(destinationElement.name)).join('') ?? ''}
         </datalist>
       </div>
 
@@ -262,7 +262,7 @@ export default class EditPointView extends AbstractStatefulView {
         basePrice: evt.target.value,
       }));
     } else {
-      evt.target.value = ''
+      evt.target.value = '';
     }
   };
 
@@ -303,9 +303,9 @@ export default class EditPointView extends AbstractStatefulView {
           destination: getDestinationId(evt.target.value, this.#destinations),
         }));
       } else {
-        evt.target.value = ''
+        evt.target.value = '';
       }
-    })
+    });
   };
 
   #dateFromChangeHandler = ([userDate]) => {
