@@ -53,6 +53,7 @@ function getWeightForTime(a, b) {
   }
 }
 
+// const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type).offers;
 const getOffersByType = (type, offers) => offers.find((offer) => offer.type === type).offers;
 
 const getDestinationId = (destinationName, destinations) => destinations.find((destinationElement) => destinationElement.name === destinationName).id;

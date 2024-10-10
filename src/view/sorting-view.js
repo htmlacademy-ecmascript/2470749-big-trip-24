@@ -4,9 +4,6 @@ import { SortType } from '../const';
 
 
 const getSortingItems = (sorting, currentSortType) =>
-  // console.log(`sorting ${ sorting}`);
-  // console.log(`current ${ currentSortType}`);
-  // console.log(sorting === currentSortType ? 'checked' : '');
   `<div class="trip-sort__item  trip-sort__item--${sorting}">
   <input
   id="sort-${sorting}"

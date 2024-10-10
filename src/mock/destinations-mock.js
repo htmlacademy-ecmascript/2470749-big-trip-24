@@ -1,5 +1,5 @@
 import { CITIES, PICTURES, DESCRIPTION_TEXT } from './const-mock';
-import { getRandomDescriptionPoint } from '../utils/common-utils';
+import { getRandomDescriptionPoint, getRandomInteger } from '../utils/common-utils';
 
 let destinationId = 0;
 
@@ -10,23 +10,23 @@ const getDestinationsMock = (city) => {
     description: getRandomDescriptionPoint(DESCRIPTION_TEXT),
     pictures: [
       {
-        src: PICTURES[0],
+        src: PICTURES[getRandomInteger(0, 4)],
         description: `${city} parliament building`
       },
       {
-        src: PICTURES[1],
+        src: PICTURES[getRandomInteger(0, 4)],
         description: `${city} main square`
       },
       {
-        src: PICTURES[2],
+        src: PICTURES[getRandomInteger(0, 4)],
         description: `${city} best view`
       },
       {
-        src: PICTURES[3],
+        src: PICTURES[getRandomInteger(0, 4)],
         description: `${city} landscape`
       },
       {
-        src: PICTURES[4],
+        src: PICTURES[getRandomInteger(0, 4)],
         description: `${city} church`
       }
     ],
