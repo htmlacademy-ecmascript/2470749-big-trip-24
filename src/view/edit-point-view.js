@@ -1,9 +1,9 @@
 import { capitalize } from '../utils/common-utils';
 import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/point-utils';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
-import { CITIES } from '../mock/const-mock';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { nanoid } from 'nanoid';
+import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -46,7 +46,7 @@ const getDestinationInfo = (description, pictures) => {
   if (description !== '') {
     return `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${description}</p>
+    <p class="event__destination-description">${he.encode(description)}</p>
     <div class="event__photos-container">
     <div class="event__photos-tape">
     ${pictures.map((picture) => getDestinationPicture(picture)).join('')}
@@ -121,7 +121,7 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${modifiedDestination}" list="destination-list-1">
         <datalist id="destination-list-1">
-          ${CITIES.map((city) => createDestinationsList(city)).join('')}
+          ${destinations.map((destination) => createDestinationsList(destination.name)).join('') ?? ''}
         </datalist>
       </div>
 
@@ -257,10 +257,13 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formPriceInputHandler = (evt) => {
     evt.preventDefault();
-
-    this.updateElement(({
-      basePrice: evt.target.value,
-    }));
+    if (Number.isFinite(Number(evt.target.value))) {
+      this.updateElement(({
+        basePrice: evt.target.value,
+      }));
+    } else {
+      evt.target.value = ''
+    }
   };
 
   #formTypeChangeHandler = (evt) => {
@@ -294,9 +297,15 @@ export default class EditPointView extends AbstractStatefulView {
   #formDestinationChangeHandler = (evt) => {
     evt.preventDefault();
 
-    this.updateElement(({
-      destination: getDestinationId(evt.target.value, this.#destinations),
-    }));
+    this.#destinations.forEach((destination) => {
+      if (evt.target.value === destination.name) {
+        this.updateElement(({
+          destination: getDestinationId(evt.target.value, this.#destinations),
+        }));
+      } else {
+        evt.target.value = ''
+      }
+    })
   };
 
   #dateFromChangeHandler = ([userDate]) => {
