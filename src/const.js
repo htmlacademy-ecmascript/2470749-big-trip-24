@@ -40,7 +40,7 @@ const ListEmptyText = {
 
 const BLANK_POINT = {
   id: '',
-  type: 'flight',
+  type: TYPES[5],
   destination: null,
   dateFrom: null,
   dateTo: null,

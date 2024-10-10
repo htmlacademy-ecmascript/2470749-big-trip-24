@@ -34,18 +34,51 @@ const getPointOfferItem = (pointOffer, pointOfferChecked, offerId) => `<div clas
 
 const getFormButtons = (isNewPoint) => {
   if (isNewPoint) {
-    return ` <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+    return `<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">Cancel</button>`;
   }
-  return ` <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  return `<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Delete</button>
     <button class="event__rollup-btn" type="button">`;
 };
 
+const getDestinationInfo = (description, pictures) => {
+  if (description !== '') {
+    return `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${description}</p>
+    <div class="event__photos-container">
+    <div class="event__photos-tape">
+    ${pictures.map((picture) => getDestinationPicture(picture)).join('')}
+    </div>
+    </div>
+    </section>`;
+  }
+}
+
+const getOfferCheckedAttribute = (pointOffers, offerId) => {
+  if (pointOffers.includes(offerId)) {
+    return 'checked';
+  } else {
+    return '';
+  }
+};
+
+const getOffersInfo = (offersArray, pointOffers) => {
+  if (offersArray.length !== 0) {
+  return `<section class="event__section  event__section--offers">
+  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">
+  ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffers, pointOffer.id), pointOffer.id)).join('')}
+  </div>
+  </section>`;
+  }
+}
+
 function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   const { type, destination, dateFrom, dateTo, basePrice, offers: pointOffers } = point;
   let modifiedDestination = '';
-  let description = null;
+  let description = '';
   let pictures = [];
 
   if (destination !== null) {
@@ -55,14 +88,6 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
   }
 
   const offersArray = offers.find((offer) => offer.type === type).offers;
-
-  const getOfferCheckedAttribute = (offerId) => {
-    if (pointOffers.includes(offerId)) {
-      return 'checked';
-    } else {
-      return '';
-    }
-  };
 
   const getTypeCheckedAttribute = (pointType) => {
     if (pointType === type) {
@@ -120,25 +145,8 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-        ${offersArray.map((pointOffer) => getPointOfferItem(pointOffer, getOfferCheckedAttribute(pointOffer.id), pointOffer.id)).join('')}
-        </div>
-      </section>
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-        <div class="event__photos-tape">
-        ${pictures.map((picture) => getDestinationPicture(picture)).join('')}
-        </div>
-      </div>
-
-      </section>
+        ${getOffersInfo(offersArray, pointOffers) ?? ''}
+        ${getDestinationInfo(description, pictures) ?? ''}
     </section>
   </form>
 </li>`;
@@ -201,7 +209,11 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChooseHandler);
+
+    if (this.element.querySelector('.event__available-offers')) {
+      this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChooseHandler);
+    }
+
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
 
