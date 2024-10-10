@@ -21,7 +21,7 @@ export default class MainPresenter {
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
 
-  constructor({ pointsContainer, pointModel, filtersModel}) {
+  constructor({ pointsContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
@@ -103,6 +103,8 @@ export default class MainPresenter {
 
     this.#currentSortType = sortType;
     this.#clearPointsList();
+    remove(this.#sorting);
+    this.#renderSorting(this.#currentSortType);
     this.#renderPointsList();
   };
 

@@ -55,7 +55,7 @@ export default class NewPointPresenter {
   #handleFormSaveClick = (point) => {
     this.#handlePointAdd(
       UserAction.ADD_POINT,
-      UpdateType.MAJOR,
+      UpdateType.MINOR,
       point,
     );
   };
