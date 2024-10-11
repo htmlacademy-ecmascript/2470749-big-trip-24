@@ -16,8 +16,11 @@ const getOffers = (type, offersList) => {
 
 function createPointItemTemplate(point, offers, destinations) {
   const { type, destination, dateFrom, dateTo, basePrice, isFavorite } = point;
+  let modifiedDestination = '';
 
-  const modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
+  if (destination !== null) {
+    modifiedDestination = destinations.find((destinationElement) => destinationElement.id === destination).name;
+  }
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
 
@@ -58,16 +61,16 @@ function createPointItemTemplate(point, offers, destinations) {
 
 export default class PointItemView extends AbstractView {
   #point = null;
-  #offers = null;
-  #destinations = null;
+  #allOffers = [];
+  #allDestinations = [];
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
   constructor({ point, offers, destinations, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#offers = offers;
-    this.#destinations = destinations;
+    this.#allOffers = offers;
+    this.#allDestinations = destinations;
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -76,7 +79,7 @@ export default class PointItemView extends AbstractView {
   }
 
   get template() {
-    return createPointItemTemplate(this.#point, this.#offers, this.#destinations);
+    return createPointItemTemplate(this.#point, this.#allOffers, this.#allDestinations);
   }
 
   #editClickHandler = (evt) => {

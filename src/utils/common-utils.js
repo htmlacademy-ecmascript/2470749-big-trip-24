@@ -27,15 +27,6 @@ const getRandomIntegerArray = (min, max) => {
   return randomIntegerArray;
 };
 
-const createIdGenerator = () => {
-  let numberId = 0;
-
-  return () => {
-    numberId += 1;
-    return numberId;
-  };
-};
-
 function updatePoint(points, update) {
   return points.map((point) => point.id === update.id ? update : point);
 }
@@ -46,4 +37,4 @@ const getRandomDescriptionPoint = (text) => {
   return randomDescriptionText;
 };
 
-export { capitalize, getRandomArrayElement, getRandomInteger, createIdGenerator, getRandomIntegerArray, updatePoint, getRandomDescriptionPoint };
+export { capitalize, getRandomArrayElement, getRandomInteger, getRandomIntegerArray, updatePoint, getRandomDescriptionPoint };
