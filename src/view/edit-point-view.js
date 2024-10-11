@@ -150,8 +150,8 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
 }
 
 export default class EditPointView extends AbstractStatefulView {
-  #allOffers = null;
-  #allDestinations = null;
+  #allOffers = [];
+  #allDestinations = [];
   #handleEditClick = null;
   #handleFormSave = null;
   #handleFormDelete = null;

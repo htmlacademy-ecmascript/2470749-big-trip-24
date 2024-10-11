@@ -61,8 +61,8 @@ function createPointItemTemplate(point, offers, destinations) {
 
 export default class PointItemView extends AbstractView {
   #point = null;
-  #allOffers = null;
-  #allDestinations = null;
+  #allOffers = [];
+  #allDestinations = [];
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
