@@ -61,16 +61,16 @@ function createPointItemTemplate(point, offers, destinations) {
 
 export default class PointItemView extends AbstractView {
   #point = null;
-  #offers = null;
-  #destinations = null;
+  #allOffers = null;
+  #allDestinations = null;
   #handleEditClick = null;
   #handleFavoriteClick = null;
 
   constructor({ point, offers, destinations, onEditClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#offers = offers;
-    this.#destinations = destinations;
+    this.#allOffers = offers;
+    this.#allDestinations = destinations;
     this.#handleEditClick = onEditClick;
     this.#handleFavoriteClick = onFavoriteClick;
 
@@ -79,7 +79,7 @@ export default class PointItemView extends AbstractView {
   }
 
   get template() {
-    return createPointItemTemplate(this.#point, this.#offers, this.#destinations);
+    return createPointItemTemplate(this.#point, this.#allOffers, this.#allDestinations);
   }
 
   #editClickHandler = (evt) => {

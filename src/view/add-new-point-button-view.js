@@ -21,7 +21,6 @@ export default class AddNewPointButtonView extends AbstractView {
   #clickHandler = (evt) => {
     evt.preventDefault();
     this.#handleClick();
-    this.element.disabled = true;
   };
 }
 

@@ -39,7 +39,6 @@ const ListEmptyText = {
 };
 
 const BLANK_POINT = {
-  id: '',
   type: TYPES[5],
   destination: null,
   dateFrom: null,

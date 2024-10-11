@@ -10,8 +10,8 @@ const Mode = {
 
 export default class PointPresenter {
   #point = null;
-  #destinations = [];
-  #offers = [];
+  #allDestinations = [];
+  #allOffers = [];
 
   #pointComponent = null;
   #editPointComponent = null;
@@ -36,16 +36,16 @@ export default class PointPresenter {
 
   init(point, offers, destinations) {
     this.#point = point;
-    this.#offers = offers;
-    this.#destinations = destinations;
+    this.#allOffers = offers;
+    this.#allDestinations = destinations;
 
     const prevPointComponent = this.#pointComponent;
     const prevEditPointComponent = this.#editPointComponent;
 
     this.#pointComponent = new PointItemView({
       point: this.#point,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers: this.#allOffers,
+      destinations: this.#allDestinations,
       onEditClick: () => {
         this.#replacePointToForm();
       },
@@ -54,8 +54,8 @@ export default class PointPresenter {
 
     this.#editPointComponent = new EditPointView({
       point: this.#point,
-      offers: this.#offers,
-      destinations: this.#destinations,
+      offers: this.#allOffers,
+      destinations: this.#allDestinations,
       onEditClick: this.#handleFormEditClick,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,

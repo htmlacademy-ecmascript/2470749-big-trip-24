@@ -35,6 +35,7 @@ render(addNewPointButton, mainContainer);
 
 function onNewPointButtonClick() {
   mainPresenter.createPoint();
+  addNewPointButton.element.disabled = true;
 }
 
 function cancelNewPoint() {

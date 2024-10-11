@@ -16,7 +16,6 @@ export default class MainPresenter {
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
-  #handleNewPointCancel = null;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
@@ -62,14 +61,6 @@ export default class MainPresenter {
   get destinations() {
     return this.#pointModel.destinations;
   }
-
-  // onNewPointCancel = (point) => {
-  //   this.#handleViewAction(
-  //     UserAction.DELETE_POINT,
-  //     UpdateType.MINOR,
-  //     point,
-  //   );
-  // }
 
   createPoint() {
     this.#currentSortType = FilterType.DAY;
@@ -170,10 +161,11 @@ export default class MainPresenter {
   };
 
   #renderPointsList() {
+    remove(this.#noPoints);
+
     if (this.points.length === 0) {
       this.#renderNoPoints();
-    } else {
-      remove(this.#noPoints);
+      return;
     }
 
     for (const point of this.points) {
@@ -195,8 +187,6 @@ export default class MainPresenter {
   }
 
   #renderNoPoints() {
-    remove(this.#noPoints);
-
     this.#noPoints = new NoPointsView({
       filter: this.#currentFilterType,
     });

@@ -2,18 +2,15 @@ import { getPoints } from '../mock/point-mock';
 import { getDestinations } from '../mock/destinations-mock';
 import { getOffers } from '../mock/offers-mock';
 import Observable from '../framework/observable';
+import { nanoid } from 'nanoid';
 
 export default class PointModel extends Observable {
   #points = getPoints();
-  #destinations = getDestinations();
-  #offers = getOffers();
+  #allDestinations = getDestinations();
+  #allOffers = getOffers();
 
   get points() {
     return this.#points;
-  }
-
-  set points(points) {
-    this.#points = points;
   }
 
   updatePoint(updateType, updatedPoint) {
@@ -29,7 +26,7 @@ export default class PointModel extends Observable {
   }
 
   addPoint(updateType, updatedPoint) {
-    this.#points = [updatedPoint, ...this.#points];
+    this.#points = [{id: nanoid(), ...updatedPoint}, ...this.#points];
 
     this._notify(updateType, updatedPoint);
   }
@@ -46,10 +43,10 @@ export default class PointModel extends Observable {
   }
 
   get destinations() {
-    return this.#destinations;
+    return this.#allDestinations;
   }
 
   get offers() {
-    return this.#offers;
+    return this.#allOffers;
   }
 }
