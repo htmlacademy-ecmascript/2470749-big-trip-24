@@ -8,6 +8,15 @@ export default class PointModel extends Observable {
   #points = getPoints();
   #allDestinations = getDestinations();
   #allOffers = getOffers();
+  #pointsApiService = null;
+
+  constructor({ pointsApiService }) {
+    super();
+    this.#pointsApiService = pointsApiService;
+
+    this.#pointsApiService.points.then((points) =>
+    console.log(points.map(this.#adaptToClient)));
+  }
 
   get points() {
     return this.#points;
@@ -26,7 +35,7 @@ export default class PointModel extends Observable {
   }
 
   addPoint(updateType, updatedPoint) {
-    this.#points = [{id: nanoid(), ...updatedPoint}, ...this.#points];
+    this.#points = [{ id: nanoid(), ...updatedPoint }, ...this.#points];
 
     this._notify(updateType, updatedPoint);
   }
@@ -48,5 +57,21 @@ export default class PointModel extends Observable {
 
   get offers() {
     return this.#allOffers;
+  }
+
+  #adaptToClient(point) {
+    const adaptedPoint = {...point,
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      basePrice: point['base_price'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 }
