@@ -97,7 +97,7 @@ export default class MainPresenter {
   }
 
   #renderLoading() {
-    render(this.#loadingComponent,this.#pointsContainer)
+    render(this.#loadingComponent,this.#pointsContainer);
   }
 
   #handleSortingClick = (sortType) => {

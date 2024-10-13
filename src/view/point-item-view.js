@@ -5,13 +5,11 @@ import AbstractView from '../framework/view/abstract-view';
 const getOffers = (pointOffer, offersByType) => {
   const checkedOffers = offersByType.filter((offer) => offer.id === pointOffer);
 
-  const renderOffers = (title, price) => {
-    return `<li class="event__offer">
+  const renderOffers = (title, price) => `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
       </li>`;
-  }
   return checkedOffers.map((checkedOffer) => renderOffers(checkedOffer.title, checkedOffer.price)).join('');
 };
 
