@@ -1,29 +1,25 @@
 import ApiService from './framework/api-service';
-
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-};
+import { Method, URL } from './const';
 
 export default class PointsApiService extends ApiService {
   get points() {
-    return this._load({url: 'points'}) // загрузка данных с сервера
+    return this._load({url: URL.POINTS}) // загрузка данных с сервера
       .then(ApiService.parseResponse); // преобразуем строку к объекту чтобы с ним далее работать
   }
 
   get allDestinations() {
-    return this._load({url: 'destinations'})
+    return this._load({url: URL.DESTINATIONS})
       .then(ApiService.parseResponse);
   }
 
   get allOffers() {
-    return this._load({url: 'offers'})
+    return this._load({url: URL.OFFERS})
       .then(ApiService.parseResponse);
   }
 
   async updatePoint(point) {
     const response = await this._load({
-      url: `points/${point.id}`,
+      url: `${URL.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),

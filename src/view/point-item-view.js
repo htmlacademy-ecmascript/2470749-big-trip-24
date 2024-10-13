@@ -3,7 +3,7 @@ import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
 const getOffers = (pointOffer, offersByType) => {
-  const checkedOffers = offersByType.filter((offer) => offer.id === pointOffer)
+  const checkedOffers = offersByType.filter((offer) => offer.id === pointOffer);
 
   const renderOffers = (title, price) => {
     return `<li class="event__offer">
@@ -47,7 +47,7 @@ function createPointItemTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-    ${pointOffers.map((pointOffer) => getOffers(pointOffer, offersByType))}
+    ${pointOffers.map((pointOffer) => getOffers(pointOffer, offersByType)).join('')}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>
