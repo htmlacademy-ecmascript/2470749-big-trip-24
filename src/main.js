@@ -51,3 +51,4 @@ function cancelNewPoint() {
 
 filtersPresenter.init();
 mainPresenter.init();
+pointModel.init();

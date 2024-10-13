@@ -7,15 +7,18 @@ import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
 import NewPointPresenter from './new-point-presenter';
+import LoadingView from '../view/loading-view';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
+  #loadingComponent = new LoadingView();
   #pointsContainer = null;
   #pointModel = null;
   #pointPresenters = new Map();
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
+  #isLoading = true;
 
   #sorting = null;
   #currentSortType = SortType.DAY;
@@ -76,6 +79,11 @@ export default class MainPresenter {
   #renderMain() {
     render(this.#pointsListComponent, this.#pointsContainer);
 
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     this.#renderPointsList();
   }
 
@@ -86,6 +94,10 @@ export default class MainPresenter {
     });
 
     render(this.#sorting, this.#pointsContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent,this.#pointsContainer)
   }
 
   #handleSortingClick = (sortType) => {
@@ -149,6 +161,12 @@ export default class MainPresenter {
         this.#clearPointsList({ resetFilters: true, resetSorting: true });
         this.#renderPointsList();
         break;
+      // - реагирует на взаимодействие с сервером
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderMain();
+        break;
     }
   };
 
@@ -173,9 +191,18 @@ export default class MainPresenter {
     }
   }
 
+  #renderNoPoints() {
+    this.#noPoints = new NoPointsView({
+      filter: this.#currentFilterType,
+    });
+
+    render(this.#noPoints, this.#pointsListComponent.element);
+  }
+
   #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+    remove(this.#loadingComponent);
 
     if (resetFilters) {
       this.#currentFilterType = FilterType.EVERYTHING;
@@ -184,14 +211,6 @@ export default class MainPresenter {
     if (resetSorting) {
       this.#currentSortType = SortType.DAY;
     }
-  }
-
-  #renderNoPoints() {
-    this.#noPoints = new NoPointsView({
-      filter: this.#currentFilterType,
-    });
-
-    render(this.#noPoints, this.#pointsListComponent.element);
   }
 
   #clearPoint = (point) => {

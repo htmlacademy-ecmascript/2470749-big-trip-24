@@ -2,20 +2,21 @@ import { humanizePointDate, getPointDuration } from '../utils/point-utils';
 import { DATE_FORMAT, TIME_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 
-const getOffers = (type, offersList) => {
-  const offers = offersList.find((offer) => offer.type === type).offers;
+const getOffers = (pointOffer, offersByType) => {
+  const checkedOffers = offersByType.filter((offer) => offer.id === pointOffer)
 
-  const renderOffers = (title, price) => `<li class="event__offer">
+  const renderOffers = (title, price) => {
+    return `<li class="event__offer">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
       </li>`;
-
-  return offers.map((offer) => renderOffers(offer.title, offer.price)).join('');
+  }
+  return checkedOffers.map((checkedOffer) => renderOffers(checkedOffer.title, checkedOffer.price)).join('');
 };
 
 function createPointItemTemplate(point, offers, destinations) {
-  const { type, destination, dateFrom, dateTo, basePrice, isFavorite } = point;
+  const { type, destination, dateFrom, dateTo, basePrice, isFavorite, offers: pointOffers } = point;
   let modifiedDestination = '';
 
   if (destination !== null) {
@@ -23,6 +24,8 @@ function createPointItemTemplate(point, offers, destinations) {
   }
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
+
+  const offersByType = offers.find((offer) => offer.type === type).offers;
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -44,7 +47,7 @@ function createPointItemTemplate(point, offers, destinations) {
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-    ${getOffers(type, offers)}
+    ${pointOffers.map((pointOffer) => getOffers(pointOffer, offersByType))}
     </ul>
     <button class="${favoriteClassName}" type="button">
       <span class="visually-hidden">Add to favorite</span>
