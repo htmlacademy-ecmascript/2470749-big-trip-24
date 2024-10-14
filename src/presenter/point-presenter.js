@@ -44,8 +44,8 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointItemView({
       point: this.#point,
-      offers: this.#allOffers,
-      destinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations,
       onEditClick: () => {
         this.#replacePointToForm();
       },
@@ -54,8 +54,8 @@ export default class PointPresenter {
 
     this.#editPointComponent = new EditPointView({
       point: this.#point,
-      offers: this.#allOffers,
-      destinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations,
       onEditClick: this.#handleFormEditClick,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
@@ -110,7 +110,7 @@ export default class PointPresenter {
   };
 
   #handleFormSaveClick = (point) => {
-    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.PATCH, point);
+    this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
 
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);

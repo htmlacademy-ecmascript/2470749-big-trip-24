@@ -1,7 +1,6 @@
 import { BLANK_POINT, UpdateType, UserAction } from '../const';
 import { render, remove, RenderPosition } from '../framework/render';
 import EditPointView from '../view/edit-point-view';
-import {nanoid} from 'nanoid';
 
 export default class NewPointPresenter {
   #pointsListContainer = null;
@@ -17,9 +16,9 @@ export default class NewPointPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-  init(offers, destinations) {
-    this.#allOffers = offers;
-    this.#allDestinations = destinations;
+  init(allOffers, allDestinations) {
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
 
     if (this.#editPointComponent !== null) {
       return;
@@ -27,8 +26,8 @@ export default class NewPointPresenter {
 
     this.#editPointComponent = new EditPointView({
       point: BLANK_POINT,
-      offers: this.#allOffers,
-      destinations: this.#allDestinations,
+      allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations,
       onFormSaveClick: this.#handleFormSaveClick,
       onFormDeleteClick: this.#handleFormDeleteClick,
       isNewPoint: true
@@ -57,7 +56,7 @@ export default class NewPointPresenter {
     this.#handlePointAdd(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point} ,
+      point,
     );
     this.destroy();
   };
