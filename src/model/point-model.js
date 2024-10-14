@@ -17,25 +17,39 @@ export default class PointModel extends Observable {
     return this.#points;
   }
 
-  get destinations() {
+  get allDestinations() {
     return this.#allDestinations;
   }
 
-  get offers() {
+  get allOffers() {
     return this.#allOffers;
+  }
+
+  #adaptToClient(point) {
+    const adaptedPoint = {
+      ...point,
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      basePrice: point['base_price'],
+      isFavorite: point['is_favorite'],
+    };
+
+    delete adaptedPoint['date_from'];
+    delete adaptedPoint['date_to'];
+    delete adaptedPoint['base_price'];
+    delete adaptedPoint['is_favorite'];
+
+    return adaptedPoint;
   }
 
   async init() {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
-      console.log(this.#points);
 
       this.#allDestinations = await this.#pointsApiService.allDestinations;
-      this.#allOffers = await this.#pointsApiService.allOffers;
 
-      console.log(this.#allDestinations);
-      console.log(this.#allOffers);
+      this.#allOffers = await this.#pointsApiService.allOffers;
     } catch (err) {
       this.#points = [];
       this.#allDestinations = [];
@@ -64,7 +78,6 @@ export default class PointModel extends Observable {
 
       this._notify(updateType, updatedPoint);
     } catch (err) {
-      console.log(err);
       throw new Error('Can\'t update point');
     }
   }
@@ -84,22 +97,5 @@ export default class PointModel extends Observable {
     ];
 
     this._notify(updateType, update);
-  }
-
-  #adaptToClient(point) {
-    const adaptedPoint = {
-      ...point,
-      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
-      basePrice: point['base_price'],
-      isFavorite: point['is_favorite'],
-    };
-
-    delete adaptedPoint['date_from'];
-    delete adaptedPoint['date_to'];
-    delete adaptedPoint['base_price'];
-    delete adaptedPoint['is_favorite'];
-
-    return adaptedPoint;
   }
 }

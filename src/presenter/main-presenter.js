@@ -57,18 +57,18 @@ export default class MainPresenter {
     return filteredPoints;
   }
 
-  get offers() {
-    return this.#pointModel.offers;
+  get allOffers() {
+    return this.#pointModel.allOffers;
   }
 
-  get destinations() {
-    return this.#pointModel.destinations;
+  get allDestinations() {
+    return this.#pointModel.allDestinations;
   }
 
   createPoint() {
     this.#currentSortType = FilterType.DAY;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init(this.offers, this.destinations);
+    this.#newPointPresenter.init(this.allOffers, this.allDestinations);
   }
 
   init() {
@@ -122,7 +122,7 @@ export default class MainPresenter {
       onModelUpdate: this.#handleViewAction,
     });
 
-    pointPresenter.init(point, this.offers, this.destinations);
+    pointPresenter.init(point, this.allOffers, this.allDestinations);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
@@ -149,7 +149,7 @@ export default class MainPresenter {
     switch (updateType) {
       // - обновить часть списка (например, когда поменялись данные поинта при редактировании)
       case UpdateType.PATCH:
-        this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.offers, this.destinations);
+        this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.allOffers, this.allDestinations);
         break;
       // - обновить список
       case UpdateType.MINOR:

@@ -1,5 +1,5 @@
 import { capitalize } from '../utils/common-utils';
-import { getOffersByType, getDestinationId, humanizePointDate } from '../utils/point-utils';
+import { getDestinationId, humanizePointDate } from '../utils/point-utils';
 import { DATE_WITH_TIME_FORMAT, TYPES } from '../const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import he from 'he';
@@ -161,11 +161,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   _state = {};
 
-  constructor({ point, offers, destinations, onEditClick, onFormSaveClick, onFormDeleteClick, isNewPoint }) {
+  constructor({ point, allOffers, allDestinations, onEditClick, onFormSaveClick, onFormDeleteClick, isNewPoint }) {
     super();
     this._setState(EditPointView.parsePointToState(point));
-    this.#allOffers = offers;
-    this.#allDestinations = destinations;
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
     this.#handleEditClick = onEditClick;
     this.#handleFormSave = onFormSaveClick;
     this.#handleFormDelete = onFormDeleteClick;
@@ -234,7 +234,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
-console.log(this._state)
+
     this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
   };
 
@@ -252,7 +252,7 @@ console.log(this._state)
     evt.preventDefault();
     if (Number.isFinite(Number(evt.target.value))) {
       this.updateElement(({
-        basePrice: evt.target.value,
+        basePrice: Number(evt.target.value),
       }));
       return;
     }
@@ -261,11 +261,10 @@ console.log(this._state)
 
   #formTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.element.querySelector('.event__label').textContent = evt.target.value;
 
     this.updateElement(({
       type: evt.target.value,
-      allOffers: getOffersByType(evt.target.value, this.#allOffers),
+      offers: [],
     }));
   };
 
@@ -277,8 +276,8 @@ console.log(this._state)
     }
 
     let updatedOffers = [];
-    const newOffer = Number(Object.values(evt.target.dataset));
-    const isNewOfferInList = this._state.offers.find((offer) => offer === newOffer) > 0;
+    const newOffer = evt.target.dataset.type;
+    const isNewOfferInList = this._state.offers.find((offer) => offer === newOffer);
 
     if (isNewOfferInList) {
       updatedOffers = this._state.offers.filter((offer) => offer !== newOffer);
