@@ -22,7 +22,7 @@ export default class PointsApiService extends ApiService {
       url: `${URL.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
-      headers: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({ 'Content-Type': 'application/json' })
     });
 
     const parsedResponse = await ApiService.parseResponse(response);

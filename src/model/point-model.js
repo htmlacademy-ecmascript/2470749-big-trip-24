@@ -31,12 +31,10 @@ export default class PointModel extends Observable {
       this.#points = points.map(this.#adaptToClient);
       console.log(this.#points);
 
-      const allDestinations = await this.#pointsApiService.allDestinations;
-      this.#allDestinations = allDestinations.map((destinations) => this.#allDestinations === destinations);
-      console.log(this.#allDestinations);
+      this.#allDestinations = await this.#pointsApiService.allDestinations;
+      this.#allOffers = await this.#pointsApiService.allOffers;
 
-      const allOffers = await this.#pointsApiService.allOffers;
-      this.#allOffers = allOffers.map((offers) => this.#allOffers === offers);
+      console.log(this.#allDestinations);
       console.log(this.#allOffers);
     } catch (err) {
       this.#points = [];
@@ -47,33 +45,45 @@ export default class PointModel extends Observable {
     this._notify(UpdateType.INIT);
   }
 
-  updatePoint(updateType, updatedPoint) {
-    const pointIndex = this.#points.findIndex((point) => point.id === updatedPoint.id);
+  async updatePoint(updateType, update) {
+    const pointIndex = this.#points.findIndex((point) => point.id === update.id);
+
+    if (pointIndex === -1) {
+      throw new Error('Can\'t update unexisting task');
+    }
+
+    try {
+      const responce = await this.#pointsApiService.updatePoint(update);
+      const updatedPoint = this.#adaptToClient(responce);
+
+      this.#points = [
+        ...this.#points.slice(0, pointIndex),
+        updatedPoint,
+        ...this.#points.slice(pointIndex + 1),
+      ];
+
+      this._notify(updateType, updatedPoint);
+    } catch (err) {
+      console.log(err);
+      throw new Error('Can\'t update point');
+    }
+  }
+
+  addPoint(updateType, update) {
+    this.#points = [{ id: nanoid(), ...update }, ...this.#points];
+
+    this._notify(updateType, update);
+  }
+
+  deletePoint(updateType, update) {
+    const pointIndex = this.#points.findIndex((point) => point.id === update.id);
 
     this.#points = [
       ...this.#points.slice(0, pointIndex),
-      updatedPoint,
       ...this.#points.slice(pointIndex + 1),
     ];
 
-    this._notify(updateType, updatedPoint);
-  }
-
-  addPoint(updateType, updatedPoint) {
-    this.#points = [{ id: nanoid(), ...updatedPoint }, ...this.#points];
-
-    this._notify(updateType, updatedPoint);
-  }
-
-  deletePoint(updateType, updatedPoint) {
-    const pointIndex = this.#points.findIndex((point) => point.id === updatedPoint.id);
-
-    this.#points = [
-      ...this.#points.slice(0, pointIndex),
-      ...this.#points.slice(pointIndex + 1),
-    ];
-
-    this._notify(updateType, updatedPoint);
+    this._notify(updateType, update);
   }
 
   #adaptToClient(point) {

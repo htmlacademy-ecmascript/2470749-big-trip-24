@@ -38,7 +38,6 @@ const filtersPresenter = new FiltersPresenter({
 });
 
 render(new NewTripInfo(), mainContainer, RenderPosition.AFTERBEGIN);
-render(addNewPointButton, mainContainer);
 
 function onNewPointButtonClick() {
   mainPresenter.createPoint();
@@ -51,4 +50,7 @@ function cancelNewPoint() {
 
 filtersPresenter.init();
 mainPresenter.init();
-pointModel.init();
+pointModel.init()
+  .finally(() => {
+    render(addNewPointButton, mainContainer);
+  });

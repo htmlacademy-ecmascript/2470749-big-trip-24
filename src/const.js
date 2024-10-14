@@ -57,7 +57,7 @@ const Method = {
 const URL = {
   POINTS: 'points',
   DESTINATIONS: 'destinations',
-  OFFERS: 'offers'
+  OFFERS: 'offers',
 };
 
 export { TYPES, DATE_FORMAT, TIME_FORMAT, DATE_WITH_TIME_FORMAT, FilterType, SortType, UserAction, UpdateType, ListEmptyText, BLANK_POINT, Method, URL };
