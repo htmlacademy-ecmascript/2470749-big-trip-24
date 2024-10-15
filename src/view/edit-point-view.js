@@ -32,20 +32,18 @@ const getPointOfferItem = (pointOffer, pointOfferChecked, offerId) => `<div clas
   </div>`;
 
 const getFormButtons = (isNewPoint, isDisabled, isSaving, isDeleting) => {
-  const getDisabledState = () => {
-    return isDisabled ? 'disabled' : '';
-  }
+  const getDisabledState = () => isDisabled ? 'disabled' : '';
 
-  const getButtonName = (isNewPoint, isDeleting) => {
+  const getButtonName = () => {
     if (!isDeleting) {
       return isNewPoint ? 'Cancel' : 'Delete';
     }
     return !isNewPoint && isDeleting ? 'Deleting...' : 'Delete';
-  }
+  };
 
   return `<button class="event__save-btn  btn  btn--blue" type="submit"${getDisabledState()} >${isSaving ? 'Saveing...' : 'Save'}</button>
-      <button class="event__reset-btn" type="reset" ${getDisabledState()}>${getButtonName(isNewPoint, isDeleting)}</button>
-      ${isNewPoint ? '' : `<button class="event__rollup-btn" type="button"  ${getDisabledState()}>`}`
+      <button class="event__reset-btn" type="reset" ${getDisabledState()}>${getButtonName()}</button>
+      ${isNewPoint ? '' : `<button class="event__rollup-btn" type="button"  ${getDisabledState()}>`}`;
 };
 
 const getDestinationInfo = (description, pictures) => {

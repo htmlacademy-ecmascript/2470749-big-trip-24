@@ -8,7 +8,7 @@ import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
 import NewPointPresenter from './new-point-presenter';
 import LoadingView from '../view/loading-view';
-import UiBlocker from '../framework/ui-blocker/ui-blocker'
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
