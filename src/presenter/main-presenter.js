@@ -3,11 +3,12 @@ import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
 import { RenderPosition, remove, render } from '../framework/render';
 import PointPresenter from './point-presenter';
-import { SortType, UpdateType, UserAction, FilterType } from '../const';
+import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
 import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
 import NewPointPresenter from './new-point-presenter';
 import LoadingView from '../view/loading-view';
+import UiBlocker from '../framework/ui-blocker/ui-blocker'
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
@@ -23,6 +24,10 @@ export default class MainPresenter {
   #sorting = null;
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   constructor({ pointsContainer, pointModel, filtersModel, onNewPointCancel }) {
     this.#pointsContainer = pointsContainer;
@@ -131,12 +136,14 @@ export default class MainPresenter {
   // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
   // update - обновленные данные
   #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#pointModel.updatePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
@@ -144,7 +151,7 @@ export default class MainPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#pointModel.addPoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -152,11 +159,13 @@ export default class MainPresenter {
         this.#pointPresenters.get(update.id).setDeleting();
         try {
           await this.#pointModel.deletePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointPresenters.get(update.id).setAborting();
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   // В зависимости от типа изменений решаем, что делать:
