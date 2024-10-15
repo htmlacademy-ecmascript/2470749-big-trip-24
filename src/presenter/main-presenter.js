@@ -205,7 +205,7 @@ export default class MainPresenter {
   #renderPointsList() {
     remove(this.#noPoints);
 
-    if (this.points.length === 0) {
+    if (this.points.length === 0 && !document.querySelector('.trip-events__msg')) {
       this.#renderNoPoints();
       return;
     }
@@ -220,7 +220,8 @@ export default class MainPresenter {
       filter: this.#currentFilterType,
     });
 
-    render(this.#noPoints, this.#pointsListComponent.element);
+    remove(this.#pointsListComponent)
+    render(this.#noPoints, this.#pointsContainer);
   }
 
   #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {

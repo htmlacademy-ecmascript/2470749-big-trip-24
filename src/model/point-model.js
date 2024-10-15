@@ -1,15 +1,20 @@
 import Observable from '../framework/observable';
 import { UpdateType } from '../const';
+import FailedToLoadView from '../view/failed-to-load-view';
+import { render } from '../framework/render';
 
 export default class PointModel extends Observable {
   #points = [];
   #allDestinations = [];
   #allOffers = [];
   #pointsApiService = null;
+  #failedToLoadComponent = new FailedToLoadView();
+  #pointsContainer = null;
 
-  constructor({ pointsApiService }) {
+  constructor({ pointsApiService, pointsContainer }) {
     super();
     this.#pointsApiService = pointsApiService;
+    this.#pointsContainer = pointsContainer;
   }
 
   get points() {
@@ -50,9 +55,7 @@ export default class PointModel extends Observable {
 
       this.#allOffers = await this.#pointsApiService.allOffers;
     } catch (err) {
-      this.#points = [];
-      this.#allDestinations = [];
-      this.#allOffers = [];
+      render(this.#failedToLoadComponent, this.#pointsContainer)
     }
 
     this._notify(UpdateType.INIT);
