@@ -55,7 +55,7 @@ export default class PointModel extends Observable {
 
       this.#allOffers = await this.#pointsApiService.allOffers;
     } catch (err) {
-      render(this.#failedToLoadComponent, this.#pointsContainer)
+      render(this.#failedToLoadComponent, this.#pointsContainer);
     }
 
     this._notify(UpdateType.INIT);

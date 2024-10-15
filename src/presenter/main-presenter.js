@@ -220,7 +220,7 @@ export default class MainPresenter {
       filter: this.#currentFilterType,
     });
 
-    remove(this.#pointsListComponent)
+    remove(this.#pointsListComponent);
     render(this.#noPoints, this.#pointsContainer);
   }
 

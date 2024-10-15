@@ -71,6 +71,7 @@ export default class NewPointPresenter {
     this.#editPointComponent.shake(resetFormState);
   }
 
+  // обработчики событий
   #handleFormSaveClick = (point) => {
     this.#handlePointAdd(
       UserAction.ADD_POINT,
