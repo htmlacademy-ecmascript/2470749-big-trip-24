@@ -59,13 +59,24 @@ export default class NewPointPresenter {
     });
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this.#editPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  }
+
   #handleFormSaveClick = (point) => {
     this.#handlePointAdd(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point,
     );
-    // this.destroy();
   };
 
   #handleFormDeleteClick = () => {

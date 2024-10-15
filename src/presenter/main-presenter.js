@@ -97,7 +97,7 @@ export default class MainPresenter {
   }
 
   #renderLoading() {
-    render(this.#loadingComponent,this.#pointsContainer);
+    render(this.#loadingComponent, this.#pointsContainer);
   }
 
   #handleSortingClick = (sortType) => {
@@ -130,19 +130,31 @@ export default class MainPresenter {
   // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
   // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
   // update - обновленные данные
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
-        this.#pointModel.updatePoint(updateType, update);
+        try {
+          await this.#pointModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
-        this.#pointModel.addPoint(updateType, update);
+        try {
+          await this.#pointModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
         this.#pointPresenters.get(update.id).setDeleting();
-        this.#pointModel.deletePoint(updateType, update);
+        try {
+          await this.#pointModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
   };

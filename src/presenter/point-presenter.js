@@ -123,6 +123,23 @@ export default class PointPresenter {
     }
   }
 
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editPointComponent.shake(resetFormState);
+  }
+
   // обработчики событий
   #handleFavoriteClick = () => {
     this.#handleModelEvent(UpdateType.PATCH, { ...this.#point, isFavorite: !this.#point.isFavorite });
