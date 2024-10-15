@@ -135,7 +135,7 @@ function createEditPointTemplate(point, offers, destinations, isNewPoint) {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" required>
       </div>
       ${getFormButtons(isNewPoint)}
         <span class="visually-hidden">Open event</span>
@@ -234,7 +234,6 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formSaveHandler = (evt) => {
     evt.preventDefault();
-
     this.#handleFormSave(EditPointView.parseStateToPoint(this._state));
   };
 
@@ -250,13 +249,17 @@ export default class EditPointView extends AbstractStatefulView {
 
   #formPriceInputHandler = (evt) => {
     evt.preventDefault();
-    if (Number.isFinite(Number(evt.target.value))) {
-      this.updateElement(({
-        basePrice: Number(evt.target.value),
-      }));
+
+    const targetPrice = Number(evt.target.value);
+
+    if (!Number.isFinite(targetPrice)) {
+      evt.target.value = '';
       return;
     }
-    evt.target.value = '';
+
+    this.updateElement(({
+      basePrice: targetPrice,
+    }));
   };
 
   #formTypeChangeHandler = (evt) => {

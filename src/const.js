@@ -52,6 +52,8 @@ const BLANK_POINT = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const URL = {
