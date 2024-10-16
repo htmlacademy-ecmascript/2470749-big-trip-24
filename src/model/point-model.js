@@ -1,16 +1,20 @@
 import Observable from '../framework/observable';
-import { nanoid } from 'nanoid';
 import { UpdateType } from '../const';
+import FailedToLoadView from '../view/failed-to-load-view';
+import { render } from '../framework/render';
 
 export default class PointModel extends Observable {
   #points = [];
   #allDestinations = [];
   #allOffers = [];
   #pointsApiService = null;
+  #failedToLoadComponent = new FailedToLoadView();
+  #pointsContainer = null;
 
-  constructor({ pointsApiService }) {
+  constructor({ pointsApiService, pointsContainer }) {
     super();
     this.#pointsApiService = pointsApiService;
+    this.#pointsContainer = pointsContainer;
   }
 
   get points() {
@@ -28,8 +32,8 @@ export default class PointModel extends Observable {
   #adaptToClient(point) {
     const adaptedPoint = {
       ...point,
-      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : point['date_from'],
-      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : point['date_to'],
+      dateFrom: point['date_from'] !== null ? new Date(point['date_from']) : null,
+      dateTo: point['date_to'] !== null ? new Date(point['date_to']) : null,
       basePrice: point['base_price'],
       isFavorite: point['is_favorite'],
     };
@@ -51,9 +55,7 @@ export default class PointModel extends Observable {
 
       this.#allOffers = await this.#pointsApiService.allOffers;
     } catch (err) {
-      this.#points = [];
-      this.#allDestinations = [];
-      this.#allOffers = [];
+      render(this.#failedToLoadComponent, this.#pointsContainer);
     }
 
     this._notify(UpdateType.INIT);
@@ -82,20 +84,31 @@ export default class PointModel extends Observable {
     }
   }
 
-  addPoint(updateType, update) {
-    this.#points = [{ id: nanoid(), ...update }, ...this.#points];
+  async addPoint(updateType, update) {
+    try {
+      const responce = await this.#pointsApiService.addPoint(update);
+      const addedPoint = this.#adaptToClient(responce);
+      this.#points = [addedPoint, ...this.#points];
 
-    this._notify(updateType, update);
+      this._notify(updateType, addedPoint);
+    } catch (err) {
+      throw new Error('Can\'t add task');
+    }
   }
 
-  deletePoint(updateType, update) {
+  async deletePoint(updateType, update) {
     const pointIndex = this.#points.findIndex((point) => point.id === update.id);
 
-    this.#points = [
-      ...this.#points.slice(0, pointIndex),
-      ...this.#points.slice(pointIndex + 1),
-    ];
+    try {
+      await this.#pointsApiService.deletePoint(update);
+      this.#points = [
+        ...this.#points.slice(0, pointIndex),
+        ...this.#points.slice(pointIndex + 1),
+      ];
 
-    this._notify(updateType, update);
+      this._notify(updateType);
+    } catch (err) {
+      throw new Error('Can\'t delete task');
+    }
   }
 }
