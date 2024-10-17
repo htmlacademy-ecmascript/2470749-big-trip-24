@@ -45,10 +45,61 @@ const getDestinationsTitle = (destinationIdList, allDestinations) => {
   }
 }
 
+const getAllOffersData = (allOffers) => {
+  const allOffersInfo = [];
 
+  allOffers.forEach((offer) => {
+    allOffersInfo.push(offer.offers);
+  });
 
-function createTripInfoTemplate(points, allDestinations) {
+  const modifiedAllOffersInfo = allOffersInfo.flat();
+  const allOffersData = new Map();
 
+  modifiedAllOffersInfo.forEach((offers) => {
+    allOffersData.set(offers.id, offers.price)
+  });
+
+  return allOffersData;
+}
+
+const getOffersFullPrice = (points, allOffers) => {
+  const pointOffersList = [];
+
+  points.forEach((point) => {
+    pointOffersList.push(point.offers);
+  })
+
+  const pointOffersIdList = pointOffersList.flat();
+  const allOffersData = getAllOffersData(allOffers);
+
+  let offersFullPrice = 0;
+
+  allOffersData.forEach((value, key) => {
+    pointOffersIdList.forEach((pointOfferId) => {
+      if (key === pointOfferId) {
+        offersFullPrice += value;
+      }
+    })
+  });
+
+  return offersFullPrice;
+}
+
+const getPointsFullPrice = (points) => {
+  const allBasePriceList = [];
+
+  points.forEach((point) => {
+    allBasePriceList.push(point.basePrice);
+  })
+
+  const allBasePrice = allBasePriceList.reduce(function (priceA, priceB) {
+    return priceA + priceB;
+  }, 0);
+
+  return allBasePrice;
+}
+
+function createTripInfoTemplate(points, allDestinations, allOffers) {
   const destinationIdList = getDestinationIdList(points);
 
   return `<section class="trip-main__trip-info  trip-info">
@@ -58,7 +109,7 @@ function createTripInfoTemplate(points, allDestinations) {
   </div>
 
   <p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+    Total: &euro;&nbsp;<span class="trip-info__cost-value">${getPointsFullPrice(points) + getOffersFullPrice(points, allOffers)}</span>
   </p>
   </section>`;
 }
