@@ -6,6 +6,7 @@ import FiltersModel from './model/filters-model';
 import FiltersPresenter from './presenter/filters-presenter';
 import AddNewPointButtonView from './view/add-new-point-button-view';
 import PointsApiService from './points-api-service';
+import TripInfoPresenter from './presenter/trip-info-presenter';
 
 const AUTHORIZATION = 'Basic fjr3598kro54083dl';
 const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
@@ -38,7 +39,10 @@ const filtersPresenter = new FiltersPresenter({
   filtersModel,
 });
 
-render(new NewTripInfo(), mainContainer, RenderPosition.AFTERBEGIN);
+const tripInfoPresenter = new TripInfoPresenter({
+  pointModel: pointModel,
+  mainContainer: mainContainer,
+});
 
 function onNewPointButtonClick() {
   mainPresenter.createPoint();
@@ -49,9 +53,13 @@ function cancelNewPoint() {
   addNewPointButton.element.disabled = false;
 }
 
-filtersPresenter.init();
 mainPresenter.init();
+
 pointModel.init()
   .finally(() => {
     render(addNewPointButton, mainContainer);
+    tripInfoPresenter.init();
+    filtersPresenter.init();
   });
+
+
