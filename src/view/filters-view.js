@@ -8,6 +8,7 @@ const getFiltersItem = (type, count) => `<div class="trip-filters__filter">
     type="radio"
     name="trip-filter"
     value="${type}"
+    ${count === 0 ? 'disabled' : ''}
     ${type === 'everything' ? 'checked' : ''}>
     <label class="trip-filters__filter-label" data-filter-type="${type}" for="filter-${type}">${capitalize(type)} ${count}</label>
     </div>`;
@@ -16,7 +17,7 @@ function createFiltersTemplate(filters) {
   return `<form class="trip-filters" action="#" method="get">
   ${Object.values(filters).map((filter) => getFiltersItem(filter.type, filter.count)).join('')}
   <button class="visually-hidden" type="submit">Accept filter</button>
-</form>`;
+  </form>`;
 }
 
 export default class FiltersView extends AbstractView {
@@ -40,7 +41,11 @@ export default class FiltersView extends AbstractView {
       return;
     }
 
-    evt.preventDefault();
-    this.#handleFiltersChange(evt.target.dataset.filterType);
+    const currentFilterCount = this.#filters.find((filter) => filter.type === evt.target.dataset.filterType).count;
+
+    if (currentFilterCount > 0) {
+      evt.preventDefault();
+      this.#handleFiltersChange(evt.target.dataset.filterType);
+    }
   };
 }

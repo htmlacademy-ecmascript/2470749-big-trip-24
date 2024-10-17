@@ -4,7 +4,7 @@ import NoPointsView from '../view/no-points-view';
 import { RenderPosition, remove, render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
-import { getWeightForPrice, getWeightForTime } from '../utils/point-utils';
+import { getWeightForPrice, getWeightForTime, getWeigthForDay } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
 import NewPointPresenter from './new-point-presenter';
 import LoadingView from '../view/loading-view';
@@ -58,6 +58,8 @@ export default class MainPresenter {
         return filteredPoints.sort(getWeightForTime);
       case SortType.PRICE:
         return filteredPoints.sort(getWeightForPrice);
+      case SortType.DAY:
+        return filteredPoints.sort(getWeigthForDay);
     }
     return filteredPoints;
   }

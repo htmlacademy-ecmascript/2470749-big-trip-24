@@ -204,6 +204,12 @@ export default class EditPointView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
+    const availableOffersComponent = this.element.querySelector('.event__available-offers');
+
+    if (availableOffersComponent) {
+      availableOffersComponent.addEventListener('change', this.#offersChooseHandler);
+    }
+
     if (!this.#isNewPoint) {
       this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     }
@@ -211,10 +217,6 @@ export default class EditPointView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this.#formSaveHandler);
     this.element.querySelector('form').addEventListener('reset', this.#formDeleteHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#formTypeChangeHandler);
-
-    if (this.element.querySelector('.event__available-offers')) {
-      this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChooseHandler);
-    }
 
     this.element.querySelector('.event__input--price').addEventListener('change', this.#formPriceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#formDestinationChangeHandler);
