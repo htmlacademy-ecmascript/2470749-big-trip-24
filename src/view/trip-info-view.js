@@ -6,44 +6,44 @@ const getFirstPoint = (points) => {
   const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
   const firstPoint = sortedByDateFromPoints[0].dateFrom;
   return firstPoint;
-}
+};
 
 const getLastPoint = (points) => {
   const sortedByDateFromPoints = [...points].sort((a, b) => b.dateTo - a.dateTo);
   const lastPoint = sortedByDateFromPoints[0].dateTo;
   return lastPoint;
-}
+};
 
 const getDestinationIdList = (points) => {
   const destinationIdList = [];
 
   points.forEach((point) => {
     destinationIdList.push(point.destination);
-  })
+  });
   return destinationIdList;
-}
+};
 
 const getDestinationsTitle = (destinationIdList, allDestinations) => {
   const firstDestination = allDestinations.find((destination) => destination.id === destinationIdList[0]).name;
   const lastDestination = allDestinations.find((destination) => destination.id === destinationIdList[destinationIdList.length - 1]).name;
 
   if (destinationIdList.length === 1) {
-    return `<h1 class="trip-info__title">${firstDestination}</h1>`
+    return `<h1 class="trip-info__title">${firstDestination}</h1>`;
   }
 
   if (destinationIdList.length === 2) {
     const secondDestination = allDestinations.find((destination) => destination.id === destinationIdList[1]).name;
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${secondDestination}</h1>`
+    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${secondDestination}</h1>`;
   }
 
   if (destinationIdList.length === 3) {
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${lastDestination}</h1>`
+    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${lastDestination}</h1>`;
   }
 
   if (destinationIdList.length > 3) {
     return `<h1 class="trip-info__title">${firstDestination} &mdash; . . . &mdash; ${lastDestination}</h1>`;
   }
-}
+};
 
 const getAllOffersData = (allOffers) => {
   const allOffersInfo = [];
@@ -56,18 +56,18 @@ const getAllOffersData = (allOffers) => {
   const allOffersData = new Map();
 
   modifiedAllOffersInfo.forEach((offers) => {
-    allOffersData.set(offers.id, offers.price)
+    allOffersData.set(offers.id, offers.price);
   });
 
   return allOffersData;
-}
+};
 
 const getOffersFullPrice = (points, allOffers) => {
   const pointOffersList = [];
 
   points.forEach((point) => {
     pointOffersList.push(point.offers);
-  })
+  });
 
   const pointOffersIdList = pointOffersList.flat();
   const allOffersData = getAllOffersData(allOffers);
@@ -79,25 +79,23 @@ const getOffersFullPrice = (points, allOffers) => {
       if (key === pointOfferId) {
         offersFullPrice += value;
       }
-    })
+    });
   });
 
   return offersFullPrice;
-}
+};
 
 const getPointsFullPrice = (points) => {
   const allBasePriceList = [];
 
   points.forEach((point) => {
     allBasePriceList.push(point.basePrice);
-  })
+  });
 
-  const allBasePrice = allBasePriceList.reduce(function (priceA, priceB) {
-    return priceA + priceB;
-  }, 0);
+  const allBasePrice = allBasePriceList.reduce((priceA, priceB) => priceA + priceB, 0);
 
   return allBasePrice;
-}
+};
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
   const destinationIdList = getDestinationIdList(points);

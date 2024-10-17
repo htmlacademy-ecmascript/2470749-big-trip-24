@@ -1,6 +1,6 @@
-import TripInfoView from "../view/trip-info-view";
-import { RenderPosition } from "../framework/render";
-import { render, replace, remove } from "../framework/render";
+import TripInfoView from '../view/trip-info-view';
+import { RenderPosition } from '../framework/render';
+import { render, replace, remove } from '../framework/render';
 
 export default class TripInfoPresenter {
   #pointModel = null;
@@ -25,10 +25,10 @@ export default class TripInfoPresenter {
       points: points,
       allDestinations: allDestinations,
       allOffers: allOffers,
-     });
+    });
 
     if(prevTripInfoComponent === null){
-      render(this.#tripInfoComponent, this.#mainContainer,  RenderPosition.AFTERBEGIN);
+      render(this.#tripInfoComponent, this.#mainContainer, RenderPosition.AFTERBEGIN);
       return;
     }
 

@@ -47,4 +47,5 @@ export default class FiltersView extends AbstractView {
       evt.preventDefault();
       this.#handleFiltersChange(evt.target.dataset.filterType);
     }
-  }}
+  };
+}
