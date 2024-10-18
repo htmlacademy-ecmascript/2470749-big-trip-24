@@ -15,16 +15,12 @@ export default class TripInfoPresenter {
   }
 
   init() {
-    const points = this.#pointModel.points;
-    const allDestinations = this.#pointModel.allDestinations;
-    const allOffers = this.#pointModel.allOffers;
-
     const prevTripInfoComponent = this.#tripInfoComponent;
 
     this.#tripInfoComponent = new TripInfoView({
-      points: points,
-      allDestinations: allDestinations,
-      allOffers: allOffers,
+      points: this.#pointModel.points,
+      allDestinations: this.#pointModel.allDestinations,
+      allOffers: this.#pointModel.allOffers,
     });
 
     if(prevTripInfoComponent === null){
