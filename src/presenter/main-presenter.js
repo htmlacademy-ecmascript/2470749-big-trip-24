@@ -20,7 +20,6 @@ export default class MainPresenter {
   #filtersModel = null;
   #newPointPresenter = null;
   #isLoading = true;
-
   #sorting = null;
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
@@ -79,7 +78,6 @@ export default class MainPresenter {
   }
 
   init() {
-    this.#renderSorting(this.#currentSortType);
     this.#renderMain();
   }
 
@@ -91,6 +89,7 @@ export default class MainPresenter {
       return;
     }
 
+    // this.#renderSorting(this.#currentSortType);
     this.#renderPointsList();
   }
 
@@ -197,6 +196,7 @@ export default class MainPresenter {
   };
 
   #handleModeChange = () => {
+    this.#newPointPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
@@ -205,8 +205,9 @@ export default class MainPresenter {
   };
 
   #renderPointsList() {
-    remove(this.#noPoints);
-
+    remove(this.#sorting);
+    this.#renderSorting(this.#currentSortType);
+    // remove(this.#noPoints);
     if (this.points.length === 0 && !document.querySelector('.trip-events__msg')) {
       this.#renderNoPoints();
       return;
@@ -222,7 +223,7 @@ export default class MainPresenter {
       filter: this.#currentFilterType,
     });
 
-    remove(this.#pointsListComponent);
+    // remove(this.#pointsListComponent);
     render(this.#noPoints, this.#pointsContainer);
   }
 
@@ -230,6 +231,8 @@ export default class MainPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     this.#newPointPresenter.destroy();
+
+    remove(this.#sorting);
     remove(this.#loadingComponent);
 
     if (resetFilters) {
@@ -238,6 +241,10 @@ export default class MainPresenter {
 
     if (resetSorting) {
       this.#currentSortType = SortType.DAY;
+    }
+
+    if (this.#noPoints) {
+      remove(this.#noPoints);
     }
   }
 

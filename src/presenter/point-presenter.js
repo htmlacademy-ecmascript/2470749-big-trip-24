@@ -1,12 +1,7 @@
 import { render, replace, remove } from '../framework/render';
 import PointItemView from '../view/point-item-view';
 import EditPointView from '../view/edit-point-view';
-import { UpdateType, UserAction} from '../const';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDIT: 'EDIT'
-};
+import { UpdateType, UserAction, Mode } from '../const';
 
 export default class PointPresenter {
   #point = null;
@@ -130,7 +125,7 @@ export default class PointPresenter {
     }
 
     const resetFormState = () => {
-      this.#pointComponent.updateElement({
+      this.#editPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
@@ -147,8 +142,6 @@ export default class PointPresenter {
 
   #handleFormSaveClick = (point) => {
     this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
-
-    // this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 

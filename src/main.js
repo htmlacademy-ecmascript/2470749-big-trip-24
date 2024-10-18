@@ -57,8 +57,11 @@ mainPresenter.init();
 pointModel.init()
   .finally(() => {
     render(addNewPointButton, mainContainer);
-    tripInfoPresenter.init();
     filtersPresenter.init();
+
+    if (pointModel.points.length > 0) {
+      tripInfoPresenter.init();
+    }
   });
 
 
