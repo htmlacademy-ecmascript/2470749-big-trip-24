@@ -96,7 +96,7 @@ const getPointsFullPrice = (points) => {
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
   if (points.length > 0) {
-  return `<section class="trip-main__trip-info  trip-info">
+    return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
   <h1 class="trip-info__title">${getDestinationsTitle(points, allDestinations)}</h1>
     <p class="trip-info__dates">${humanizePointDate(getFirstPoint(points), TRIP_INFO_DATE_FORMAT)}&nbsp;&mdash;&nbsp;${humanizePointDate(getLastPoint(points), TRIP_INFO_DATE_FORMAT)}</p>

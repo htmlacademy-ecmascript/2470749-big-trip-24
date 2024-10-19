@@ -15,6 +15,13 @@ export default class TripInfoPresenter {
   }
 
   init() {
+    if (this.#pointModel.points.length === 0) {
+      if (this.#tripInfoComponent !== null) {
+        remove(this.#tripInfoComponent);
+      }
+      return;
+    }
+
     const prevTripInfoComponent = this.#tripInfoComponent;
 
     this.#tripInfoComponent = new TripInfoView({

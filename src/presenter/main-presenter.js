@@ -127,7 +127,7 @@ export default class MainPresenter {
   #renderPointsList() {
     remove(this.#sorting);
     this.#renderSorting(this.#currentSortType);
-    // remove(this.#noPoints);
+
     if (this.points.length === 0 && !document.querySelector('.trip-events__msg')) {
       this.#renderNoPoints();
       return;
@@ -143,7 +143,6 @@ export default class MainPresenter {
       filter: this.#currentFilterType,
     });
 
-    // remove(this.#pointsListComponent);
     render(this.#noPoints, this.#pointsContainer);
   }
 
