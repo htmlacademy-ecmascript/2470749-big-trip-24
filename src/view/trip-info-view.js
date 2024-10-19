@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 import { humanizePointDate } from '../utils/point-utils';
-import { DATE_FORMAT } from '../const';
+import { TRIP_INFO_DATE_FORMAT } from '../const';
 
 const getFirstPoint = (points) => {
   const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
@@ -14,34 +14,31 @@ const getLastPoint = (points) => {
   return lastPoint;
 };
 
-const getDestinationIdList = (points) => {
-  const destinationIdList = [];
+const getDestinationsTitle = (points, allDestinations) => {
+  const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
 
-  points.forEach((point) => {
-    destinationIdList.push(point.destination);
-  });
-  return destinationIdList;
-};
+  const firstDestinationId = sortedByDateFromPoints[0].destination;
+  const lastDestinationId = sortedByDateFromPoints[sortedByDateFromPoints.length - 1].destination;
 
-const getDestinationsTitle = (destinationIdList, allDestinations) => {
-  const firstDestination = allDestinations.find((destination) => destination.id === destinationIdList[0]).name;
-  const lastDestination = allDestinations.find((destination) => destination.id === destinationIdList[destinationIdList.length - 1]).name;
+  const firstDestination = allDestinations.find((destination) => destination.id === firstDestinationId).name;
+  const lastDestination = allDestinations.find((destination) => destination.id === lastDestinationId).name;
 
-  if (destinationIdList.length === 1) {
-    return `<h1 class="trip-info__title">${firstDestination}</h1>`;
+  if (points.length === 1) {
+    return `${firstDestination}`;
   }
 
-  if (destinationIdList.length === 2) {
-    const secondDestination = allDestinations.find((destination) => destination.id === destinationIdList[1]).name;
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${secondDestination}</h1>`;
+  if (points.length === 2) {
+    const secondDestinationId = sortedByDateFromPoints[1].destination;
+    const secondDestination = allDestinations.find((destination) => destination.id === secondDestinationId).name;
+    return `${firstDestination} &mdash; ${secondDestination}`;
   }
 
-  if (destinationIdList.length === 3) {
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${lastDestination}</h1>`;
+  if (points.length === 3) {
+    return `${firstDestination} &mdash; ${lastDestination}`;
   }
 
-  if (destinationIdList.length > 3) {
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; . . . &mdash; ${lastDestination}</h1>`;
+  if (points.length > 3) {
+    return `${firstDestination} &mdash; . . . &mdash; ${lastDestination}`;
   }
 };
 
@@ -98,18 +95,19 @@ const getPointsFullPrice = (points) => {
 };
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
-  const destinationIdList = getDestinationIdList(points);
-
+  if (points.length > 0) {
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
-  <h1 class="trip-info__title">${getDestinationsTitle(destinationIdList, allDestinations)}</h1>
-    <p class="trip-info__dates">${humanizePointDate(getFirstPoint(points), DATE_FORMAT)}&nbsp;&mdash;&nbsp;${humanizePointDate(getLastPoint(points), DATE_FORMAT)}</p>
+  <h1 class="trip-info__title">${getDestinationsTitle(points, allDestinations)}</h1>
+    <p class="trip-info__dates">${humanizePointDate(getFirstPoint(points), TRIP_INFO_DATE_FORMAT)}&nbsp;&mdash;&nbsp;${humanizePointDate(getLastPoint(points), TRIP_INFO_DATE_FORMAT)}</p>
   </div>
 
   <p class="trip-info__cost">
     Total: &euro;&nbsp;<span class="trip-info__cost-value">${getPointsFullPrice(points) + getOffersFullPrice(points, allOffers)}</span>
   </p>
   </section>`;
+  }
+  return '';
 }
 
 export default class TripInfoView extends AbstractView {

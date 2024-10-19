@@ -45,11 +45,8 @@ export default class NewPointPresenter {
     }
 
     this.#handleDestroy();
-
     remove(this.#editPointComponent);
-
     this.#editPointComponent = null;
-
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
@@ -86,7 +83,7 @@ export default class NewPointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.destroy();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
