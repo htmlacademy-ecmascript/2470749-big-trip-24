@@ -135,7 +135,6 @@ export default class PointPresenter {
 
   #handleFormSaveClick = (point) => {
     this.#handleModelUpdate(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFormDeleteClick = (point) => {
