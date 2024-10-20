@@ -43,11 +43,12 @@ export default class FiltersView extends AbstractView {
       return;
     }
 
-    const currentFilterCount = this.#filters.find((filter) => filter.type === evt.target.dataset.filterType).count;
+    const targetFilter = evt.target.dataset.filterType;
+    const currentFilterCount = this.#filters.find((filter) => filter.type === targetFilter).count;
 
     if (currentFilterCount > 0) {
       evt.preventDefault();
-      this.#handleFiltersChange(evt.target.dataset.filterType);
+      this.#handleFiltersChange(targetFilter);
     }
   };
 }
