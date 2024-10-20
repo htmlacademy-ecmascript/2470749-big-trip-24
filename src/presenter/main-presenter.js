@@ -1,6 +1,7 @@
 import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
+import AddNewPointButtonView from '../view/add-new-point-button-view';
 import { RenderPosition, remove, render } from '../framework/render';
 import PointPresenter from './point-presenter';
 import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
@@ -13,12 +14,14 @@ import UiBlocker from '../framework/ui-blocker/ui-blocker';
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #mainContainer = null;
   #pointsContainer = null;
   #pointModel = null;
   #pointPresenters = new Map();
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
+  #addNewPointButton = null;
   #isLoading = true;
   #sorting = null;
   #currentSortType = SortType.DAY;
@@ -28,15 +31,16 @@ export default class MainPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({ pointsContainer, pointModel, filtersModel, onNewPointCancel }) {
+  constructor({ pointsContainer, mainContainer, pointModel, filtersModel}) {
     this.#pointsContainer = pointsContainer;
+    this.#mainContainer = mainContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointAdd: this.#handleViewAction,
-      onDestroy: onNewPointCancel,
+      onDestroy: this.#handleNewPointCancel,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -80,8 +84,14 @@ export default class MainPresenter {
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
     this.#newPointPresenter.init(this.allOffers, this.allDestinations);
-
     remove(this.#noPoints);
+  }
+
+  renderAddNewPointButton() {
+    this.#addNewPointButton = new AddNewPointButtonView({
+      onClick: this.#handleNewPointButtonClick,
+    });
+    render(this.#addNewPointButton, this.#mainContainer);
   }
 
   #renderMain() {
@@ -92,6 +102,7 @@ export default class MainPresenter {
       return;
     }
 
+    this.renderAddNewPointButton();
     this.#renderPointsList();
   }
 
@@ -170,9 +181,6 @@ export default class MainPresenter {
   // обработчики
 
   // обновление модели
-  // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-  // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-  // update - обновленные данные
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
@@ -229,6 +237,19 @@ export default class MainPresenter {
         remove(this.#loadingComponent);
         this.#renderMain();
         break;
+    }
+  };
+
+  #handleNewPointButtonClick = () => {
+    this.createPoint();
+    this.#addNewPointButton.element.disabled = true;
+  };
+
+  #handleNewPointCancel = () => {
+    this.#addNewPointButton.element.disabled = false;
+
+    if (this.points.length === 0) {
+      this.#renderNoPoints();
     }
   };
 
