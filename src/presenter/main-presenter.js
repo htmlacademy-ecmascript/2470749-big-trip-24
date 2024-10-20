@@ -80,6 +80,7 @@ export default class MainPresenter {
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
     this.#newPointPresenter.init(this.allOffers, this.allDestinations);
+
     remove(this.#noPoints);
   }
 
@@ -91,7 +92,6 @@ export default class MainPresenter {
       return;
     }
 
-    // this.#renderSorting(this.#currentSortType);
     this.#renderPointsList();
   }
 
@@ -128,7 +128,7 @@ export default class MainPresenter {
     remove(this.#sorting);
     this.#renderSorting(this.#currentSortType);
 
-    if (this.points.length === 0 && !document.querySelector('.trip-events__msg')) {
+    if (this.points.length === 0 && !this.#pointModel.failedToLoadData) {
       this.#renderNoPoints();
       return;
     }
@@ -169,7 +169,7 @@ export default class MainPresenter {
 
   // обработчики
 
-  // Здесь будем вызывать обновление модели.
+  // обновление модели
   // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
   // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
   // update - обновленные данные

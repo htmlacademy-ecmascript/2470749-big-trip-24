@@ -43,30 +43,18 @@ const getDestinationsTitle = (points, allDestinations) => {
 };
 
 const getAllOffersData = (allOffers) => {
-  const allOffersInfo = [];
+  const allOffersInfo = allOffers.map((offer) => offer.offers).flat();
+  const allOffersCollection = new Map();
 
-  allOffers.forEach((offer) => {
-    allOffersInfo.push(offer.offers);
+  allOffersInfo.forEach((offers) => {
+    allOffersCollection.set(offers.id, offers.price);
   });
 
-  const modifiedAllOffersInfo = allOffersInfo.flat();
-  const allOffersData = new Map();
-
-  modifiedAllOffersInfo.forEach((offers) => {
-    allOffersData.set(offers.id, offers.price);
-  });
-
-  return allOffersData;
+  return allOffersCollection;
 };
 
 const getOffersFullPrice = (points, allOffers) => {
-  const pointOffersList = [];
-
-  points.forEach((point) => {
-    pointOffersList.push(point.offers);
-  });
-
-  const pointOffersIdList = pointOffersList.flat();
+  const pointOffersIdList = points.map((point) => point.offers).flat();
   const allOffersData = getAllOffersData(allOffers);
 
   let offersFullPrice = 0;
@@ -83,12 +71,7 @@ const getOffersFullPrice = (points, allOffers) => {
 };
 
 const getPointsFullPrice = (points) => {
-  const allBasePriceList = [];
-
-  points.forEach((point) => {
-    allBasePriceList.push(point.basePrice);
-  });
-
+  const allBasePriceList = points.map((point) => point.basePrice);
   const allBasePrice = allBasePriceList.reduce((priceA, priceB) => priceA + priceB, 0);
 
   return allBasePrice;

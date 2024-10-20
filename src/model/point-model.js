@@ -10,6 +10,7 @@ export default class PointModel extends Observable {
   #pointsApiService = null;
   #failedToLoadComponent = new FailedToLoadView();
   #pointsContainer = null;
+  #isFailedToLoadPoints = null;
 
   constructor({ pointsApiService, pointsContainer }) {
     super();
@@ -27,6 +28,10 @@ export default class PointModel extends Observable {
 
   get allOffers() {
     return this.#allOffers;
+  }
+
+  get failedToLoadPoints() {
+    return this.#isFailedToLoadPoints;
   }
 
   #adaptToClient(point) {
@@ -50,20 +55,24 @@ export default class PointModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
+
     } catch (err) {
       render(this.#failedToLoadComponent, this.#pointsContainer);
+      this.#isFailedToLoadPoints = true;
     }
 
     try {
       this.#allDestinations = await this.#pointsApiService.allDestinations;
-    } catch(err) {
+    } catch (err) {
       render(this.#failedToLoadComponent, this.#pointsContainer);
+      this.#isFailedToLoadPoints = true;
     }
 
     try {
       this.#allOffers = await this.#pointsApiService.allOffers;
-    } catch(err) {
+    } catch (err) {
       render(this.#failedToLoadComponent, this.#pointsContainer);
+      this.#isFailedToLoadPoints = true;
     }
 
     this._notify(UpdateType.INIT);
@@ -105,18 +114,10 @@ export default class PointModel extends Observable {
   }
 
   async deletePoint(updateType, update) {
-    // const pointIndex = this.#points.findIndex((point) => point.id === update.id);
-
-
     try {
       await this.#pointsApiService.deletePoint(update);
 
       this.#points = this.#points.filter((point) => point.id !== update.id);
-      // await this.#pointsApiService.deletePoint(update);
-      // this.#points = [
-      //   ...this.#points.slice(0, pointIndex),
-      //   ...this.#points.slice(pointIndex + 1),
-      // ];
 
       this._notify(updateType);
     } catch (err) {
