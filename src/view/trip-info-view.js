@@ -42,7 +42,7 @@ const getDestinationsTitle = (points, allDestinations) => {
   }
 };
 
-const getAllOffersData = (allOffers) => {
+const getAllOffersCollection = (allOffers) => {
   const allOffersInfo = allOffers.map((offer) => offer.offers).flat();
   const allOffersCollection = new Map();
 
@@ -55,11 +55,11 @@ const getAllOffersData = (allOffers) => {
 
 const getOffersFullPrice = (points, allOffers) => {
   const pointOffersIdList = points.map((point) => point.offers).flat();
-  const allOffersData = getAllOffersData(allOffers);
+  const allOffersCollection = getAllOffersCollection(allOffers);
 
   let offersFullPrice = 0;
 
-  allOffersData.forEach((value, key) => {
+  allOffersCollection.forEach((value, key) => {
     pointOffersIdList.forEach((pointOfferId) => {
       if (key === pointOfferId) {
         offersFullPrice += value;
