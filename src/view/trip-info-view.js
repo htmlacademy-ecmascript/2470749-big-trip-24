@@ -78,7 +78,6 @@ const getPointsFullPrice = (points) => {
 };
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
-  if (points.length > 0) {
     return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
   <h1 class="trip-info__title">${getDestinationsTitle(points, allDestinations)}</h1>
@@ -89,8 +88,6 @@ function createTripInfoTemplate(points, allDestinations, allOffers) {
     Total: &euro;&nbsp;<span class="trip-info__cost-value">${getPointsFullPrice(points) + getOffersFullPrice(points, allOffers)}</span>
   </p>
   </section>`;
-  }
-  return '';
 }
 
 export default class TripInfoView extends AbstractView {
