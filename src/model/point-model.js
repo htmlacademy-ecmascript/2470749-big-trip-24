@@ -1,21 +1,16 @@
 import Observable from '../framework/observable';
 import { UpdateType } from '../const';
-import FailedToLoadView from '../view/failed-to-load-view';
-import { render } from '../framework/render';
 
 export default class PointModel extends Observable {
   #points = [];
   #allDestinations = [];
   #allOffers = [];
   #pointsApiService = null;
-  #failedToLoadComponent = new FailedToLoadView();
-  #pointsContainer = null;
-  #isFailedToLoadPoints = null;
+  #isFailedToLoadPoints = false;
 
-  constructor({ pointsApiService, pointsContainer }) {
+  constructor({ pointsApiService }) {
     super();
     this.#pointsApiService = pointsApiService;
-    this.#pointsContainer = pointsContainer;
   }
 
   get points() {
@@ -55,22 +50,12 @@ export default class PointModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
-    } catch (err) {
-      render(this.#failedToLoadComponent, this.#pointsContainer);
-      this.#isFailedToLoadPoints = true;
-    }
-
-    try {
       this.#allDestinations = await this.#pointsApiService.allDestinations;
-    } catch (err) {
-      render(this.#failedToLoadComponent, this.#pointsContainer);
-      this.#isFailedToLoadPoints = true;
-    }
-
-    try {
       this.#allOffers = await this.#pointsApiService.allOffers;
     } catch (err) {
-      render(this.#failedToLoadComponent, this.#pointsContainer);
+      this.#points = [];
+      this.#allOffers = [];
+      this.#allDestinations = [];
       this.#isFailedToLoadPoints = true;
     }
 

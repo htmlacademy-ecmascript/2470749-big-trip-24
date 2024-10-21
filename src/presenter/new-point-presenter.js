@@ -1,6 +1,6 @@
+import EditPointView from '../view/edit-point-view';
 import { BLANK_POINT, UpdateType, UserAction } from '../const';
 import { render, remove, RenderPosition } from '../framework/render';
-import EditPointView from '../view/edit-point-view';
 
 
 export default class NewPointPresenter {

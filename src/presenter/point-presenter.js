@@ -1,6 +1,6 @@
-import { render, replace, remove } from '../framework/render';
 import PointItemView from '../view/point-item-view';
 import EditPointView from '../view/edit-point-view';
+import { render, replace, remove } from '../framework/render';
 import { UpdateType, UserAction, Mode } from '../const';
 
 export default class PointPresenter {

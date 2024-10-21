@@ -2,18 +2,20 @@ import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
 import AddNewPointButtonView from '../view/add-new-point-button-view';
-import { RenderPosition, remove, render } from '../framework/render';
+import LoadingView from '../view/loading-view';
+import FailedToLoadView from '../view/failed-to-load-view';
+import NewPointPresenter from './new-point-presenter';
 import PointPresenter from './point-presenter';
+import { RenderPosition, remove, render } from '../framework/render';
 import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
 import { getWeightForPrice, getWeigthForDay, getWeightForTime } from '../utils/point-utils';
 import { filter } from '../utils/filter-utils';
-import NewPointPresenter from './new-point-presenter';
-import LoadingView from '../view/loading-view';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #failedToLoadComponent = new FailedToLoadView();
   #mainContainer = null;
   #pointsContainer = null;
   #pointModel = null;
@@ -31,7 +33,7 @@ export default class MainPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({ pointsContainer, mainContainer, pointModel, filtersModel}) {
+  constructor({ pointsContainer, mainContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
     this.#mainContainer = mainContainer;
     this.#pointModel = pointModel;
@@ -139,7 +141,12 @@ export default class MainPresenter {
     remove(this.#sorting);
     this.#renderSorting(this.#currentSortType);
 
-    if (this.points.length === 0 && !this.#pointModel.failedToLoadData) {
+    if (this.#pointModel.failedToLoadPoints) {
+      this.#renderFailedToLoadPoints();
+      return;
+    }
+
+    if (this.points.length === 0 && !this.#pointModel.failedToLoadPoints) {
       this.#renderNoPoints();
       return;
     }
@@ -147,6 +154,10 @@ export default class MainPresenter {
     for (const point of this.points) {
       this.#renderPoint(point);
     }
+  }
+
+  #renderFailedToLoadPoints() {
+    render(this.#failedToLoadComponent, this.#pointsContainer);
   }
 
   #renderNoPoints() {
@@ -214,7 +225,7 @@ export default class MainPresenter {
     this.#uiBlocker.unblock();
   };
 
-  // В зависимости от типа изменений решаем, что делать:
+  // в зависимости от типа изменений решаем, что делать:
   #handleModelEvent = (updateType, updatedPoint) => {
     switch (updateType) {
       // - обновить часть списка (например, когда поменялись данные поинта при редактировании)
