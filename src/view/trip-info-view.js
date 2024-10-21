@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 import { humanizePointDate } from '../utils/point-utils';
-import { DATE_FORMAT } from '../const';
+import { TRIP_INFO_DATE_FORMAT } from '../const';
 
 const getFirstPoint = (points) => {
   const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
@@ -14,62 +14,47 @@ const getLastPoint = (points) => {
   return lastPoint;
 };
 
-const getDestinationIdList = (points) => {
-  const destinationIdList = [];
+const getDestinationsTitle = (points, allDestinations) => {
+  const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
 
-  points.forEach((point) => {
-    destinationIdList.push(point.destination);
-  });
-  return destinationIdList;
-};
+  const firstDestinationId = sortedByDateFromPoints[0].destination;
+  const lastDestinationId = sortedByDateFromPoints[sortedByDateFromPoints.length - 1].destination;
 
-const getDestinationsTitle = (destinationIdList, allDestinations) => {
-  const firstDestination = allDestinations.find((destination) => destination.id === destinationIdList[0]).name;
-  const lastDestination = allDestinations.find((destination) => destination.id === destinationIdList[destinationIdList.length - 1]).name;
+  const firstDestination = allDestinations.find((destination) => destination.id === firstDestinationId).name;
+  const lastDestination = allDestinations.find((destination) => destination.id === lastDestinationId).name;
 
-  if (destinationIdList.length === 1) {
-    return `<h1 class="trip-info__title">${firstDestination}</h1>`;
+  if (points.length === 1) {
+    return `${firstDestination}`;
   }
 
-  if (destinationIdList.length === 2) {
-    const secondDestination = allDestinations.find((destination) => destination.id === destinationIdList[1]).name;
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${secondDestination}</h1>`;
+  if (points.length === 2) {
+    const secondDestinationId = sortedByDateFromPoints[1].destination;
+    const secondDestination = allDestinations.find((destination) => destination.id === secondDestinationId).name;
+    return `${firstDestination} &mdash; ${secondDestination}`;
   }
 
-  if (destinationIdList.length === 3) {
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; ${lastDestination}</h1>`;
+  if (points.length === 3) {
+    return `${firstDestination} &mdash; ${lastDestination}`;
   }
 
-  if (destinationIdList.length > 3) {
-    return `<h1 class="trip-info__title">${firstDestination} &mdash; . . . &mdash; ${lastDestination}</h1>`;
+  if (points.length > 3) {
+    return `${firstDestination} &mdash; . . . &mdash; ${lastDestination}`;
   }
 };
 
 const getAllOffersData = (allOffers) => {
-  const allOffersInfo = [];
+  const allOffersInfo = allOffers.map((offer) => offer.offers).flat();
+  const allOffersCollection = new Map();
 
-  allOffers.forEach((offer) => {
-    allOffersInfo.push(offer.offers);
+  allOffersInfo.forEach((offers) => {
+    allOffersCollection.set(offers.id, offers.price);
   });
 
-  const modifiedAllOffersInfo = allOffersInfo.flat();
-  const allOffersData = new Map();
-
-  modifiedAllOffersInfo.forEach((offers) => {
-    allOffersData.set(offers.id, offers.price);
-  });
-
-  return allOffersData;
+  return allOffersCollection;
 };
 
 const getOffersFullPrice = (points, allOffers) => {
-  const pointOffersList = [];
-
-  points.forEach((point) => {
-    pointOffersList.push(point.offers);
-  });
-
-  const pointOffersIdList = pointOffersList.flat();
+  const pointOffersIdList = points.map((point) => point.offers).flat();
   const allOffersData = getAllOffersData(allOffers);
 
   let offersFullPrice = 0;
@@ -86,24 +71,17 @@ const getOffersFullPrice = (points, allOffers) => {
 };
 
 const getPointsFullPrice = (points) => {
-  const allBasePriceList = [];
-
-  points.forEach((point) => {
-    allBasePriceList.push(point.basePrice);
-  });
-
+  const allBasePriceList = points.map((point) => point.basePrice);
   const allBasePrice = allBasePriceList.reduce((priceA, priceB) => priceA + priceB, 0);
 
   return allBasePrice;
 };
 
 function createTripInfoTemplate(points, allDestinations, allOffers) {
-  const destinationIdList = getDestinationIdList(points);
-
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
-  <h1 class="trip-info__title">${getDestinationsTitle(destinationIdList, allDestinations)}</h1>
-    <p class="trip-info__dates">${humanizePointDate(getFirstPoint(points), DATE_FORMAT)}&nbsp;&mdash;&nbsp;${humanizePointDate(getLastPoint(points), DATE_FORMAT)}</p>
+  <h1 class="trip-info__title">${getDestinationsTitle(points, allDestinations)}</h1>
+    <p class="trip-info__dates">${humanizePointDate(getFirstPoint(points), TRIP_INFO_DATE_FORMAT)}&nbsp;&mdash;&nbsp;${humanizePointDate(getLastPoint(points), TRIP_INFO_DATE_FORMAT)}</p>
   </div>
 
   <p class="trip-info__cost">

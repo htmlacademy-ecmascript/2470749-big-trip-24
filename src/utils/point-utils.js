@@ -11,6 +11,11 @@ const getPointDuration = (pointDateFrom, pointDateTo) => {
 
   const pointDuration = dayjs.duration(humatizedDateTo.diff(humatizedDateFrom));
 
+  if (pointDuration.months() > 0 || pointDuration.years() > 0) {
+    const days = Math.floor(pointDuration.asDays());
+    return pointDuration.format(`${days}[D] HH[H] mm[M]`);
+  }
+
   if (pointDuration.days() > 0) {
     return pointDuration.format('DD[D] HH[H] mm[M]');
   }
@@ -36,9 +41,9 @@ function getWeightForPrice(a, b) {
   }
 }
 
-function getWeightForTime(a, b) {
-  const pointADuration = getPointDuration(a.dateFrom, a.dateTo);
-  const pointBDuration = getPointDuration(b.dateFrom, b.dateTo);
+function getWeightForTime(pointA, pointB) {
+  const pointADuration = dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+  const pointBDuration = dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom));
 
   if (pointADuration < pointBDuration) {
     return 1;

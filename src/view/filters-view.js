@@ -1,7 +1,7 @@
 import { capitalize } from '../utils/common-utils';
 import AbstractView from '../framework/view/abstract-view';
 
-const getFiltersItem = (type, count) => `<div class="trip-filters__filter">
+const getFiltersItem = (type, count, currentFilter) => `<div class="trip-filters__filter">
     <input
     id="filter-${type}"
     class="trip-filters__filter-input  visually-hidden"
@@ -9,13 +9,13 @@ const getFiltersItem = (type, count) => `<div class="trip-filters__filter">
     name="trip-filter"
     value="${type}"
     ${count === 0 ? 'disabled' : ''}
-    ${type === 'everything' ? 'checked' : ''}>
+    ${type === currentFilter ? 'checked' : ''}>
     <label class="trip-filters__filter-label" data-filter-type="${type}" for="filter-${type}">${capitalize(type)} ${count}</label>
     </div>`;
 
-function createFiltersTemplate(filters) {
+function createFiltersTemplate(filters, currentFilter) {
   return `<form class="trip-filters" action="#" method="get">
-  ${Object.values(filters).map((filter) => getFiltersItem(filter.type, filter.count)).join('')}
+  ${Object.values(filters).map((filter) => getFiltersItem(filter.type, filter.count, currentFilter)).join('')}
   <button class="visually-hidden" type="submit">Accept filter</button>
   </form>`;
 }
@@ -23,17 +23,19 @@ function createFiltersTemplate(filters) {
 export default class FiltersView extends AbstractView {
   #filters = [];
   #handleFiltersChange = null;
+  #currentFilter = null;
 
-  constructor({ filters, onFiltersChange }) {
+  constructor({ filters, onFiltersChange, currentFilter }) {
     super();
     this.#filters = filters;
     this.#handleFiltersChange = onFiltersChange;
+    this.#currentFilter = currentFilter;
 
     this.element.addEventListener('click', this.#filtersChangeHandler);
   }
 
   get template() {
-    return createFiltersTemplate(this.#filters);
+    return createFiltersTemplate(this.#filters, this.#currentFilter);
   }
 
   #filtersChangeHandler = (evt) => {
@@ -41,11 +43,12 @@ export default class FiltersView extends AbstractView {
       return;
     }
 
-    const currentFilterCount = this.#filters.find((filter) => filter.type === evt.target.dataset.filterType).count;
+    const targetFilter = evt.target.dataset.filterType;
+    const currentFilterCount = this.#filters.find((filter) => filter.type === targetFilter).count;
 
     if (currentFilterCount > 0) {
       evt.preventDefault();
-      this.#handleFiltersChange(evt.target.dataset.filterType);
+      this.#handleFiltersChange(targetFilter);
     }
   };
 }

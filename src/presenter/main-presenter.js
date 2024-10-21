@@ -1,26 +1,30 @@
 import PointListView from '../view/point-list-view';
 import SortingView from '../view/sorting-view';
 import NoPointsView from '../view/no-points-view';
-import { RenderPosition, remove, render } from '../framework/render';
-import PointPresenter from './point-presenter';
-import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
-import { getWeightForPrice, getWeightForTime, getWeigthForDay } from '../utils/point-utils';
-import { filter } from '../utils/filter-utils';
-import NewPointPresenter from './new-point-presenter';
+import AddNewPointButtonView from '../view/add-new-point-button-view';
 import LoadingView from '../view/loading-view';
+import FailedToLoadView from '../view/failed-to-load-view';
+import NewPointPresenter from './new-point-presenter';
+import PointPresenter from './point-presenter';
+import { RenderPosition, remove, render } from '../framework/render';
+import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const';
+import { getWeightForPrice, getWeigthForDay, getWeightForTime } from '../utils/point-utils';
+import { filter } from '../utils/filter-utils';
 import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 export default class MainPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #failedToLoadComponent = new FailedToLoadView();
+  #mainContainer = null;
   #pointsContainer = null;
   #pointModel = null;
   #pointPresenters = new Map();
   #noPoints = null;
   #filtersModel = null;
   #newPointPresenter = null;
+  #addNewPointButton = null;
   #isLoading = true;
-
   #sorting = null;
   #currentSortType = SortType.DAY;
   #currentFilterType = FilterType.EVERYTHING;
@@ -29,15 +33,16 @@ export default class MainPresenter {
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor({ pointsContainer, pointModel, filtersModel, onNewPointCancel }) {
+  constructor({ pointsContainer, mainContainer, pointModel, filtersModel }) {
     this.#pointsContainer = pointsContainer;
+    this.#mainContainer = mainContainer;
     this.#pointModel = pointModel;
     this.#filtersModel = filtersModel;
 
     this.#newPointPresenter = new NewPointPresenter({
       pointsListContainer: this.#pointsListComponent.element,
       onPointAdd: this.#handleViewAction,
-      onDestroy: onNewPointCancel,
+      onDestroy: this.#handleNewPointCancel,
     });
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -72,15 +77,23 @@ export default class MainPresenter {
     return this.#pointModel.allDestinations;
   }
 
+  init() {
+    this.#renderMain();
+  }
+
   createPoint() {
     this.#currentSortType = FilterType.DAY;
     this.#filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+
     this.#newPointPresenter.init(this.allOffers, this.allDestinations);
+    remove(this.#noPoints);
   }
 
-  init() {
-    this.#renderSorting(this.#currentSortType);
-    this.#renderMain();
+  renderAddNewPointButton() {
+    this.#addNewPointButton = new AddNewPointButtonView({
+      onClick: this.#handleNewPointButtonClick,
+    });
+    render(this.#addNewPointButton, this.#mainContainer);
   }
 
   #renderMain() {
@@ -91,6 +104,7 @@ export default class MainPresenter {
       return;
     }
 
+    this.renderAddNewPointButton();
     this.#renderPointsList();
   }
 
@@ -107,24 +121,10 @@ export default class MainPresenter {
     render(this.#loadingComponent, this.#pointsContainer);
   }
 
-  #handleSortingClick = (sortType) => {
-    if (this.#currentSortType === sortType) {
-      return;
-    }
-
-    this.#currentSortType = sortType;
-    this.#clearPointsList();
-    remove(this.#sorting);
-    this.#renderSorting(this.#currentSortType);
-    this.#renderPointsList();
-  };
-
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointsListComponent: this.#pointsListComponent.element,
-      onPointsChange: this.#handleModelEvent,
       onModeChange: this.#handleModeChange,
-      onPointClear: this.#clearPoint,
       onEditPointView: this.#resetPointView,
       onModelUpdate: this.#handleViewAction,
     });
@@ -133,10 +133,65 @@ export default class MainPresenter {
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  // Здесь будем вызывать обновление модели.
-  // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-  // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-  // update - обновленные данные
+  #resetPointView = (point) => {
+    this.#pointPresenters.get(point.id).resetView();
+  };
+
+  #renderPointsList() {
+    remove(this.#sorting);
+    this.#renderSorting(this.#currentSortType);
+
+    if (this.#pointModel.failedToLoadPoints) {
+      this.#renderFailedToLoadPoints();
+      return;
+    }
+
+    if (this.points.length === 0 && !this.#pointModel.failedToLoadPoints) {
+      this.#renderNoPoints();
+      return;
+    }
+
+    for (const point of this.points) {
+      this.#renderPoint(point);
+    }
+  }
+
+  #renderFailedToLoadPoints() {
+    render(this.#failedToLoadComponent, this.#pointsContainer);
+  }
+
+  #renderNoPoints() {
+    this.#noPoints = new NoPointsView({
+      filter: this.#currentFilterType,
+    });
+
+    render(this.#noPoints, this.#pointsContainer);
+  }
+
+  #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+    this.#newPointPresenter.destroy();
+
+    remove(this.#sorting);
+    remove(this.#loadingComponent);
+
+    if (resetFilters) {
+      this.#currentFilterType = FilterType.EVERYTHING;
+    }
+
+    if (resetSorting) {
+      this.#currentSortType = SortType.DAY;
+    }
+
+    if (this.#noPoints) {
+      remove(this.#noPoints);
+    }
+  }
+
+  // обработчики
+
+  // обновление модели
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
@@ -170,7 +225,7 @@ export default class MainPresenter {
     this.#uiBlocker.unblock();
   };
 
-  // В зависимости от типа изменений решаем, что делать:
+  // в зависимости от типа изменений решаем, что делать:
   #handleModelEvent = (updateType, updatedPoint) => {
     switch (updateType) {
       // - обновить часть списка (например, когда поменялись данные поинта при редактировании)
@@ -196,52 +251,33 @@ export default class MainPresenter {
     }
   };
 
-  #handleModeChange = () => {
-    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  #handleNewPointButtonClick = () => {
+    this.createPoint();
+    this.#addNewPointButton.element.disabled = true;
   };
 
-  #resetPointView = (point) => {
-    this.#pointPresenters.get(point.id).resetView();
-  };
+  #handleNewPointCancel = () => {
+    this.#addNewPointButton.element.disabled = false;
 
-  #renderPointsList() {
-    remove(this.#noPoints);
-
-    if (this.points.length === 0 && !document.querySelector('.trip-events__msg')) {
+    if (this.points.length === 0) {
       this.#renderNoPoints();
+    }
+  };
+
+  #handleSortingClick = (sortType) => {
+    if (this.#currentSortType === sortType) {
       return;
     }
 
-    for (const point of this.points) {
-      this.#renderPoint(point);
-    }
-  }
+    this.#currentSortType = sortType;
+    this.#clearPointsList();
+    remove(this.#sorting);
+    this.#renderSorting(this.#currentSortType);
+    this.#renderPointsList();
+  };
 
-  #renderNoPoints() {
-    this.#noPoints = new NoPointsView({
-      filter: this.#currentFilterType,
-    });
-
-    remove(this.#pointsListComponent);
-    render(this.#noPoints, this.#pointsContainer);
-  }
-
-  #clearPointsList({ resetFilters = false, resetSorting = false } = {}) {
-    this.#pointPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointPresenters.clear();
+  #handleModeChange = () => {
     this.#newPointPresenter.destroy();
-    remove(this.#loadingComponent);
-
-    if (resetFilters) {
-      this.#currentFilterType = FilterType.EVERYTHING;
-    }
-
-    if (resetSorting) {
-      this.#currentSortType = SortType.DAY;
-    }
-  }
-
-  #clearPoint = (point) => {
-    this.#handleViewAction(UserAction.DELETE_POINT, UpdateType.MINOR, point);
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 }
