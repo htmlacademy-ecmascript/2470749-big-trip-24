@@ -3,19 +3,19 @@ import { humanizePointDate } from '../utils/point-utils';
 import { TRIP_INFO_DATE_FORMAT } from '../const';
 
 const getFirstPoint = (points) => {
-  const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
+  const sortedByDateFromPoints = [...points].sort((pointA, pointB) => pointA.dateFrom - pointB.dateFrom);
   const firstPoint = sortedByDateFromPoints[0].dateFrom;
   return firstPoint;
 };
 
 const getLastPoint = (points) => {
-  const sortedByDateFromPoints = [...points].sort((a, b) => b.dateTo - a.dateTo);
+  const sortedByDateFromPoints = [...points].sort((pointA, pointB) => pointB.dateTo - pointA.dateTo);
   const lastPoint = sortedByDateFromPoints[0].dateTo;
   return lastPoint;
 };
 
 const getDestinationsTitle = (points, allDestinations) => {
-  const sortedByDateFromPoints = [...points].sort((a, b) => a.dateFrom - b.dateFrom);
+  const sortedByDateFromPoints = [...points].sort((pointA, pointB) => pointA.dateFrom - pointB.dateFrom);
 
   const firstDestinationId = sortedByDateFromPoints[0].destination;
   const lastDestinationId = sortedByDateFromPoints[sortedByDateFromPoints.length - 1].destination;

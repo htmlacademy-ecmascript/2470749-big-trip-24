@@ -1,3 +1,3 @@
-const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+const capitalize = (name) => name.charAt(0).toUpperCase() + name.slice(1);
 
 export { capitalize };

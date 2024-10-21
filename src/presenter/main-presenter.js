@@ -93,7 +93,12 @@ export default class MainPresenter {
     this.#addNewPointButton = new AddNewPointButtonView({
       onClick: this.#handleNewPointButtonClick,
     });
+
     render(this.#addNewPointButton, this.#mainContainer);
+
+    if (this.#pointModel.failedToLoadPoints) {
+      this.#addNewPointButton.element.disabled = true;
+    }
   }
 
   #renderMain() {
